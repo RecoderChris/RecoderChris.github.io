@@ -49,7 +49,7 @@
 
 
   
-    <script src="lib/pace.min.js"></script>
+    <script src="/lib/pace.min.js"></script>
     <link href="//cdn.bootcss.com/pace/1.0.2/themes/silver/pace-theme-flash.css" rel="stylesheet">
   
 
@@ -65,18 +65,18 @@
 <div class="overlay" style="background: #002fa7;"></div>
 <div class="intrude-less">
 	<header id="header" class="inner">
-		<a href="index.html" class="profilepic">
+		<a href="/" class="profilepic">
 			<img src="/img/avatar.jpg" class="js-avatar">
 		</a>
 		<hgroup>
-			<h1 class="header-author"><a href="index.html">Zhang Xinmiao</a></h1>
+			<h1 class="header-author"><a href="/">Zhang Xinmiao</a></h1>
 		</hgroup>
 		
 
 		<nav class="header-menu">
 			<ul>
 			
-				<li><a href="index.html" target="_blank">主页</a></li>
+				<li><a href="/" target="_blank">主页</a></li>
 			
 				<li><a href="/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" target="_blank">论文阅读</a></li>
 			
@@ -135,7 +135,7 @@
       
       <a class="forkMe" style="position:absolute;z-index:999;top:0;right:0.5em;" 
         href="https://github.com/RecoderChris" target="_blank">
-        <img src="img/forkme.png"
+        <img src="/img/forkme.png"
           class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
       
       
@@ -147,7 +147,7 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<a href="index.html">
+				<a href="/">
 					<img src="/img/avatar.jpg" class="js-avatar">
 				</a>
 			</div>
@@ -188,7 +188,7 @@
 				<ul style="width: 50%">
 				
 				
-					<li style="width: 50%"><a href="index.html">主页</a></li>
+					<li style="width: 50%"><a href="/">主页</a></li>
 		        
 					<li style="width: 50%"><a href="/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
 		        
@@ -217,7 +217,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="2023/02/04/FAST21-Behemoth/" target="_blank">(FAST21)Behemoth</a>
+	  <a class="article-title" href="/2023/02/04/FAST21-Behemoth/" target="_blank">(FAST21)Behemoth:面向超大规模DNN、以闪存为中心存储的训练加速器</a>
   
     </h1>
   
@@ -225,7 +225,7 @@
 
   
   
-<a href="2023/02/04/FAST21-Behemoth/" class="archive-article-date">
+<a href="/2023/02/04/FAST21-Behemoth/" class="archive-article-date">
         <time datetime="2023-02-04T14:22:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-02-04</time>
 </a>
 
@@ -243,7 +243,8 @@
 <p>@ <em>Seoul National University, Samsung Electronics</em></p>
 <h1 id="一句话描述该论文解决了什么事情？"><a href="#一句话描述该论文解决了什么事情？" class="headerlink" title="一句话描述该论文解决了什么事情？"></a>一句话描述该论文解决了什么事情？</h1><p>本文针对以自然语言处理领域模型为代表的<strong>超大规模深度神经网络(DNN)<strong>模型的训练问题，构建了一种</strong>以闪存为中心存储</strong>的训练加速器。 </p>
 <h1 id="论文为什么要做这个事情？"><a href="#论文为什么要做这个事情？" class="headerlink" title="论文为什么要做这个事情？"></a>论文为什么要做这个事情？</h1><p>DNN在自然语言处理、计算机视觉、推荐算法等应用领域有广泛的应用。而增加模型参数的数量对于提升模型的准确度起到至关重要的作用。自然处理领域中各种基于Transformer的模型，其网络中的参数数量达到了超大规模(Extreme-scale)的级别。例如，GPT-3模型的参数数量达到了1,750亿以上。不仅如此，DNN模型的参数规模仍然在继续扩展，如如图1所示：</p>
-<p><img src="/.io//fig1.png" alt="NLP领域模型参数数量的扩展趋势"></p>
+<img src="/2023/02/04/FAST21-Behemoth/fig1.png" class="" title="NLP领域模型参数数量的扩展趋势">
+
 <p>模型参数数量的扩展对存储系统提出了以下的两个挑战：</p>
 <ol>
 <li><strong>内存容量墙(Memory Capacity Wall)</strong></li>
@@ -254,7 +255,8 @@
 <li>用户将不得不采用模型并行的方式，将模型分布在多个GPU上完成训练。但是完成模型并行，需要细致地设计负载均衡机制。</li>
 <li>GPU&#x2F;TPU上配备有高带宽存储系统(HBM)，其价格相当昂贵。</li>
 </ul>
-<p><img src="/.io//fig2.png" alt="用模型并行的方法实现超大规模DNN训练"></p>
+<img src="/2023/02/04/FAST21-Behemoth/fig2.png" class="" title="用模型并行的方法实现超大规模DNN训练">
+
 <ol start="2">
 <li><strong>存储带宽的浪费(Memory B&#x2F;W Underutilization)</strong></li>
 </ol>
@@ -262,7 +264,8 @@
 <li>随着DNN模型的尺寸扩大，Transformer中各种<strong>全连接层矩阵的重用</strong>也会变得更加频繁；</li>
 <li>因此，随着训练计算总量的不断扩张，实际存储的带宽需求<strong>并未大幅度提高</strong>；而GPU上的<strong>高带宽存储系统</strong>也随着计算量而不断增加，造成了明显的<strong>带宽浪费</strong>问题。</li>
 </ul>
-<p><img src="/.io//fig3.png" alt="模型训练的需求带宽和实际带宽不匹配"></p>
+<img src="/2023/02/04/FAST21-Behemoth/fig3.png" class="" title="模型训练的需求带宽和实际带宽不匹配">
+
 <p>本文希望能够将超大规模DNN训练的中心存储由低容量、高花费的HBM替换为高容量、低开销的闪存块，并辅助加速器设计完成单SSD节点上的训练任务。</p>
 <h1 id="这个事情之前别人是怎么做的，存在什么问题？"><a href="#这个事情之前别人是怎么做的，存在什么问题？" class="headerlink" title="这个事情之前别人是怎么做的，存在什么问题？"></a>这个事情之前别人是怎么做的，存在什么问题？</h1><p>对于超大规模DNN模型训练而带来的内存容量墙问题，有以下两种解决方案：</p>
 <ol>
@@ -289,7 +292,8 @@
 <li><strong>Flash的耐久性(endurance)问题：</strong>SSD只能进行一定数量的P&#x2F;E操作，这被定义为SSD的耐久性或寿命。用SSD作为DNN训练的存储器明显将缩短其寿命，特别是在随机写时，有写放大(<em>Write Amplification</em>)的现象。</li>
 </ol>
 <h1 id="针对以上难点，作者各做了哪些优化，优化背后的思想是什么？"><a href="#针对以上难点，作者各做了哪些优化，优化背后的思想是什么？" class="headerlink" title="针对以上难点，作者各做了哪些优化，优化背后的思想是什么？"></a>针对以上难点，作者各做了哪些优化，优化背后的思想是什么？</h1><h2 id="Behemoth计算平台"><a href="#Behemoth计算平台" class="headerlink" title="Behemoth计算平台"></a>Behemoth计算平台</h2><h3 id="硬件模块"><a href="#硬件模块" class="headerlink" title="硬件模块"></a>硬件模块</h3><p>Behemoth系统设计的整体目的是在单节点上完全容纳超大规模的DNN模型，实现<strong>数据并行</strong>训练。Behemoth计算平台的整体结构图如下所示：</p>
-<p><img src="/.io//fig4.png" alt="Behemoth架构图"></p>
+<img src="/2023/02/04/FAST21-Behemoth/fig4.png" class="" title="Behemoth架构图">
+
 <p>由于执行过程的底层逻辑是一致的，所以计算加速器的硬件部分可以分为三个部分：<em>计算核心、张量缓存以及平台专用的Flash存储系统</em>。</p>
 <ol>
 <li><strong>计算核心(Compute Core)：</strong>计算张量；控制数据转移；指令翻译。</li>
@@ -304,7 +308,8 @@
 <li><strong>主机端(Host)：</strong>负责将训练命令序列(包含计算以及DMA命令)发送到加速器上，在训练结束之后，加速器将训练结果返回给主机端。</li>
 </ol>
 <h3 id="训练步骤"><a href="#训练步骤" class="headerlink" title="训练步骤"></a>训练步骤</h3><p>DNN模型的训练是一个<strong>重复的正向&#x2F;反向传播</strong>的过程。图5(a)展示了单层训练的步骤，其正向传播包含以下几步：</p>
-<p><img src="/.io//fig5.png" alt="运行时系统"></p>
+<img src="/2023/02/04/FAST21-Behemoth/fig5.png" class="" title="运行时系统">
+
 <ol>
 <li>从权重节点闪存中读取权重值，到权重节点的张量缓存中；</li>
 <li>将权重节点张量缓存中的权值通过广播发送到激活节点的张量缓存中；</li>
@@ -327,7 +332,8 @@
 <li><strong>尽可能的顺序化对NAND设备的写操作</strong>：随机写会造成大量的带宽浪费以及写放大现象；</li>
 <li><strong>防止NAND设备固件成为性能的瓶颈</strong>：固件中的FTL一般都有如垃圾回收、磨损均衡、备份数据管理等机制，这些机制都会影响NAND设备发挥其峰值带宽。</li>
 </ol>
-<h3 id="数据分类"><a href="#数据分类" class="headerlink" title="数据分类"></a>数据分类</h3><p><img src="/.io//fig6.png" alt="对数据类型进行分类"></p>
+<h3 id="数据分类"><a href="#数据分类" class="headerlink" title="数据分类"></a>数据分类</h3><img src="/2023/02/04/FAST21-Behemoth/fig6.png" class="" title="对数据类型进行分类">
+
 <p>DNN训练的计算过程中涉及的数据读写类型非常固定，可以进行一定程度的分类。</p>
 <p>在活跃计算节点上，主要有<strong>训练的输入</strong>和<strong>训练过程中生成的激活值</strong>两种张量数据。训练的输入其生命周期长，持续整个训练过程，这样的数据被称为<strong>NV数据流</strong>(非易失性数据流)。</p>
 <p>相比来说，训练过程中生成的激活值是一种中间结果，其生命周期很短，往往只持续几分钟，这样的数据被称为<strong>V数据流</strong>(易失性数据流)。同样地，在权值节点上也有这两种数据流。上表分析了活跃计算节点和权值节点上数据的不同类型，我们可以发现：</p>
@@ -336,16 +342,19 @@
 <li>在活跃节点和权重节点上，都各有一个NV数据流和V数据流，两种数据流的数据保留时间相差很大。</li>
 </ol>
 <p>由以上分析，NV数据流和V数据流在保存时间、读写权限上有很大的不同，<strong>存储在同一段地址空间中并不合适</strong>。在存储上，Flash管理系统设计了一种按照流来分层的存储方式，下图展示了激活计算节点的Flash分层管理结构：</p>
-<p><img src="/.io//fig7.png" alt="激活计算节点的Flash管理系统的分层结构"></p>
+<img src="/2023/02/04/FAST21-Behemoth/fig7.png" class="" title="激活计算节点的Flash管理系统的分层结构">
+
 <p>这样设计的效果是：</p>
 <ol>
 <li>用物理块地址明确的分离了每种数据，每个数据流在单独的存储空间上运行；</li>
 <li>每个流有自己的逻辑地址空间、访问权限和基于数据保存时长的P&#x2F;E周期数。</li>
 </ol>
-<h3 id="轻量级FTL"><a href="#轻量级FTL" class="headerlink" title="轻量级FTL"></a>轻量级FTL</h3><p><img src="/.io//fig8.png" alt="用轮盘赌算法实现磨损均衡"></p>
+<h3 id="轻量级FTL"><a href="#轻量级FTL" class="headerlink" title="轻量级FTL"></a>轻量级FTL</h3><img src="/2023/02/04/FAST21-Behemoth/fig8.png" class="" title="用轮盘赌算法实现磨损均衡">
+
 <p>通过对数据的分析可知，对Flash存储的写<strong>保证是添加式的顺序写</strong>。因此，在之前Flash翻译层(FTL)中复杂的垃圾回收和磨损均衡机制将不再必要。在本方案中移去了垃圾回收机制，并用最简单的轮盘赌(Round-robin)算法来实现充分的磨损均衡，极大程度简化了FTL。如图8中，假如共有4个物理块，一轮迭代需要写入3个逻辑块，采用轮盘赌算法在第一轮迭代写入0&#x2F;1&#x2F;2后，第二轮迭代将写入3&#x2F;0&#x2F;1块。</p>
 <h3 id="写路径的硬件自动化"><a href="#写路径的硬件自动化" class="headerlink" title="写路径的硬件自动化"></a>写路径的硬件自动化</h3><p>一般来说，通用的SSD平台实现了读路径的硬件自动化，这样能够最大程度的利用NAND设备的带宽。但是，由于写路径需要去考虑垃圾回收、磨损均衡、数据一致性、冗余数据管理等处理机制，其硬件自动化很难实现。在本平台专用的Flash管理系统中，基于轻量级的FTL，实现写路径的硬件自动化不再是问题。</p>
-<p><img src="/.io//fig9.png" alt="写路径的硬件自动化"></p>
+<img src="/2023/02/04/FAST21-Behemoth/fig9.png" class="" title="写路径的硬件自动化">
+
 <p>硬件自动的写路径主要由两条流水线组成：</p>
 <ol>
 <li><strong>写命令流水线</strong>：将数据从计算节点的张量缓存转移到Flash存储的SRAM中，其带宽可以达到56GB&#x2F;s；</li>
@@ -356,12 +365,16 @@
 <h2 id="平台专用Flash管理系统——耐久性问题"><a href="#平台专用Flash管理系统——耐久性问题" class="headerlink" title="平台专用Flash管理系统——耐久性问题"></a>平台专用Flash管理系统——耐久性问题</h2><p>一般来说，P&#x2F;E操作会对Flash颗粒造成永久性损伤，Flash颗粒所能承受的最大P&#x2F;E操作数量被称为Flash的寿命或耐久性。然而，这种损伤的实际体现为<strong>颗粒对于数据的保存时间变短</strong>，而当数据保持的时间低于预设值的时候，此颗粒就会被认定为已损坏。</p>
 <p>因此，当把数据保存时间的预设时间限制降低时，从某种意义上来说，Flash颗粒仍能够发挥数据保存的作用。<strong>许多研究已经证明SSD的耐久性会随着对数据保留时间要求的放松而提高。</strong></p>
 <p>平台专用的Flash管理系统将NV数据流和V数据流分离开，在V数据流中，如下图所示，数据保留时间的限制仅仅为分钟级别，假设为5分钟。</p>
-<p><img src="/.io//fig10.png" alt="张量的寿命"></p>
+<img src="/2023/02/04/FAST21-Behemoth/fig10.png" class="" title="张量的寿命">
+
 <p>图10 张量的寿命</p>
 <p>据相关研究表明，当数据保留时间限制为5年时，一般的SSD设备能够承受5万个P&#x2F;E操作；</p>
 <p>当把数据保留时间的限制从5年降低到3天的时候，Flash颗粒所能承受的P&#x2F;E次数大概能够提升40倍。</p>
 <p>而因此保守估计，数据保留时间降低为3天的情况下，V数据流的颗粒承受P&#x2F;E次数大概为200万次左右，而V数据流的数据量为1.85TB。假定数据带宽为17.6GB&#x2F;s下，Flash管理系统中V数据流颗粒有5年以上的寿命。[这里写放大系数(WAF)为1，如图11所示，此Flash只支持添加写的顺序写操作，而不涉及垃圾回收等机制。]由此论证了存储系统的耐久性问题。</p>
-<p><img src="/.io//fig11.png" alt="DNN训练时数据块的访问特征"></p>
+<img src="/2023/02/04/FAST21-Behemoth/fig11.png" class="" title="DNN训练时数据块的访问特征">
+
+
+
 <h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><h3 id="实验设定"><a href="#实验设定" class="headerlink" title="实验设定"></a>实验设定</h3><p>验证方法：</p>
 <ol>
 <li>将Behemoth在存储上的<strong>费用开销</strong>与传统的基于TPU的DNN训练系统相对比；(<strong>验证Flash替换HBM作为主要存储的作用</strong>)</li>
@@ -370,19 +383,24 @@
 <p>验证平台：</p>
 <p>采用<strong>MAESTRO</strong>作为NPU模拟器平台，采用<strong>MQ-Sim</strong>作为SSD的模拟器平台。</p>
 <p>训练模型：</p>
-<p><img src="/.io//fig12.png" alt="评测使用的训练模型"></p>
+<img src="/2023/02/04/FAST21-Behemoth/fig12.png" class="" title="评测使用的训练模型">
+
 <p>图12 评测使用的训练模型</p>
 <p>（<strong>PxQ</strong>：P代表全连接层扩展的宽度倍数，Q代表网络decode或encode层的深度倍数。例如BERT 2x2模型代表在原始的BERT上，每个全连接层的宽度扩展为原来的两倍，网络层数也加深为原来的两倍）</p>
 <h3 id="开销对比"><a href="#开销对比" class="headerlink" title="开销对比"></a>开销对比</h3><p>开销对比时模拟器的参数设定：</p>
-<p><img src="/.io//fig13.png" alt="开销对比中模拟器的参数设定"></p>
+<img src="/2023/02/04/FAST21-Behemoth/fig13.png" class="" title="开销对比中模拟器的参数设定">
+
 <p>开销对比的结果：</p>
-<p><img src="/.io//fig14.png" alt="开销对比的结果"></p>
+<img src="/2023/02/04/FAST21-Behemoth/fig14.png" class="" title="开销对比的结果">
+
 <p>以上训练均在10天之内完成，使用TPU v3系列的系统在存储上的开销比Behemoth系统要贵3.65倍左右。</p>
 <h3 id="训练吞吐量对比"><a href="#训练吞吐量对比" class="headerlink" title="训练吞吐量对比"></a>训练吞吐量对比</h3><p>训练吞吐对比时模拟器的参数设定：</p>
-<p><img src="/.io//fig15.png" alt="训练吞吐量对比的参数设定"></p>
+<img src="/2023/02/04/FAST21-Behemoth/fig15.png" class="" title="训练吞吐量对比的参数设定">
+
 <p>其都采用Behemoth加速器作为计算核心，只有Flash管理上的不同。Baseline采用4个SSD并行达到64个Channel。</p>
 <p>对比结果：（<strong>下图中的理想情况是指存储访问不花费任何开销</strong>）</p>
-<p><img src="/.io//fig16.png" alt="训练吞吐量的对比结果"></p>
+<img src="/2023/02/04/FAST21-Behemoth/fig16.png" class="" title="训练吞吐量的对比结果">
+
 <ul>
 <li>平台专用的Flash管理系统接近于理想情况；</li>
 <li>优化后的吞吐量是传统的SSD其训练吞吐量的2.05倍；</li>
@@ -405,7 +423,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">DNN</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -413,11 +435,7 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">DNN</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -431,7 +449,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="2023/02/04/FAST21-Behemoth/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/02/04/FAST21-Behemoth/">展开全文 >></a>
     </p>
     
 
@@ -469,7 +487,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="2023/02/04/GPETPU/" target="_blank">(SC21)GPETPU</a>
+	  <a class="article-title" href="/2023/02/04/GPETPU/" target="_blank">(SC21)GPETPU:用EdgeTPU加速通用应用</a>
   
     </h1>
   
@@ -477,7 +495,7 @@
 
   
   
-<a href="2023/02/04/GPETPU/" class="archive-article-date">
+<a href="/2023/02/04/GPETPU/" class="archive-article-date">
         <time datetime="2023-02-04T13:44:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-02-04</time>
 </a>
 
@@ -530,7 +548,8 @@
 <p><strong>Main memory:</strong> 64GB DDR</p>
 <p><strong>Storage:</strong> NVMe SSD</p>
 <h4 id="分析Edge-TPU指令"><a href="#分析Edge-TPU指令" class="headerlink" title="分析Edge TPU指令"></a>分析Edge TPU指令</h4><p>文章分析了Edge TPU的一些指令的性能表现。由于像<strong>TOPS</strong>(<em>tera op per second</em>)、<strong>IPS</strong>(<em>inference per second</em>)这些常用的衡量标准都是面向神经网络的，所以本文建立了一些新的衡量标准<strong>RPS</strong>(<em>results per second</em>)。 RPS计算了某条指令产生结果数量的效率，测量得到的结果是：</p>
-<p><img src="/.io//fig1.png" alt="每一条Edge TPU指令的OPS和RPS测量数据"></p>
+<img src="/2023/02/04/GPETPU/fig1.png" class="" title="每一条Edge TPU指令的OPS和RPS测量数据">
+
 <p>从上表我们可以得到以下结论：</p>
 <ul>
 <li>conv2D的RPS非常高，这是因为<strong>卷积操作的使用频率高</strong>，TPU进行了特别的优化；</li>
@@ -550,7 +569,8 @@
 <li>TFLite编译生成的模型采用小端存储的方式进行数据存放。</li>
 </ol>
 <hr>
-<h3 id="GPETPU整体架构"><a href="#GPETPU整体架构" class="headerlink" title="GPETPU整体架构"></a>GPETPU整体架构</h3><p><img src="/.io//fig2.png" alt="GPETPU整体架构"></p>
+<h3 id="GPETPU整体架构"><a href="#GPETPU整体架构" class="headerlink" title="GPETPU整体架构"></a>GPETPU整体架构</h3><img src="/2023/02/04/GPETPU/fig2.png" class="" title="GPETPU整体架构">
+
 <p>整个GPETPU可以分为如下几个部分：</p>
 <ul>
 <li>前端开发了<strong>OpenCtpu</strong>方便编程，以及与之配套的编译器。</li>
@@ -569,9 +589,11 @@
 <li>以任务的形式使核函数进队列 ；</li>
 <li>适时进行同步：这里在调度时系统的设计中，任务之间是可以并行的，所以需要在恰当的时候进行同步操作来获得结果。</li>
 </ol>
-<p><img src="/.io//fig3.png" alt="用OpenCtpu编写张量卷积的程序示意"></p>
+<img src="/2023/02/04/GPETPU/fig3.png" class="" title="用OpenCtpu编写张量卷积的程序示意">
+
 <hr>
-<h3 id="GPETPU的运行时系统"><a href="#GPETPU的运行时系统" class="headerlink" title="GPETPU的运行时系统"></a>GPETPU的运行时系统</h3><p><img src="/.io//fig4.png" alt="GPETPU运行时系统"></p>
+<h3 id="GPETPU的运行时系统"><a href="#GPETPU的运行时系统" class="headerlink" title="GPETPU的运行时系统"></a>GPETPU的运行时系统</h3><img src="/2023/02/04/GPETPU/fig4.png" class="" title="GPETPU运行时系统">
+
 <h4 id="任务调度"><a href="#任务调度" class="headerlink" title="任务调度"></a>任务调度</h4><p>GPETPU的运行时任务调度策略是一种基于数据流的算法，由<strong>前端任务队列OPQ</strong>和<strong>后端指令队列IQ</strong>组成。OPQ的每一项包含任务ID，任务操作符，输入、输出、量化参数等必要的信息。IQ的每一项包含任务ID、TPU操作指令码、输入输出位置等。</p>
 <h5 id="OPQ"><a href="#OPQ" class="headerlink" title="OPQ"></a><strong>OPQ</strong></h5><ol>
 <li>主机端调用enqueue API时，运行时系统新建一个taskID,为即将进入队列的kernel函数做准备，并且开始执行该kernel函数。</li>
@@ -597,17 +619,22 @@
 <li>用全连接操作符完成矩阵乘法非常简单，因为全连接本质上是一种矩阵-向量乘法，所以很容易实现，但是根据本工作前文对TPU指令的量化，全连接操作的RPS非常低。</li>
 <li>除此之外我们还可以使用卷积操作实现矩阵乘法，这时候需要数据进行一定程度的变形。但是他的RPS非常好。</li>
 </ol>
-<p><img src="/.io//fig5.png" alt="用conv2D和FC两种算子实现矩阵相乘时的加速比， baseline是在CPU上使用OpenBLAS库进行计算的结果"></p>
+<img src="/2023/02/04/GPETPU/fig5.png" class="" title="用conv2D和FC两种算子实现矩阵相乘时的加速比， baseline是在CPU上使用OpenBLAS库进行计算的结果">
+
 <p>上图是使用全连接和卷积两种操作的效果，对比对象是CPU上使用OpenBLAS库进行计算。在只使用全连接算子时，其速度还不如CPU；但用卷积操作则可以加速超过两倍。 这个实验告诉我们，采用GPETPU进行编程时仍然需要注意算子的选择，可以依据之前测量的RPS进行选择。</p>
-<p><img src="/.io//fig6.png" alt="GPETPU实现的一些通用计算库"></p>
+<img src="/2023/02/04/GPETPU/fig6.png" class="" title="GPETPU实现的一些通用计算库">
+
 <p>为了进一步方便程序员的编程，GPETPU将一些领域内最常用的算法通过优化封装在标准库里，可以直接调用。领域涵盖了<strong>图计算、线性代数、物理仿真、模式识别以及金融领域</strong>。用户在前端像调用TPU基本操作一样调用这些算子就可以实现这些基本操作。</p>
 <hr>
 <h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><h3 id="实验平台"><a href="#实验平台" class="headerlink" title="实验平台"></a>实验平台</h3><p>同上。</p>
-<h3 id="单核性能比较：TPU-vs-CPU"><a href="#单核性能比较：TPU-vs-CPU" class="headerlink" title="单核性能比较：TPU vs. CPU"></a>单核性能比较：TPU vs. CPU</h3><p><img src="/.io//fig7.png" alt="单核TPU与CPU的性能与能耗比较"></p>
+<h3 id="单核性能比较：TPU-vs-CPU"><a href="#单核性能比较：TPU-vs-CPU" class="headerlink" title="单核性能比较：TPU vs. CPU"></a>单核性能比较：TPU vs. CPU</h3><img src="/2023/02/04/GPETPU/fig7.png" class="" title="单核TPU与CPU的性能与能耗比较">
+
 <p>Baseline是用单核CPU进行应用实现的方案。可以看到TPU平均可以实现2.46倍的加速；且能耗要比CPU低45%。</p>
-<h3 id="GPETPU的扩展性"><a href="#GPETPU的扩展性" class="headerlink" title="GPETPU的扩展性"></a>GPETPU的扩展性</h3><p><img src="/.io//fig8.png" alt="多核TPU的扩展性"></p>
+<h3 id="GPETPU的扩展性"><a href="#GPETPU的扩展性" class="headerlink" title="GPETPU的扩展性"></a>GPETPU的扩展性</h3><img src="/2023/02/04/GPETPU/fig8.png" class="" title="多核TPU的扩展性">
+
 <p>其次，使用多个TPU进行并行计算也有很好的扩展性。左边这个图的baseline仍然是使用单核CPU的计算速度。可以看到采用8核CPU的平均速度提升大概只在2.7倍左右，但采用8核TPU则可以提升13倍左右。 随着TPU数量的增多，大部分应用的速度几乎呈线性提升。</p>
-<h3 id="与GPU的比较"><a href="#与GPU的比较" class="headerlink" title="与GPU的比较"></a>与GPU的比较</h3><p><img src="/.io//fig9.png" alt="与GPU之间的性能(a)与功耗(b)比较"></p>
+<h3 id="与GPU的比较"><a href="#与GPU的比较" class="headerlink" title="与GPU的比较"></a>与GPU的比较</h3><img src="/2023/02/04/GPETPU/fig9.png" class="" title="与GPU之间的性能(a)与功耗(b)比较">
+
 <p>最后这张图展示了GPU与TPU的性能表现对比以及相对能耗。仍然是对比了单核的CPU。 虽然TPU的性能不如GPU，但是能耗非常低，相对于CPU可以平均节省40%的能量。 综合考虑能耗和性能，8x Edge TPU可以超出baseline 46%，强于GPU。</p>
 <hr>
 <h2 id="6-自己的思考"><a href="#6-自己的思考" class="headerlink" title="6. 自己的思考"></a>6. 自己的思考</h2><p>借助GPETPU框架，Edge TPU在边缘计算以及嵌入式设备中有较好的应用前景。类似的设计方法在各种加速器设计上都可以参考。</p>
@@ -627,11 +654,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">TPU</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">通用计算</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">加速器</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -639,7 +662,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">加速器</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">TPU</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">通用计算</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -653,7 +680,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="2023/02/04/GPETPU/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/02/04/GPETPU/">展开全文 >></a>
     </p>
     
 
@@ -691,7 +718,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/" target="_blank">(HPCA06)</a>
+	  <a class="article-title" href="/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/" target="_blank">(HPCA06)从体系结构角度看软错误问题</a>
   
     </h1>
   
@@ -699,7 +726,7 @@
 
   
   
-<a href="2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/" class="archive-article-date">
+<a href="/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/" class="archive-article-date">
         <time datetime="2023-02-04T13:34:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-02-04</time>
 </a>
 
@@ -727,7 +754,8 @@
 <li>开发更好的设计框架、分析技术和软工具，以对软错误造成的系统影响产生<strong>更直观</strong>的理解和更量化的测量</li>
 <li>探索和刻画软错误避免、探测和恢复的技术，在<strong>合理的性能、功耗、面积和复杂度要求下</strong>，满足对不同可靠性指标的要求</li>
 </ul>
-<h2 id="单比特软错误的分类"><a href="#单比特软错误的分类" class="headerlink" title="单比特软错误的分类"></a>单比特软错误的分类</h2><h3 id="SDC-amp-DUE"><a href="#SDC-amp-DUE" class="headerlink" title="SDC &amp; DUE"></a>SDC &amp; DUE</h3><p><img src="/.io//soft_error.jpg" alt="单比特软错误的分类"></p>
+<h2 id="单比特软错误的分类"><a href="#单比特软错误的分类" class="headerlink" title="单比特软错误的分类"></a>单比特软错误的分类</h2><h3 id="SDC-amp-DUE"><a href="#SDC-amp-DUE" class="headerlink" title="SDC &amp; DUE"></a>SDC &amp; DUE</h3><img src="/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/soft_error.jpg" class="" title="单比特软错误的分类">
+
 <ul>
 <li>**SDC(Silent Data Corruption，静默数据错误)**：没有被探测到、没有被修复，且对最终结果产生了影响的软错误。</li>
 <li>**DUE(Detected Unrecoverable Error，被探测到且无法修复错误)**：被探测到了，但是无法被修复的错误。</li>
@@ -877,7 +905,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/">展开全文 >></a>
     </p>
     
 
@@ -915,7 +943,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/" target="_blank">图数据管理-课程笔记2</a>
+	  <a class="article-title" href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/" target="_blank">图数据管理-课程笔记2</a>
   
     </h1>
   
@@ -923,7 +951,7 @@
 
   
   
-<a href="2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/" class="archive-article-date">
+<a href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/" class="archive-article-date">
         <time datetime="2023-02-04T12:16:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-02-04</time>
 </a>
 
@@ -1102,7 +1130,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/">展开全文 >></a>
     </p>
     
 
@@ -1140,7 +1168,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/" target="_blank">图数据管理-课程笔记1</a>
+	  <a class="article-title" href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/" target="_blank">图数据管理-课程笔记1</a>
   
     </h1>
   
@@ -1148,7 +1176,7 @@
 
   
   
-<a href="2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/" class="archive-article-date">
+<a href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/" class="archive-article-date">
         <time datetime="2023-02-04T12:08:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-02-04</time>
 </a>
 
@@ -1397,7 +1425,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/">展开全文 >></a>
     </p>
     
 
@@ -1448,7 +1476,7 @@
   </div>
   
   
-	<script src="lib/busuanzi.pure.js"></script>
+	<script src="/lib/busuanzi.pure.js"></script>
 	
   
   
@@ -1474,7 +1502,7 @@
 		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,
-		root: "index.html",
+		root: "/",
 		innerArchive: true,
 		showTags: true
 	}
@@ -1531,11 +1559,15 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">TPU</a>
+                <a href="javascript:void(0)" class="js-tag color4">DNN</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">通用计算</a>
+                <a href="javascript:void(0)" class="js-tag color1">近存储计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">加速器</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1543,7 +1575,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">加速器</a>
+                <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">TPU</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">通用计算</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1564,18 +1604,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PKU</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">DNN</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">近存储计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1719,8 +1747,8 @@
   </div>
 
   
-<script type="text/javascript" src="plugins/TweenMax/TweenMax.min.js"></script>
-<script type="text/javascript" src="plugins/TweenMax/HoverImg.js"></script>
+<script type="text/javascript" src="/plugins/TweenMax/TweenMax.min.js"></script>
+<script type="text/javascript" src="/plugins/TweenMax/HoverImg.js"></script>
 
 <script>
 
@@ -1749,7 +1777,7 @@
 </script>
 
   
-<script type="text/javascript" src="plugins/activate-power-mode/activate-power-mode.js"></script>
+<script type="text/javascript" src="/plugins/activate-power-mode/activate-power-mode.js"></script>
 <script>
   POWERMODE.colorful = true; // make power mode colorful
   POWERMODE.shake = false; // turn off shake
@@ -1757,7 +1785,7 @@
 </script>
 
   
-  <!-- <script async type="text/javascript" size="90" alpha="0.2" zIndex="0" src="plugins/ribbon.js/ribbon.min.js"></script> -->
+  <!-- <script async type="text/javascript" size="90" alpha="0.2" zIndex="0" src="/plugins/ribbon.js/ribbon.min.js"></script> -->
   
   
   
