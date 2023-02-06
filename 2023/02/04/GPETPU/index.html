@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://recoderchris.github.io/2023/02/04/GPETPU/fig8.png">
 <meta property="og:image" content="https://recoderchris.github.io/2023/02/04/GPETPU/fig9.png">
 <meta property="article:published_time" content="2023-02-04T13:44:39.000Z">
-<meta property="article:modified_time" content="2023-02-04T15:30:50.330Z">
+<meta property="article:modified_time" content="2023-02-06T12:57:18.348Z">
 <meta property="article:author" content="Zhang Xinmiao">
 <meta property="article:tag" content="加速器">
 <meta property="article:tag" content="论文阅读">
@@ -135,7 +135,7 @@
 			</div>
 			
 				
-				<p style="font-size: 12px;">Our Best Life is our Twenties.<p>
+				<p style="font-size: 12px;">Our Best Life is Our Twenties<p>
 			
 		
 		</nav>
@@ -284,6 +284,8 @@
 </ul>
 <p>多年之前，GPU只是用来着色和渲染的工具，有CUDA和OpenCL之后，GPU凭借其大规模并行能力，面向了矢量计算领域。本工作和TPU的关系与CUDA与GPU的关系异曲同工。</p>
 <hr>
+<span id="more"></span>
+
 <h2 id="3-这个事情之前别人是怎么做的，存在什么问题？"><a href="#3-这个事情之前别人是怎么做的，存在什么问题？" class="headerlink" title="3. 这个事情之前别人是怎么做的，存在什么问题？"></a>3. 这个事情之前别人是怎么做的，存在什么问题？</h2><h3 id="①-背景知识"><a href="#①-背景知识" class="headerlink" title="① 背景知识"></a>① 背景知识</h3><ul>
 <li><strong>TPU：</strong>通过创建对张量执行操作的脉动阵列，来加速机器学习领域中的神经网络任务的领域特定硬件。</li>
 <li><strong>Edge TPU：</strong>谷歌开发的谷歌云TPU的精简版。相比于谷歌云TPU，它具有公共可得性、且其开放了部分后端C++代码、有更好的每瓦特性能（2TOPS&#x2F;W vs. 0.36TOPS&#x2F;W），因而被本工作选用为加速器。除谷歌之外，在TPU领域仍有非常多的工作，但是有绝大部分的TPU并不生产，用来学术研究；或者其性能和功耗表现较差，没有被本工作选用。然而，这些TPU都以张量为输入和输出，且其接口大同小异，所以本文提出的框架应该具备可移植性。</li>
@@ -738,22 +740,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">图计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">基础知识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">课程笔记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PKU</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">TPU</a>
               </li>
              
@@ -770,11 +756,27 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">SDC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">软错误</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SDC</a>
+                <a href="javascript:void(0)" class="js-tag color4">图计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">基础知识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">课程笔记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PKU</a>
               </li>
              
               <li class="article-tag-list-item">
