@@ -6,28 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://recoderchris.github.io">
-  <title>(HPCA06)从体系结构角度看软错误问题 | Xinmiao的博客</title>
+  <title>ABFT | Xinmiao的博客</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="以下内容来自HPCA’06的论文《The Soft Error Problem: An Architectural Perspective》。 背景知识什么是软错误高能粒子(e.g. 宇宙射线中的中子和封装材料中的α粒子)通过半导体设备(电路)时，会在其上产生电子空穴对(electron-hole pairs)，这会可能会导致瞬态错误(Transient Fault)。具体来说，电子空穴对会对晶体">
+  <meta name="description" content="ABFT解决矩阵乘问题原文：Algorithm-Based Fault Tolerance for Matrix Operations(1984, TC)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="(HPCA06)从体系结构角度看软错误问题">
-<meta property="og:url" content="https://recoderchris.github.io/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:title" content="ABFT">
+<meta property="og:url" content="https://recoderchris.github.io/2023/02/08/ABFT/index.html">
 <meta property="og:site_name" content="Xinmiao的博客">
-<meta property="og:description" content="以下内容来自HPCA’06的论文《The Soft Error Problem: An Architectural Perspective》。 背景知识什么是软错误高能粒子(e.g. 宇宙射线中的中子和封装材料中的α粒子)通过半导体设备(电路)时，会在其上产生电子空穴对(electron-hole pairs)，这会可能会导致瞬态错误(Transient Fault)。具体来说，电子空穴对会对晶体">
+<meta property="og:description" content="ABFT解决矩阵乘问题原文：Algorithm-Based Fault Tolerance for Matrix Operations(1984, TC)">
 <meta property="og:locale">
-<meta property="og:image" content="https://recoderchris.github.io/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/soft_error.jpg">
-<meta property="article:published_time" content="2023-02-04T13:34:34.000Z">
-<meta property="article:modified_time" content="2023-02-06T12:57:53.409Z">
+<meta property="article:published_time" content="2023-02-08T09:44:29.000Z">
+<meta property="article:modified_time" content="2023-02-08T09:45:50.172Z">
 <meta property="article:author" content="Zhang Xinmiao">
 <meta property="article:tag" content="容错">
 <meta property="article:tag" content="SDC">
 <meta property="article:tag" content="论文阅读">
 <meta property="article:tag" content="软错误">
-<meta property="article:tag" content="Umich">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://recoderchris.github.io/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/soft_error.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Xinmiao的博客" type="application/atom+xml">
   
@@ -210,14 +207,14 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-软错误问题" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-ABFT" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
   
   
     <h1 class="article-title" itemprop="name">
-      (HPCA06)从体系结构角度看软错误问题
+      ABFT
     </h1>
   
 
@@ -229,8 +226,8 @@
               <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
         </span>
 
-<a href="/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/" class="archive-article-date">
-        <time datetime="2023-02-04T13:34:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-02-04</time>
+<a href="/2023/02/08/ABFT/" class="archive-article-date">
+        <time datetime="2023-02-08T09:44:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-02-08</time>
 </a>
 
   
@@ -243,7 +240,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">4.8k字</span>
+      <span class="post-count">19字</span>
     </span>
   </span>
 
@@ -252,7 +249,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">17分</span>
+      <span class="post-count">1分</span>
     </span>
   </span>
 </div>
@@ -263,132 +260,7 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p>以下内容来自HPCA’06的论文《<em><strong>The Soft Error Problem: An Architectural Perspective</strong></em>》。</p>
-<h1 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h1><h2 id="什么是软错误"><a href="#什么是软错误" class="headerlink" title="什么是软错误"></a>什么是软错误</h2><p><strong>高能粒子</strong>(e.g. <em>宇宙射线中的中子和封装材料中的α粒子</em>)通过半导体设备(电路)时，会在其上产生<strong>电子空穴对</strong>(electron-hole pairs)，这会可能会导致<strong>瞬态错误</strong>(Transient Fault)。具体来说，电子空穴对会对晶体管的源(source)和扩散节点充电，如果充电量到达一定的阈值，会使得设备上某个组件(e.g. SRAM、锁存器、门电路)的逻辑状态发生改变，最终使得整个电路的运行结果产生逻辑错误，这种因为瞬态错误继而产生的运行错误被称为**软错误(soft error)**。</p>
-<span id="more"></span>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PS: 与此相对应，硬错误(hard error)是指电路原件发生破坏，错误无法在短时间内修正的错误。个人理解是：软错误相对于硬错误来说是一种逻辑错误，而不是真实硬件发生了错误。软错误在接下来也许很难复现。</span><br></pre></td></tr></table></figure>
-
-<p>一般来说，每个电子元器件器件的纯软错误率(raw error rate)是一个常数。随着工艺水平的提升，单位面积的电路中将会集成更多的电子元器件，因而整个电路的纯软错误率线性增长。为了降低纯软错误率，一些DRAM厂商通过<strong>减缓单位电容的提升</strong>、<strong>降低供电电压</strong>等措施来降低每比特的软错误率，以应对工艺迭代会造成的软错误率提升。</p>
-<h2 id="软错误：从工业界到学术界"><a href="#软错误：从工业界到学术界" class="headerlink" title="软错误：从工业界到学术界"></a>软错误：从工业界到学术界</h2><p>工业界中亟待解决的因为软错误而产生的问题：</p>
-<ul>
-<li>在芯片设计中，厂商希望能够<strong>了解</strong>软错误会对其设计产生多大的影响</li>
-<li>希望能够从现有的技术中选择一种合适的策略来<strong>降低软错误产生的影响</strong>，以达到通过最小代价换取其可靠性指标的目的。</li>
-</ul>
-<p>而学术界要解决以下的具体问题：</p>
-<ul>
-<li>开发更好的设计框架、分析技术和软工具，以对软错误造成的系统影响产生<strong>更直观</strong>的理解和更量化的测量</li>
-<li>探索和刻画软错误避免、探测和恢复的技术，在<strong>合理的性能、功耗、面积和复杂度要求下</strong>，满足对不同可靠性指标的要求</li>
-</ul>
-<h2 id="单比特软错误的分类"><a href="#单比特软错误的分类" class="headerlink" title="单比特软错误的分类"></a>单比特软错误的分类</h2><h3 id="SDC-amp-DUE"><a href="#SDC-amp-DUE" class="headerlink" title="SDC &amp; DUE"></a>SDC &amp; DUE</h3><img src="/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/soft_error.jpg" class="" title="单比特软错误的分类">
-
-<ul>
-<li>**SDC(Silent Data Corruption，静默数据错误)**：没有被探测到、没有被修复，且对最终结果产生了影响的软错误。</li>
-<li>**DUE(Detected Unrecoverable Error，被探测到且无法修复错误)**：被探测到了，但是无法被修复的错误。</li>
-</ul>
-<p>目前，业界认为软错误率为SDC和DUE之和。DUE错误因为无法修正，所以它并不会影响整体的错误率。对抗DUE错误的最基本的对抗办法是fail-stop(重新运行)，以保证最后结果是正确的，但是它实际上并没有降低错误率。</p>
-<p>DUE有两种分类：</p>
-<ol>
-<li><p>第一种分类：会对最终结果产生影响的被称为<strong>true DUE</strong>，不会产生影响的被成为<strong>false DUE</strong>。保守的系统会对所有的DUE错误进行处理，一些系统则会分辨false DUE，例如错误选择路径的指令，来分门别类进行处理。</p>
-</li>
-<li><p>另一种分类：根据重新运行方式被分为<strong>process-kill</strong>和<strong>system-kill</strong>的DUE。所谓的process-kill是指一些DUE(e.g. 奇偶位校验错误)产生后，操作系统会隔离开这个错误，锁定一组出错的进程将它们杀死，保留其他进程正常运行，这种DUE被称为process-kill DUE；而另一种DUE是只能将整个系统关闭并重启才可以修复的错误，被称为system-kill DUE。</p>
-</li>
-</ol>
-<h3 id="衡量软错误的单位：FIT和MTTF"><a href="#衡量软错误的单位：FIT和MTTF" class="headerlink" title="衡量软错误的单位：FIT和MTTF"></a>衡量软错误的单位：FIT和MTTF</h3><ul>
-<li>**FIT(failure in time)**：是指在10<sup>9</sup>小时内产生的错误次数。SDC和DUE都可以用它来量化，FIT具有可加性，例如芯片的FIT可以用它上面所有组件的FIT求和得到。SDC和DUE的FIT数值和是整个芯片或系统的SER(soft error rate，软错误率)。</li>
-<li>**MTTF(mean time to failure)**：是FIT的倒数，一种更加直观的展示。含义是经过多久系统会发生一次软错误。例如：1FIT&#x3D;114 years</li>
-</ul>
-<p>一般来说，厂商都会在推出产品前规定自己产品的软错误率预算。例如IBM的power4宣称其SDC MTTF&#x3D;1000yrs，process-kill DUE MTTF&#x3D;10yrs，system-kill DUE MTTF&#x3D;25yrs。有更好的错误检测机制的系统，其SDC FIT会越低，但是DUE会更高。只有同时具备良好的检测(detection)和恢复(recovery)机制的系统，SDC和DUE FIT都会更低，使得SER会更低。</p>
-<h1 id="计算或估计SDC和DUE-FIT"><a href="#计算或估计SDC和DUE-FIT" class="headerlink" title="计算或估计SDC和DUE FIT"></a>计算或估计SDC和DUE FIT</h1><p>芯片或系统设计团队要面临的一大问题是：<strong>设计出来的产品能否满足其软错误率预算的要求</strong>。当然，最准确的测量设计的软错误率的方法应该是这样的：使用加速中子或者放射性阿尔法粒子对真实电路进行实验。但是这种方法的实验代价太大，且需要将产品研制出来之后再测试。这种方法显然既耗时间，又不经济，不符合在芯片设计阶段的要求。</p>
-<p>要计算或者估计设计的软错误率，目前普遍采用的是<strong>建模和计算</strong>的思想。首先，软错误率为SDC FIT和DUE FIT之和，之后再将整个系统或芯片的FIT拆解成每个组件的FIT。而每个组件的FIT又可以分为以下两个部分：</p>
-<ul>
-<li><strong>原始设备错误率</strong>(raw circuit error, 指瞬态错误能够导致组件状态转变的可能性)</li>
-<li><strong>体系结构脆弱因子</strong>(AVF, 指这个组件的状态变化，能够产生架构层面上可见的SDC&#x2F;DUE的可能性)</li>
-</ul>
-<p>由此可见，计算设计的软错误率需要计算<strong>原始设备错误率</strong>和<strong>体系结构脆弱因子</strong>两项。</p>
-<h2 id="原始设备错误率"><a href="#原始设备错误率" class="headerlink" title="原始设备错误率"></a>原始设备错误率</h2><p>每个组件的原始设备错误率由两个因素来决定：环境中的粒子流量和由工艺和实现决定的底层电路错误率。</p>
-<h3 id="粒子流量-particle-flux"><a href="#粒子流量-particle-flux" class="headerlink" title="粒子流量(particle flux)"></a>粒子流量(particle flux)</h3><p>错误率基本和环境中的粒子流量成线性关系。环境中的粒子可以通过施加适当的屏蔽机制来实现一定程度的屏蔽，但是一般来说效果并不好。(需要很厚的混凝土隔离，不好实现)此外，随着海拔高度升高，粒子流量也会上升。</p>
-<h3 id="底层电路错误率-circuit-error-rate"><a href="#底层电路错误率-circuit-error-rate" class="headerlink" title="底层电路错误率(circuit error rate)"></a>底层电路错误率(circuit error rate)</h3><p>电路错误率又由两个因素来决定：<strong>原始电路错误率</strong>和<strong>时间脆弱性因子</strong>(TVF, time vulnerability factor)。</p>
-<ol>
-<li><strong>原始电路错误率</strong>：指的是特定的电路单元会发生比特反转的可能性。这个跟比特反转的充电量Q<sub>crit</sub>有关系，而这个数值由电路的电容和电压决定。一般来说，为了估算原始电路错误率，可以通过在不同时间点模拟电路单元(cell)的所有节点上的所有尺度的电流脉冲来计算原始错误率。但是这个花费的时间复杂度太高。因此，对于全芯片模拟，通常我们使用<strong>近似模型或蒙特卡洛</strong>模拟技术。</li>
-<li><strong>TVF</strong>：它是指在一个周期内一个比特反转会被捕获到的概率。例如，对于DRAM来说，因为它每个周期都会刷新一次，所以其被捕捉到的概率是100%；对于锁存器，只有在其内部保存数据的时候电路翻转才会被捕捉到，故概率大概是50%；对于一些静态逻辑电路，例如NAND电路，它只有在其前向电路(例如：前向电路中有锁存器)捕捉到这一变化时才有效。</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">例子：计算原始设备利用率</span><br><span class="line"></span><br><span class="line">一般假定FIT/bit在0.001~0.01之间(原始电路错误率)，我们假定最小值0.001。TVF=50%，目标系统有4个CPU，SDC FIT预算为114FIT，我们可以算出每个处理器中最多有57,000(=114FIT/(0.001FIT/bit*0.5TVF*4CPU))个不受保护的锁存器。</span><br></pre></td></tr></table></figure>
-
-<h2 id="SDC-AVF"><a href="#SDC-AVF" class="headerlink" title="SDC AVF"></a>SDC AVF</h2><ul>
-<li>SDC AVF：一个比特反转真正能够导致系统实质性执行错误的可能性，因为这个反转既没有被处理，也没有被探测到。</li>
-<li>比特反转并不一定造成实质性执行错误：例如，如果分支预测的寄存器发生比特反转，不会影响程序的执行结果(SDC AVF&#x3D;0%)；而如果程序计数器的寄存器发生比特反转，程序大概率会被影响(SDC AVF&#x3D;100%)；指令队列中的寄存器比特反转就不一定了，如果里面存储的是错误路径的指令，那么SDC AVF很低；而如果是关键路径，那么SDC AVF就很高了。</li>
-<li>ACE(architecturally correct execution)：ACE代表任何一种能够向用户产生正确系统执行结果的执行。</li>
-<li>ACE bit：是指其中包含的信息一旦改变，将会影响程序的最终结果。un-ACE bit反之。</li>
-<li>一个存储单元的SDC AVF是其中ACE bit的占比。如果一个程序执行了1000万个周期，其中的一个存储单元包含100万个周期的ACE位，则该单元的SDC AVF为10%。一个设计的SDC AVF是所有单元SDC AVF的总和。</li>
-</ul>
-<h2 id="DUE-AVF"><a href="#DUE-AVF" class="headerlink" title="DUE AVF"></a>DUE AVF</h2><ul>
-<li><strong>DUE AVF</strong>是指比特反转会导致DUE的概率。它是true DUE和false DUE的总和。</li>
-<li><strong>True DUE AVF</strong>实际上是SDC AVF中被探测到的那部分，它在数值上等于老的SDC AVF</li>
-</ul>
-<h2 id="计算SDC和DUE-AVF"><a href="#计算SDC和DUE-AVF" class="headerlink" title="计算SDC和DUE AVF"></a>计算SDC和DUE AVF</h2><p>有三种方法：统计性错误注入、分析模型和性能模型(模拟器)。</p>
-<h3 id="统计性错误注入-Statistical-Fault-Injection-SFI"><a href="#统计性错误注入-Statistical-Fault-Injection-SFI" class="headerlink" title="统计性错误注入(Statistical Fault Injection, SFI)"></a>统计性错误注入(Statistical Fault Injection, SFI)</h3><ul>
-<li>SFI是一种历经时间检验的测量脆弱性参数的方法</li>
-<li><strong>方法：</strong>在被研究的RTL设计结构中引入比特反转(时间空间随机)，之后运行设计，比较没有错误的模型和当前模型的体系结构状态。在运行几个模拟cycle之后，如果对比没有差异，说明错误潜伏在处理器中，或者已经被掩盖了。后者可以通过继续比较微结构状态来说明。此架构的AVF就是结果差异数量和比特反转数量的比值。（Architectural state includes main memory, architectural registers, and the program counter. Architectural state is defined by the instruction set architecture and can be manipulated by the programmer using instructions.）</li>
-<li><strong>优点：</strong>有力、不需要对处理器内部设计了解。</li>
-<li><strong>缺点：</strong>只能在详细的模型(RTL级，需要建模所有的比特)生效，对于每一个注入错误比特，需要上万cycle的测试，相当耗费时间；有错误和无错误的模型之间的不匹配不一定意味着存在错误，因为体系结构状态实际上可能包含非ACE位，例如动态死寄存器值。</li>
-</ul>
-<h3 id="分析模型"><a href="#分析模型" class="headerlink" title="分析模型"></a>分析模型</h3><ul>
-<li><p><strong>场景：</strong>比特流未经修改且没有重复地流经电路</p>
-</li>
-<li><p><strong>Little’s Law: N &#x3D; B x L</strong></p>
-<ul>
-<li>N – 结构中的平均比特数量</li>
-<li>B – 每个周期进入结构的平均比特带宽</li>
-<li>L – 每个比特通过结构的平均延迟</li>
-</ul>
-</li>
-<li><p><strong>分析模型：</strong><br>$$<br>\frac{B_{ace}\times L_{ace}}{number,of,bits,in,structure}<br>$$</p>
-</li>
-<li><p><strong>举例：</strong>对于指令队列，B<sub>ace</sub>是 IPC（每周期指令数）乘以每条指令的 ACE 位数。 L<sub>ace</sub> 是指令在指令队列中的驻留周期。 当性能模型和 RTL 都不可用时，此方法在设计的早期阶段很有用。</p>
-</li>
-</ul>
-<h3 id="性能模型"><a href="#性能模型" class="headerlink" title="性能模型"></a>性能模型</h3><ul>
-<li><strong>基本思想：</strong>识别流经机器的比特哪些是 ACE状态，哪些不是 ACE状态。 根据定义，每个比特位包含 ACE 状态的时间占比是位的 AVF，此过程被称为寿命分析。</li>
-<li><strong>主要挑战：</strong>确定每个位寿命的un-ACE 部分。导致un-ACE 状态的例子(在指令中)有dynamically dead&#x2F;wrong-path&#x2F;falsely predicted instruction。因而生命周期分析需要深入了解架构和微架构。</li>
-<li><strong>优势：</strong>与 SFI 不同，性能模型中的 ACE 分析要快得多，因为可以在一个实验中计算大量处理器结构的 AVF。 此外，性能模型可以实际运行数千万个周期，此它可以提供比 SFI 更高的准确性。</li>
-</ul>
-<h1 id="减小软错误率的方法"><a href="#减小软错误率的方法" class="headerlink" title="减小软错误率的方法"></a>减小软错误率的方法</h1><p>以上只是介绍了如何估计一个设计的软错误率。而真正要减少软错误率，可以从以下三个方面入手：<strong>制造工艺、电路层面和架构层面</strong>。</p>
-<h2 id="处理工艺层面"><a href="#处理工艺层面" class="headerlink" title="处理工艺层面"></a>处理工艺层面</h2><ul>
-<li><strong>方案：</strong>绝缘体上硅 (<em>silicon-on-insulator</em>, SOI)。</li>
-<li><strong>原理：</strong>因为其硅层薄的多，SOI 器件从 alpha 或中子粒子撞击中收集的电荷较少。</li>
-<li><strong>效果或优势：</strong>SOI 工艺可以使 SRAM 设备的 SER 降低 5 倍。(IBM)</li>
-<li><strong>缺点：</strong>尚不清楚是否会从 SOI 锁存器和逻辑器件中获得类似的 SER 降低；SOI 芯片的批量生产仍然是一个挑战。</li>
-</ul>
-<h2 id="电路层面"><a href="#电路层面" class="headerlink" title="电路层面"></a>电路层面</h2><ul>
-<li><strong>方案：</strong>调整设备参数、创建抗辐射（或抗辐射）单元。</li>
-<li><strong>原理：</strong>增加设备的电容和&#x2F;或电源电压，这两者都会提高 Q<sub>crit</sub>，来降低软错误率； 抗辐射单元(cell)可能包含冗余状态，可以用来从软错误中恢复。</li>
-<li><strong>缺点：</strong>抗辐射单元会带来显着的面积和功耗开销。</li>
-</ul>
-<h2 id="架构层面"><a href="#架构层面" class="headerlink" title="架构层面"></a>架构层面</h2><p>架构解决方案可能比电路级解决方案更有效：</p>
-<ol>
-<li>错误的【定义】通常存在于体系结构中（例如，对分支预测器的攻击不会导致微处理器中出现错误）。</li>
-<li>典型的架构层面解决方案（例如奇偶校验或 ECC）的开销通常可以分摊到大量的位上。例如，ECC 的开销为每 64 位数据额外多出8位（即 13%），而抗辐射单元可能有 30-100% 的面积损失</li>
-</ol>
-<h3 id="微观层面-micro-solution"><a href="#微观层面-micro-solution" class="headerlink" title="微观层面(micro solution)"></a>微观层面(micro solution)</h3><ol>
-<li><strong>奇偶校验(parity)：</strong>奇偶校验可以检测任何单比特错误，但只能检测，不能修正。 受奇偶校验保护的位，通常具有SDC AVF&#x3D;0，但DUE AVF不等于0。 但是，奇偶校验保护结构的 DUE AVF 可以通过架构知识减少到零。 例如，受保护的直写缓存可以使奇偶校验错误的块无效，并从较低级别的缓存中重新获取正确的块。</li>
-<li><strong>SECDED ECC(single error correct, double error detected)：</strong>通常用于处理器高速缓存，可以纠正所有单比特错误并检测所有双比特错误，为单比特错误提供零SDC 和 DUE AVF。 ECC 可以inline或out-of-band实现：inline ECC 需要在读取返回数据之前计算并验证 ECC 代码是否正确，这通常会在处理器流水线中产生一个或多个额外的周期；out-of-band ECC 检查允许处理器继续读取数据，如果 ECC 检查检测到错误，读取不正确数据的指令重新提交，缓存数据被更正。</li>
-<li><strong>π 比特：</strong>π 比特是一种错误传播机制，可减少false DUE。 检测到错误后，不会立即发出错误信号，而是将错误发布在π位中并传播，直到有更多有价值的信息出现。 例如，在奇偶校验中，不会保护的寄存器文件中直接引发错误，而是可以通过在读取特定寄存器的指令时设置π位来发布错误。如果确定有问题的指令在错误的路径上，则忽略π位，避免false DUE 事件的发生。</li>
-</ol>
-<h3 id="宏观层面-macro-solution"><a href="#宏观层面-macro-solution" class="headerlink" title="宏观层面(macro solution)"></a>宏观层面(macro solution)</h3><p>微观层面的方法可能需要大量的面积和设计工作负担。 因此，在某些情况下，使用 CPU 或线程进行故障检测可能会更简单。两种广泛的故障检测解决方案包括流水线的<strong>逐周期锁步(lockstepping)</strong> 和**冗余多线程 (redundant multithreading, RMT)**。</p>
-<ol>
-<li>逐周期锁步： 在逐周期锁步中，同一的程序在相同的流水线上运行，每个周期都会检查二者的输出是否一致。</li>
-<li>RMT：在指令的提交点检查选定的指令的输出是否匹配。 与锁步不同，RMT 并不需要两个线程每个周期进行同步。</li>
-</ol>
-<p>以上方法降低了 SDC 率，但增加了 DUE 率。 降低处理器的 DUE 率需要通过硬件或软件进行错误恢复实现。从检测到的错误中恢复需要识别有问题的处理器并保持可以启动恢复的正确状态。 当外部检查器检测到错误时，可以从内部错误信号中识别有问题的处理器；或者可以定期检查处理器的状态，并在错误回滚时从检查点重启流水线或线程。</p>
-<h1 id="未来方向"><a href="#未来方向" class="headerlink" title="未来方向"></a>未来方向</h1><ol>
-<li><strong>计算不同架构的 SDC 和 DUE AVF：</strong>需要详细的生命周期分析和潜在的新技术，以识别处理器结构中的 ACE 和非 ACE 组件。</li>
-<li><strong>适用于不同处理器结构的AVF缩减技术</strong></li>
-<li><strong>保护数据通过的微架构状态：</strong>现代处理器芯片既包含处理器内核，也包含系统组件，例如内存控制器和路由器。 保护流经“非核心”部分的数据可能并不难，我们可以通过在流水线中创建数据的位置，生成错误保护位提供端到端的错误保护，并让其保持不变地流动，直到数据被使用。 然而，保护数据通过的微架构的状态可能需要进一步研究。</li>
-<li><strong>RMT 的软件版本：</strong>锁步基本上是一个硬件概念，而 RMT 可以在硬件或软件中实现。与之前的软件故障检测实施相比，RMT 模型允许设计人员减少必要的软件检查次数。 此外，软件无法完全了解硬件，因此硬件可能必须有选择地去保护RMT无法涵盖的一些结构，这涉及软硬件协同。</li>
-<li><strong>了解和描述软错误与功率的权衡关系：</strong> 当电源电压降低时，软错误率会急剧上升。 二者如何权衡是下一步要解决的一个问题。</li>
-<li><strong>来自其他问题的软错误：</strong>例如电源噪声、耦合等。这需要详细了解不同的故障模型，但关于软错误的许多定义可以被转移到这些类型的故障中。</li>
-</ol>
+    <h1 id="ABFT解决矩阵乘问题"><a href="#ABFT解决矩阵乘问题" class="headerlink" title="ABFT解决矩阵乘问题"></a>ABFT解决矩阵乘问题</h1><p>原文：Algorithm-Based Fault Tolerance for Matrix Operations(1984, TC)</p>
 
     
 
@@ -435,7 +307,7 @@
         </li>
         <li>
           <strong>本文链接：</strong>
-          <a href="https://recoderchris.github.io/2023/02/04/软错误问题/" title="(HPCA06)从体系结构角度看软错误问题" target="_blank">https://recoderchris.github.io/2023/02/04/软错误问题/</a>
+          <a href="https://recoderchris.github.io/2023/02/08/ABFT/" title="ABFT" target="_blank">https://recoderchris.github.io/2023/02/08/ABFT/</a>
         </li>
         
         <li>
@@ -470,10 +342,6 @@
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">软错误</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Umich</a>
         		</li>
       		
 		</ul>
@@ -529,7 +397,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://recoderchris.github.io/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/" alt="微信分享二维码"> -->
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://recoderchris.github.io/2023/02/08/ABFT/" alt="微信分享二维码"> -->
     </div>
 </div>
 
@@ -544,18 +412,9 @@
 
 <nav id="article-nav">
   
-    <a href="/2023/02/04/GPETPU/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          (SC21)GPETPU:用EdgeTPU加速通用应用
-        
-      </div>
-    </a>
   
-  
-    <a href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">图数据管理-课程笔记2</div>
+    <a href="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Meta关于SDC的项目基金和已有的研究成果调研</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -582,7 +441,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF%E7%9F%A5%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text">背景知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%BD%AF%E9%94%99%E8%AF%AF"><span class="toc-number">1.1.</span> <span class="toc-text">什么是软错误</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E9%94%99%E8%AF%AF%EF%BC%9A%E4%BB%8E%E5%B7%A5%E4%B8%9A%E7%95%8C%E5%88%B0%E5%AD%A6%E6%9C%AF%E7%95%8C"><span class="toc-number">1.2.</span> <span class="toc-text">软错误：从工业界到学术界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E6%AF%94%E7%89%B9%E8%BD%AF%E9%94%99%E8%AF%AF%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">1.3.</span> <span class="toc-text">单比特软错误的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SDC-amp-DUE"><span class="toc-number">1.3.1.</span> <span class="toc-text">SDC &amp; DUE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A1%E9%87%8F%E8%BD%AF%E9%94%99%E8%AF%AF%E7%9A%84%E5%8D%95%E4%BD%8D%EF%BC%9AFIT%E5%92%8CMTTF"><span class="toc-number">1.3.2.</span> <span class="toc-text">衡量软错误的单位：FIT和MTTF</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%88%96%E4%BC%B0%E8%AE%A1SDC%E5%92%8CDUE-FIT"><span class="toc-number">2.</span> <span class="toc-text">计算或估计SDC和DUE FIT</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%A7%8B%E8%AE%BE%E5%A4%87%E9%94%99%E8%AF%AF%E7%8E%87"><span class="toc-number">2.1.</span> <span class="toc-text">原始设备错误率</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B2%92%E5%AD%90%E6%B5%81%E9%87%8F-particle-flux"><span class="toc-number">2.1.1.</span> <span class="toc-text">粒子流量(particle flux)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%95%E5%B1%82%E7%94%B5%E8%B7%AF%E9%94%99%E8%AF%AF%E7%8E%87-circuit-error-rate"><span class="toc-number">2.1.2.</span> <span class="toc-text">底层电路错误率(circuit error rate)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SDC-AVF"><span class="toc-number">2.2.</span> <span class="toc-text">SDC AVF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DUE-AVF"><span class="toc-number">2.3.</span> <span class="toc-text">DUE AVF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97SDC%E5%92%8CDUE-AVF"><span class="toc-number">2.4.</span> <span class="toc-text">计算SDC和DUE AVF</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E6%80%A7%E9%94%99%E8%AF%AF%E6%B3%A8%E5%85%A5-Statistical-Fault-Injection-SFI"><span class="toc-number">2.4.1.</span> <span class="toc-text">统计性错误注入(Statistical Fault Injection, SFI)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.4.2.</span> <span class="toc-text">分析模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.4.3.</span> <span class="toc-text">性能模型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%8F%E5%B0%8F%E8%BD%AF%E9%94%99%E8%AF%AF%E7%8E%87%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">减小软错误率的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E5%B7%A5%E8%89%BA%E5%B1%82%E9%9D%A2"><span class="toc-number">3.1.</span> <span class="toc-text">处理工艺层面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%B5%E8%B7%AF%E5%B1%82%E9%9D%A2"><span class="toc-number">3.2.</span> <span class="toc-text">电路层面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E5%B1%82%E9%9D%A2"><span class="toc-number">3.3.</span> <span class="toc-text">架构层面</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AE%E8%A7%82%E5%B1%82%E9%9D%A2-micro-solution"><span class="toc-number">3.3.1.</span> <span class="toc-text">微观层面(micro solution)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8F%E8%A7%82%E5%B1%82%E9%9D%A2-macro-solution"><span class="toc-number">3.3.2.</span> <span class="toc-text">宏观层面(macro solution)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91"><span class="toc-number">4.</span> <span class="toc-text">未来方向</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ABFT%E8%A7%A3%E5%86%B3%E7%9F%A9%E9%98%B5%E4%B9%98%E9%97%AE%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">ABFT解决矩阵乘问题</span></a></li></ol>
                     </div>
                 </span>
             </div>

@@ -10,26 +10,31 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="outline：软错误背景-SDC问题-meta在解决什么样的问题-meta推荐的研究方向-软件方向和硅方向-锁定在软件方向并且详细介绍(ABFT ai MM NN介绍)-AI方法怎么apply到这个上面(想做什么) 背景Meta的服务(facebook, instagram, whatsapp, messengers)都依赖于数据中心的服务。然而，静默数据错误(SDC)无法被大型系统所发现，在硬">
+  <meta name="description" content="outline：软错误背景-SDC问题-meta在解决什么样的问题-meta推荐的研究方向-软件方向和硅方向-锁定在软件方向并且详细介绍(ABFT ai MM NN介绍)-AI方法怎么apply到这个上面(想做什么) 背景Meta的服务(facebook, instagram, whatsapp, messengers)都依赖于数据中心的服务。   然而，静默数据错误(SDC)无法被大型系统所发现">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Meta关于SDC的项目基金和已有的研究成果调研">
 <meta property="og:url" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/index.html">
 <meta property="og:site_name" content="Xinmiao的博客">
-<meta property="og:description" content="outline：软错误背景-SDC问题-meta在解决什么样的问题-meta推荐的研究方向-软件方向和硅方向-锁定在软件方向并且详细介绍(ABFT ai MM NN介绍)-AI方法怎么apply到这个上面(想做什么) 背景Meta的服务(facebook, instagram, whatsapp, messengers)都依赖于数据中心的服务。然而，静默数据错误(SDC)无法被大型系统所发现，在硬">
+<meta property="og:description" content="outline：软错误背景-SDC问题-meta在解决什么样的问题-meta推荐的研究方向-软件方向和硅方向-锁定在软件方向并且详细介绍(ABFT ai MM NN介绍)-AI方法怎么apply到这个上面(想做什么) 背景Meta的服务(facebook, instagram, whatsapp, messengers)都依赖于数据中心的服务。   然而，静默数据错误(SDC)无法被大型系统所发现">
 <meta property="og:locale">
+<meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig0.jpg">
 <meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig1.jpg">
 <meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig2.jpg">
 <meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig3.jpg">
 <meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig4.jpg">
+<meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig5.jpg">
+<meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig6.jpg">
+<meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig7.jpg">
+<meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig8.jpg">
 <meta property="article:published_time" content="2023-02-06T02:07:35.000Z">
-<meta property="article:modified_time" content="2023-02-06T15:07:49.519Z">
+<meta property="article:modified_time" content="2023-02-08T06:50:25.969Z">
 <meta property="article:author" content="Zhang Xinmiao">
-<meta property="article:tag" content="论文阅读">
 <meta property="article:tag" content="容错">
 <meta property="article:tag" content="SDC">
+<meta property="article:tag" content="论文阅读">
 <meta property="article:tag" content="软错误">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig1.jpg">
+<meta name="twitter:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig0.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Xinmiao的博客" type="application/atom+xml">
   
@@ -245,7 +250,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">4.9k字</span>
+      <span class="post-count">6.1k字</span>
     </span>
   </span>
 
@@ -254,7 +259,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">16分</span>
+      <span class="post-count">21分</span>
     </span>
   </span>
 </div>
@@ -266,11 +271,20 @@
   <div class="article-entry" itemprop="articleBody">
     
     <p>outline：软错误背景-SDC问题-meta在解决什么样的问题-meta推荐的研究方向-软件方向和硅方向-锁定在软件方向并且详细介绍(ABFT ai MM NN介绍)-AI方法怎么apply到这个上面(想做什么)</p>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>Meta的服务(facebook, instagram, whatsapp, messengers)都依赖于数据中心的服务。然而，静默数据错误(SDC)无法被大型系统所发现，在硬件层面无法被捕获，有可能会随着软硬件栈一直传播，最终形成应用层面的数据损失。这些损失可能需要数个月来修复，是大型基础计算设施中潜在的问题。</p>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>Meta的服务(facebook, instagram, whatsapp, messengers)都依赖于数据中心的服务。</p>
+<img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig0.jpg" class="" title="SDC对应用层产生的影响">
+
+<p>然而，静默数据错误(SDC)无法被大型系统所发现，在硬件层面无法被捕获，有可能会随着软硬件栈一直传播，最终形成应用层面的数据损失。这些损失可能需要数个月来修复，是大型基础计算设施中潜在的问题。<br>以下在数据中心中出现的重大事故都与SDC问题相关：</p>
+<ol>
+<li>AWS S3 因 bit corruption 造成 36 小时的服务中断</li>
+<li>Facebook 遇到 10%-15% 的图片无法访问 (48 小时)</li>
+<li>Netflix 宕机超过 3 天</li>
+</ol>
 <span id="more"></span>
 
 <hr>
-<h1 id="潜在研究方向"><a href="#潜在研究方向" class="headerlink" title="潜在研究方向"></a>潜在研究方向</h1><p>针对以上前沿研究问题，Meta的系统和基础架构实验室已经开展了大量的工作并运用于云服务场景中以保证服务交付的准确性。经过多年的研究，Meta认为解决SDC问题有以下四个方向：</p>
+<h1 id="潜在研究方向"><a href="#潜在研究方向" class="headerlink" title="潜在研究方向"></a>潜在研究方向</h1><p>我们固然可以执行非常严厉的计划来避免 SDC 问题，然而无论多么精巧的设计都不能 100% 避免问题的发生，而且会急剧降低系统的整体性能。这就要求系统设计者学会在性能与可靠性之间做工程上的平衡。</p>
+<p>针对以上前沿研究问题，Meta的系统和基础架构实验室已经开展了大量的工作并运用于云服务场景中以保证服务交付的准确性。经过多年的研究，Meta认为解决SDC问题有以下四个方向：</p>
 <ol>
 <li>从**计算架构(Architecture)**层面处理SDC问题<ul>
 <li>架构层面上处理和转移SDC的方法，例如enhanced compute block ECC机制</li>
@@ -393,7 +407,33 @@
 <p>从以上四点，本文总结保护集群以对抗SDC的唯一方法是通过不断改进的测试例程和高级测试模式生成来反复测试基础设施。</p>
 </li>
 </ul>
-<h2 id="架构测试"><a href="#架构测试" class="headerlink" title="架构测试"></a>架构测试</h2><h2 id="效果对比"><a href="#效果对比" class="headerlink" title="效果对比"></a>效果对比</h2>
+<h2 id="基础设施集群测试的方法-Infrastructure-Fleet-Testing"><a href="#基础设施集群测试的方法-Infrastructure-Fleet-Testing" class="headerlink" title="基础设施集群测试的方法(Infrastructure Fleet Testing)"></a>基础设施集群测试的方法(Infrastructure Fleet Testing)</h2><p>两个主要的测试方法：</p>
+<ul>
+<li>停产测试(Out-of-production Testing)</li>
+<li>不停产测试(In-production Testing)</li>
+</ul>
+<h3 id="停产测试-Out-of-production-Testing"><a href="#停产测试-Out-of-production-Testing" class="headerlink" title="停产测试(Out-of-production Testing)"></a>停产测试(Out-of-production Testing)</h3><img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig5.jpg" class="" title="SDC对应用层产生的影响">
+
+<p>停产测试是指让机器接受一组固定特征的输入，将其输出与已知参考值进行比较的过程。这种测试往往在机器没有执行生产负载的时候执行，并且测试要经历不同的温度、电压、机器条件和地域环境等复杂条件。</p>
+<p>测试的特征往往是根据生产经验以及对硅架构本身的理解来生成的，以匹配常见的一些缺陷。一般来说，在大型基础设施中，总是会有一部分机器处于维护状态，在维护开始之前，机器上的负载会被迁移下来，这叫做draining phase。之后会进行维护，例如固件升级、内核升级、环境配置、修理等措施，之后再重新将工作负载迁移回来。</p>
+<p>之后进行停产测试：用于停产测试的工具是Meta开发的<strong>Fleetscanner</strong>。Fleetscanner会找机会识别那些进入和退出维护状态的机器，并且使已经完成维护的机器进入停产测试SDC阶段。在所有情况下，根据可用的测试时间、识别的机器类型，fleetscanner会运行优化的测试，并提供设备对敏感的架构代码路径的响应快照，并验证计算是否准确。此时，大量的机器相关的参数会被瞬间捕捉到，以在分析过程中理解设备出错的具体条件。任何被鉴别为出SDC错误的机器会被放进quarantine pool中，以待进一步的观察和测试。</p>
+<h3 id="不停产测试-In-production-Testing"><a href="#不停产测试-In-production-Testing" class="headerlink" title="不停产测试(In-production Testing)"></a>不停产测试(In-production Testing)</h3><p>不停产测试是指在集群内机器仍然运行工作负载的情况下，同时进行测试。如果不对测试例程和工作负载有细致的了解，则很难实现这一点。Meta实现了一种叫做ripple的测试方法，与工作负载同时存在，并且每次实现毫秒级别的测试时长。在停产测试中使用的测试序列被修改，以通过ripple测试。</p>
+<img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig6.jpg" class="" title="SDC对应用层产生的影响">
+
+<h4 id="影子测试"><a href="#影子测试" class="headerlink" title="影子测试"></a>影子测试</h4><img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig7.jpg" class="" title="SDC对应用层产生的影响">
+
+<p>Meta实施了可以跨多组工作负载的ripple，并且精心设计了ripple测试架构，以防止整个集群的错误。 影子测试的一个主要挑战是实现托管。 基于工作负载的扩展，测试规模必须缩小。 对于 Meta 的每种类型的工作负载，确定了缩放因子的评估过程。此外，Meta还建立了与测试相关的开销分析，每种工作负载类型的托管都会提供开销，该工具的目标是将其开销降至特定阈值以下。通过反复试验，我们建立了控制结构和保障措施，以便为不同的工作负载启用不同的选项，然后将解决方案扩展到整个集群。</p>
+<h4 id="持续不停产"><a href="#持续不停产" class="headerlink" title="持续不停产"></a>持续不停产</h4><p>持续不停产的纠错机制始终处于开启状态，只有它运行的规模是通过集群内的配置动态控制的。 这种方法在查找需要对相同数据输入进行数千次迭代的缺陷，以及识别正在退化的设备等方面非常有效。 在几周内，通过测试随机化和缺陷模式匹配，可以将设备中识别的新签名扩展到整个设备群。 这种方法在识别硅过渡缺陷方面也非常有效。 </p>
+<h2 id="效果对比"><a href="#效果对比" class="headerlink" title="效果对比"></a>效果对比</h2><img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig8.jpg" class="" title="对比">
+
+<p>根据三年的真实测试对比两种策略。</p>
+<ul>
+<li>使用 ripple 可以在 15 天内完成 70% 的常见覆盖检测，Fleetscanner 在 6 个月内将覆盖范围扩大到剩余的 23%</li>
+<li>独特的 7% 覆盖率是通过集群内重复的ripple实例实现的。</li>
+<li>通过不断地重新审视和评估这些覆盖率指标，可以知道围绕测试向量、测试节奏和测试运行时间的集群范围内的测试策略。 对于不同类型的缺陷，覆盖率会有所不同。</li>
+</ul>
+<hr>
+<h1 id="Google对SDC问题的理解"><a href="#Google对SDC问题的理解" class="headerlink" title="Google对SDC问题的理解"></a>Google对SDC问题的理解</h1>
     
 
     
@@ -461,15 +501,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">容错</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">SDC</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -544,6 +584,15 @@
 
 <nav id="article-nav">
   
+    <a href="/2023/02/08/ABFT/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          ABFT
+        
+      </div>
+    </a>
+  
   
     <a href="/2023/02/04/FAST21-Behemoth/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">(FAST21)Behemoth:面向超大规模DNN、以闪存为中心存储的训练加速器</div>
@@ -573,7 +622,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BD%9C%E5%9C%A8%E7%A0%94%E7%A9%B6%E6%96%B9%E5%90%91"><span class="toc-number">2.</span> <span class="toc-text">潜在研究方向</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Facebook%E5%9C%A8%E5%A4%A7%E8%A7%84%E6%A8%A1%E9%9B%86%E7%BE%A4%E4%B8%AD%E5%AF%B9SDC%E9%97%AE%E9%A2%98%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-number">3.</span> <span class="toc-text">Facebook在大规模集群中对SDC问题的理解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A5%E5%85%85%E8%83%8C%E6%99%AF"><span class="toc-number">3.1.</span> <span class="toc-text">补充背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A7%E7%94%9F%E7%BC%BA%E9%99%B7%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-number">3.2.</span> <span class="toc-text">产生缺陷的原因</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87%E7%BC%BA%E9%99%B7-Device-Errors"><span class="toc-number">3.2.1.</span> <span class="toc-text">设备缺陷(Device Errors)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A9%E6%9C%9F%E6%95%85%E9%9A%9C-Early-Life-Failures"><span class="toc-number">3.2.2.</span> <span class="toc-text">早期故障(Early Life Failures)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87%E8%80%81%E5%8C%96-Degradation"><span class="toc-number">3.2.3.</span> <span class="toc-text">设备老化(Degradation)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%9A%E6%9C%9F%E7%A3%A8%E6%8D%9F-End-of-Life-Wear-Out"><span class="toc-number">3.2.4.</span> <span class="toc-text">晚期磨损(End-of-Life Wear-Out)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Case-Study%EF%BC%9A%E5%BA%94%E7%94%A8%E5%B1%82%E7%9C%8BSDC%E9%80%A0%E6%88%90%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-number">3.3.</span> <span class="toc-text">Case Study：应用层看SDC造成的影响</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spark"><span class="toc-number">3.3.1.</span> <span class="toc-text">Spark</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FaceBook%E8%A7%A3%E5%8E%8B%E7%BC%A9%E5%BA%94%E7%94%A8"><span class="toc-number">3.3.2.</span> <span class="toc-text">FaceBook解压缩应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E4%BB%A5%E4%B8%8A%E9%97%AE%E9%A2%98%E5%81%9Adebug"><span class="toc-number">3.4.</span> <span class="toc-text">对以上问题做debug</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">3.4.1.</span> <span class="toc-text">工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%88%E5%A5%BD%E7%9A%84%E4%B8%80%E4%BA%9B%E8%B0%83%E8%AF%95%E7%BB%8F%E9%AA%8C-%E7%95%A5%E8%BF%87%E4%BA%86%EF%BC%8C%E5%A4%AA%E5%B7%A5%E7%A8%8B%EF%BC%8C%E5%A4%A7%E9%83%A8%E5%88%86%E8%B0%B7%E6%AD%8C%E7%BF%BB%E8%AF%91%E4%BA%86"><span class="toc-number">3.4.2.</span> <span class="toc-text">很好的一些调试经验(略过了，太工程，大部分谷歌翻译了)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E5%AE%A1%E8%A7%86%E5%BA%94%E7%94%A8%E7%9A%84%E9%94%99%E8%AF%AF"><span class="toc-number">3.5.</span> <span class="toc-text">重新审视应用的错误</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%8A%97SDC%E7%9A%84%E7%A1%AC%E4%BB%B6%E6%96%B9%E6%B3%95"><span class="toc-number">3.5.1.</span> <span class="toc-text">对抗SDC的硬件方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A2%E6%B5%8BSDC%E7%9A%84%E6%96%B9%E6%B3%95-%E4%B8%8D%E5%A2%9E%E5%8A%A0%E5%85%B6%E4%BB%96%E9%A2%9D%E5%A4%96%E5%BC%80%E9%94%80"><span class="toc-number">3.6.</span> <span class="toc-text">探测SDC的方法(不增加其他额外开销)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%BE%E6%9C%BA%E4%BC%9A"><span class="toc-number">3.6.1.</span> <span class="toc-text">找机会</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%A8%E6%9C%9F%E6%80%A7"><span class="toc-number">3.6.2.</span> <span class="toc-text">周期性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E7%94%9F%E4%BA%A7%E5%8F%8B%E5%A5%BD%E7%9A%84%E6%96%B9%E6%A1%88"><span class="toc-number">3.6.3.</span> <span class="toc-text">对生产友好的方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%B9%E9%94%99%E6%9C%BA%E5%88%B6"><span class="toc-number">3.7.</span> <span class="toc-text">软件容错机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%97%E4%BD%99%E6%9C%BA%E5%88%B6"><span class="toc-number">3.7.1.</span> <span class="toc-text">冗余机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E9%94%99%E5%BA%93"><span class="toc-number">3.7.2.</span> <span class="toc-text">容错库</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Facebook%E6%A3%80%E6%B5%8BSDC%E9%97%AE%E9%A2%98%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">Facebook检测SDC问题的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%85%E6%B5%8B%E8%AF%95%E6%B5%81%E7%A8%8B"><span class="toc-number">4.1.</span> <span class="toc-text">硅测试流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E5%92%8C%E9%AA%8C%E8%AF%81-Design-and-Verification"><span class="toc-number">4.1.1.</span> <span class="toc-text">设计和验证(Design and Verification)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%85%E4%B8%8A%E9%AA%8C%E8%AF%81-Post-Silicon-Validation"><span class="toc-number">4.1.2.</span> <span class="toc-text">硅上验证(Post  Silicon  Validation)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E5%8E%82%E5%95%86%E6%B5%8B%E8%AF%95-Manufacturer-testing"><span class="toc-number">4.1.3.</span> <span class="toc-text">生产厂商测试(Manufacturer testing)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95"><span class="toc-number">4.1.4.</span> <span class="toc-text">集成测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E5%BC%95%E5%85%A5%E6%B5%8B%E8%AF%95"><span class="toc-number">4.1.5.</span> <span class="toc-text">基础设施引入测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E9%9B%86%E7%BE%A4%E6%B5%8B%E8%AF%95"><span class="toc-number">4.1.6.</span> <span class="toc-text">基础设施集群测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SDC%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E4%B8%80%E4%B8%AA%E5%BE%88%E9%9A%BE%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">4.2.</span> <span class="toc-text">SDC为什么是一个很难的问题？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E6%B5%8B%E8%AF%95"><span class="toc-number">4.3.</span> <span class="toc-text">架构测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%AF%B9%E6%AF%94"><span class="toc-number">4.4.</span> <span class="toc-text">效果对比</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BD%9C%E5%9C%A8%E7%A0%94%E7%A9%B6%E6%96%B9%E5%90%91"><span class="toc-number">2.</span> <span class="toc-text">潜在研究方向</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Facebook%E5%9C%A8%E5%A4%A7%E8%A7%84%E6%A8%A1%E9%9B%86%E7%BE%A4%E4%B8%AD%E5%AF%B9SDC%E9%97%AE%E9%A2%98%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-number">3.</span> <span class="toc-text">Facebook在大规模集群中对SDC问题的理解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A5%E5%85%85%E8%83%8C%E6%99%AF"><span class="toc-number">3.1.</span> <span class="toc-text">补充背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A7%E7%94%9F%E7%BC%BA%E9%99%B7%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-number">3.2.</span> <span class="toc-text">产生缺陷的原因</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87%E7%BC%BA%E9%99%B7-Device-Errors"><span class="toc-number">3.2.1.</span> <span class="toc-text">设备缺陷(Device Errors)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A9%E6%9C%9F%E6%95%85%E9%9A%9C-Early-Life-Failures"><span class="toc-number">3.2.2.</span> <span class="toc-text">早期故障(Early Life Failures)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87%E8%80%81%E5%8C%96-Degradation"><span class="toc-number">3.2.3.</span> <span class="toc-text">设备老化(Degradation)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%9A%E6%9C%9F%E7%A3%A8%E6%8D%9F-End-of-Life-Wear-Out"><span class="toc-number">3.2.4.</span> <span class="toc-text">晚期磨损(End-of-Life Wear-Out)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Case-Study%EF%BC%9A%E5%BA%94%E7%94%A8%E5%B1%82%E7%9C%8BSDC%E9%80%A0%E6%88%90%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-number">3.3.</span> <span class="toc-text">Case Study：应用层看SDC造成的影响</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spark"><span class="toc-number">3.3.1.</span> <span class="toc-text">Spark</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FaceBook%E8%A7%A3%E5%8E%8B%E7%BC%A9%E5%BA%94%E7%94%A8"><span class="toc-number">3.3.2.</span> <span class="toc-text">FaceBook解压缩应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E4%BB%A5%E4%B8%8A%E9%97%AE%E9%A2%98%E5%81%9Adebug"><span class="toc-number">3.4.</span> <span class="toc-text">对以上问题做debug</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">3.4.1.</span> <span class="toc-text">工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%88%E5%A5%BD%E7%9A%84%E4%B8%80%E4%BA%9B%E8%B0%83%E8%AF%95%E7%BB%8F%E9%AA%8C-%E7%95%A5%E8%BF%87%E4%BA%86%EF%BC%8C%E5%A4%AA%E5%B7%A5%E7%A8%8B%EF%BC%8C%E5%A4%A7%E9%83%A8%E5%88%86%E8%B0%B7%E6%AD%8C%E7%BF%BB%E8%AF%91%E4%BA%86"><span class="toc-number">3.4.2.</span> <span class="toc-text">很好的一些调试经验(略过了，太工程，大部分谷歌翻译了)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E5%AE%A1%E8%A7%86%E5%BA%94%E7%94%A8%E7%9A%84%E9%94%99%E8%AF%AF"><span class="toc-number">3.5.</span> <span class="toc-text">重新审视应用的错误</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%8A%97SDC%E7%9A%84%E7%A1%AC%E4%BB%B6%E6%96%B9%E6%B3%95"><span class="toc-number">3.5.1.</span> <span class="toc-text">对抗SDC的硬件方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A2%E6%B5%8BSDC%E7%9A%84%E6%96%B9%E6%B3%95-%E4%B8%8D%E5%A2%9E%E5%8A%A0%E5%85%B6%E4%BB%96%E9%A2%9D%E5%A4%96%E5%BC%80%E9%94%80"><span class="toc-number">3.6.</span> <span class="toc-text">探测SDC的方法(不增加其他额外开销)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%BE%E6%9C%BA%E4%BC%9A"><span class="toc-number">3.6.1.</span> <span class="toc-text">找机会</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%A8%E6%9C%9F%E6%80%A7"><span class="toc-number">3.6.2.</span> <span class="toc-text">周期性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E7%94%9F%E4%BA%A7%E5%8F%8B%E5%A5%BD%E7%9A%84%E6%96%B9%E6%A1%88"><span class="toc-number">3.6.3.</span> <span class="toc-text">对生产友好的方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%B9%E9%94%99%E6%9C%BA%E5%88%B6"><span class="toc-number">3.7.</span> <span class="toc-text">软件容错机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%97%E4%BD%99%E6%9C%BA%E5%88%B6"><span class="toc-number">3.7.1.</span> <span class="toc-text">冗余机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E9%94%99%E5%BA%93"><span class="toc-number">3.7.2.</span> <span class="toc-text">容错库</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Facebook%E6%A3%80%E6%B5%8BSDC%E9%97%AE%E9%A2%98%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">Facebook检测SDC问题的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%85%E6%B5%8B%E8%AF%95%E6%B5%81%E7%A8%8B"><span class="toc-number">4.1.</span> <span class="toc-text">硅测试流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E5%92%8C%E9%AA%8C%E8%AF%81-Design-and-Verification"><span class="toc-number">4.1.1.</span> <span class="toc-text">设计和验证(Design and Verification)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%85%E4%B8%8A%E9%AA%8C%E8%AF%81-Post-Silicon-Validation"><span class="toc-number">4.1.2.</span> <span class="toc-text">硅上验证(Post  Silicon  Validation)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E5%8E%82%E5%95%86%E6%B5%8B%E8%AF%95-Manufacturer-testing"><span class="toc-number">4.1.3.</span> <span class="toc-text">生产厂商测试(Manufacturer testing)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95"><span class="toc-number">4.1.4.</span> <span class="toc-text">集成测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E5%BC%95%E5%85%A5%E6%B5%8B%E8%AF%95"><span class="toc-number">4.1.5.</span> <span class="toc-text">基础设施引入测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E9%9B%86%E7%BE%A4%E6%B5%8B%E8%AF%95"><span class="toc-number">4.1.6.</span> <span class="toc-text">基础设施集群测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SDC%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E4%B8%80%E4%B8%AA%E5%BE%88%E9%9A%BE%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">4.2.</span> <span class="toc-text">SDC为什么是一个很难的问题？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E9%9B%86%E7%BE%A4%E6%B5%8B%E8%AF%95%E7%9A%84%E6%96%B9%E6%B3%95-Infrastructure-Fleet-Testing"><span class="toc-number">4.3.</span> <span class="toc-text">基础设施集群测试的方法(Infrastructure Fleet Testing)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%9C%E4%BA%A7%E6%B5%8B%E8%AF%95-Out-of-production-Testing"><span class="toc-number">4.3.1.</span> <span class="toc-text">停产测试(Out-of-production Testing)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%81%9C%E4%BA%A7%E6%B5%8B%E8%AF%95-In-production-Testing"><span class="toc-number">4.3.2.</span> <span class="toc-text">不停产测试(In-production Testing)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BD%B1%E5%AD%90%E6%B5%8B%E8%AF%95"><span class="toc-number">4.3.2.1.</span> <span class="toc-text">影子测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%81%E7%BB%AD%E4%B8%8D%E5%81%9C%E4%BA%A7"><span class="toc-number">4.3.2.2.</span> <span class="toc-text">持续不停产</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%AF%B9%E6%AF%94"><span class="toc-number">4.4.</span> <span class="toc-text">效果对比</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Google%E5%AF%B9SDC%E9%97%AE%E9%A2%98%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-number">5.</span> <span class="toc-text">Google对SDC问题的理解</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -696,15 +745,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">DNN</a>
+                <a href="javascript:void(0)" class="js-tag color3">容错</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">近存储计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">加速器</a>
+                <a href="javascript:void(0)" class="js-tag color4">SDC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -712,7 +757,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
+                <a href="javascript:void(0)" class="js-tag color4">软错误</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -724,19 +769,11 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">加速器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">UC(Riverside)</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">容错</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SDC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">软错误</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -753,6 +790,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PKU</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DNN</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">近存储计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
               </li>
              
               <li class="article-tag-list-item">
