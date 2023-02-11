@@ -217,7 +217,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/02/08/ABFT/" target="_blank">ABFT</a>
+	  <a class="article-title" href="/2023/02/08/ABFT/" target="_blank">Algorithm-based Fault Tolerant(基于算法的容错)</a>
   
     </h1>
   
@@ -238,7 +238,41 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="ABFT解决矩阵乘问题"><a href="#ABFT解决矩阵乘问题" class="headerlink" title="ABFT解决矩阵乘问题"></a>ABFT解决矩阵乘问题</h1><p>原文：Algorithm-Based Fault Tolerance for Matrix Operations(1984, TC)</p>
+    <h1 id="对ABFT容错的浅薄理解"><a href="#对ABFT容错的浅薄理解" class="headerlink" title="对ABFT容错的浅薄理解"></a>对ABFT容错的浅薄理解</h1><p>原理是针对某一种算法中的高频算子进行可靠性设计，以在较低的成本下保障算法大部分的可靠性。目前看到的两篇论文都是通过冗余计算，计算校验和对比结果来实现容错机制。这种方法相比于架构层和电路层的方法来说代价要更低，更加灵活。</p>
+<p>相关论文的主要方法是：</p>
+<ul>
+<li>设计校对矩阵</li>
+<li>设计checksum校对方法</li>
+<li>分析一下校对算法开销如何、能够实现什么级别的容错(可检测or可修正)</li>
+<li>设计相关的容错框架或者系统</li>
+<li>通过实验验证可靠性保证以及额外开销。</li>
+</ul>
+<p>以后也可以多思考一下相关的算子有没有这样的机会做冗余计算。</p>
+<hr>
+<h1 id="矩阵操作ABFT设计"><a href="#矩阵操作ABFT设计" class="headerlink" title="矩阵操作ABFT设计"></a>矩阵操作ABFT设计</h1><p>原文：Algorithm-Based Fault Tolerance for Matrix Operations(1984, TC)</p>
+<h2 id="校对矩阵设计"><a href="#校对矩阵设计" class="headerlink" title="校对矩阵设计"></a>校对矩阵设计</h2><img src="/2023/02/08/ABFT/fig1.png" class="" title="校对矩阵">
+
+<p>简单来说就是有个矩阵M，然后里面每个元素的最大值(位宽决定)为8。这个矩阵的行校验矩阵$M_r$就是增加新的一列，这一列是前面几列的和，这个矩阵可以用来定位错误所在的行；同样这个矩阵的列校验矩阵$M_c$也同理定义，用来定位错误所在的列。$M_f$是矩阵的全校验矩阵，可以实现错误的定位和修复。</p>
+<h2 id="检错方法"><a href="#检错方法" class="headerlink" title="检错方法"></a>检错方法</h2><img src="/2023/02/08/ABFT/fig2.jpg" class="" title="校对矩阵">
+
+<ul>
+<li>适用于矩阵乘、加、LU分解、标量乘、转置操作</li>
+<li>可以实现单比特错误检测(右下角的数值C和整个结果矩阵的和对比)、定位、纠错(通过行和列定位后再算一下)</li>
+<li>可以实现多比特错误检测。</li>
+</ul>
+<hr>
+<h1 id="卷积操作ABFT设计"><a href="#卷积操作ABFT设计" class="headerlink" title="卷积操作ABFT设计"></a>卷积操作ABFT设计</h1><h2 id="校对矩阵"><a href="#校对矩阵" class="headerlink" title="校对矩阵"></a>校对矩阵</h2><img src="/2023/02/08/ABFT/fig3.png" class="" title="校对矩阵">
+
+<p>在这个卷积操作里面假设输入矩阵D和W都是思维矩阵，校对矩阵中$C_{d1}$和$C_{d2}$分别是$D_i$的和以及加权和。如果在全校验的情况下，checkSum会有很多个；不同的checkSum的计算难度不同，其检错难度也不同，因此适用于不同的场景，或者可以分层次进行检测，以使本方法的开销更小一些。这就是本文的核心思想，其具体思路可以再重新找一下论文。</p>
+<h2 id="不同校验和组合产生的检错维度"><a href="#不同校验和组合产生的检错维度" class="headerlink" title="不同校验和组合产生的检错维度"></a>不同校验和组合产生的检错维度</h2><img src="/2023/02/08/ABFT/fig4.png" class="" title="检错维度">
+
+<h2 id="检测原理：以Checksum-of-Checksum为例"><a href="#检测原理：以Checksum-of-Checksum为例" class="headerlink" title="检测原理：以Checksum of Checksum为例"></a>检测原理：以Checksum of Checksum为例</h2><img src="/2023/02/08/ABFT/fig.png" class="" title="检错维度">
+
+<h2 id="检错能力和checksum的复杂度分析"><a href="#检错能力和checksum的复杂度分析" class="headerlink" title="检错能力和checksum的复杂度分析"></a>检错能力和checksum的复杂度分析</h2><img src="/2023/02/08/ABFT/fig5.png" class="" title="检错维度">
+
+<h2 id="分层的纠错框架"><a href="#分层的纠错框架" class="headerlink" title="分层的纠错框架"></a>分层的纠错框架</h2><img src="/2023/02/08/ABFT/fig6.png" class="" title="检错维度">
+
+<h2 id="实验结果：开销"><a href="#实验结果：开销" class="headerlink" title="实验结果：开销"></a>实验结果：开销</h2><img src="/2023/02/08/ABFT/fig8.png" class="" title="实验结果">
 
     
 
@@ -315,7 +349,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/" target="_blank">Meta关于SDC的项目基金和已有的研究成果调研</a>
+	  <a class="article-title" href="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/" target="_blank">SDC调研：Meta的两篇论文</a>
   
     </h1>
   
@@ -473,15 +507,15 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">加速器</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">DNN</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">加速器</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -588,15 +622,15 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">加速器</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">TPU</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">通用计算</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">加速器</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -1075,15 +1109,27 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DNN</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">近存储计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">加速器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">TPU</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">通用计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">加速器</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1104,18 +1150,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PKU</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">DNN</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">近存储计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
               </li>
              
               <li class="article-tag-list-item">

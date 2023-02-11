@@ -6,25 +6,34 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://recoderchris.github.io">
-  <title>ABFT | Xinmiao的博客</title>
+  <title>Algorithm-based Fault Tolerant(基于算法的容错) | Xinmiao的博客</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="ABFT解决矩阵乘问题原文：Algorithm-Based Fault Tolerance for Matrix Operations(1984, TC)">
+  <meta name="description" content="对ABFT容错的浅薄理解原理是针对某一种算法中的高频算子进行可靠性设计，以在较低的成本下保障算法大部分的可靠性。目前看到的两篇论文都是通过冗余计算，计算校验和对比结果来实现容错机制。这种方法相比于架构层和电路层的方法来说代价要更低，更加灵活。 相关论文的主要方法是：  设计校对矩阵 设计checksum校对方法 分析一下校对算法开销如何、能够实现什么级别的容错(可检测or可修正) 设计相关的容错框">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ABFT">
+<meta property="og:title" content="Algorithm-based Fault Tolerant(基于算法的容错)">
 <meta property="og:url" content="https://recoderchris.github.io/2023/02/08/ABFT/index.html">
 <meta property="og:site_name" content="Xinmiao的博客">
-<meta property="og:description" content="ABFT解决矩阵乘问题原文：Algorithm-Based Fault Tolerance for Matrix Operations(1984, TC)">
+<meta property="og:description" content="对ABFT容错的浅薄理解原理是针对某一种算法中的高频算子进行可靠性设计，以在较低的成本下保障算法大部分的可靠性。目前看到的两篇论文都是通过冗余计算，计算校验和对比结果来实现容错机制。这种方法相比于架构层和电路层的方法来说代价要更低，更加灵活。 相关论文的主要方法是：  设计校对矩阵 设计checksum校对方法 分析一下校对算法开销如何、能够实现什么级别的容错(可检测or可修正) 设计相关的容错框">
 <meta property="og:locale">
+<meta property="og:image" content="https://recoderchris.github.io/2023/02/08/ABFT/fig1.png">
+<meta property="og:image" content="https://recoderchris.github.io/2023/02/08/ABFT/fig2.jpg">
+<meta property="og:image" content="https://recoderchris.github.io/2023/02/08/ABFT/fig3.png">
+<meta property="og:image" content="https://recoderchris.github.io/2023/02/08/ABFT/fig4.png">
+<meta property="og:image" content="https://recoderchris.github.io/2023/02/08/ABFT/fig.png">
+<meta property="og:image" content="https://recoderchris.github.io/2023/02/08/ABFT/fig5.png">
+<meta property="og:image" content="https://recoderchris.github.io/2023/02/08/ABFT/fig6.png">
+<meta property="og:image" content="https://recoderchris.github.io/2023/02/08/ABFT/fig8.png">
 <meta property="article:published_time" content="2023-02-08T09:44:29.000Z">
-<meta property="article:modified_time" content="2023-02-08T09:45:50.172Z">
+<meta property="article:modified_time" content="2023-02-11T13:42:37.821Z">
 <meta property="article:author" content="Zhang Xinmiao">
 <meta property="article:tag" content="容错">
 <meta property="article:tag" content="SDC">
 <meta property="article:tag" content="论文阅读">
 <meta property="article:tag" content="软错误">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://recoderchris.github.io/2023/02/08/ABFT/fig1.png">
   
     <link rel="alternative" href="/atom.xml" title="Xinmiao的博客" type="application/atom+xml">
   
@@ -214,7 +223,7 @@
   
   
     <h1 class="article-title" itemprop="name">
-      ABFT
+      Algorithm-based Fault Tolerant(基于算法的容错)
     </h1>
   
 
@@ -240,7 +249,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">19字</span>
+      <span class="post-count">645字</span>
     </span>
   </span>
 
@@ -249,7 +258,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">1分</span>
+      <span class="post-count">2分</span>
     </span>
   </span>
 </div>
@@ -260,7 +269,41 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="ABFT解决矩阵乘问题"><a href="#ABFT解决矩阵乘问题" class="headerlink" title="ABFT解决矩阵乘问题"></a>ABFT解决矩阵乘问题</h1><p>原文：Algorithm-Based Fault Tolerance for Matrix Operations(1984, TC)</p>
+    <h1 id="对ABFT容错的浅薄理解"><a href="#对ABFT容错的浅薄理解" class="headerlink" title="对ABFT容错的浅薄理解"></a>对ABFT容错的浅薄理解</h1><p>原理是针对某一种算法中的高频算子进行可靠性设计，以在较低的成本下保障算法大部分的可靠性。目前看到的两篇论文都是通过冗余计算，计算校验和对比结果来实现容错机制。这种方法相比于架构层和电路层的方法来说代价要更低，更加灵活。</p>
+<p>相关论文的主要方法是：</p>
+<ul>
+<li>设计校对矩阵</li>
+<li>设计checksum校对方法</li>
+<li>分析一下校对算法开销如何、能够实现什么级别的容错(可检测or可修正)</li>
+<li>设计相关的容错框架或者系统</li>
+<li>通过实验验证可靠性保证以及额外开销。</li>
+</ul>
+<p>以后也可以多思考一下相关的算子有没有这样的机会做冗余计算。</p>
+<hr>
+<h1 id="矩阵操作ABFT设计"><a href="#矩阵操作ABFT设计" class="headerlink" title="矩阵操作ABFT设计"></a>矩阵操作ABFT设计</h1><p>原文：Algorithm-Based Fault Tolerance for Matrix Operations(1984, TC)</p>
+<h2 id="校对矩阵设计"><a href="#校对矩阵设计" class="headerlink" title="校对矩阵设计"></a>校对矩阵设计</h2><img src="/2023/02/08/ABFT/fig1.png" class="" title="校对矩阵">
+
+<p>简单来说就是有个矩阵M，然后里面每个元素的最大值(位宽决定)为8。这个矩阵的行校验矩阵$M_r$就是增加新的一列，这一列是前面几列的和，这个矩阵可以用来定位错误所在的行；同样这个矩阵的列校验矩阵$M_c$也同理定义，用来定位错误所在的列。$M_f$是矩阵的全校验矩阵，可以实现错误的定位和修复。</p>
+<h2 id="检错方法"><a href="#检错方法" class="headerlink" title="检错方法"></a>检错方法</h2><img src="/2023/02/08/ABFT/fig2.jpg" class="" title="校对矩阵">
+
+<ul>
+<li>适用于矩阵乘、加、LU分解、标量乘、转置操作</li>
+<li>可以实现单比特错误检测(右下角的数值C和整个结果矩阵的和对比)、定位、纠错(通过行和列定位后再算一下)</li>
+<li>可以实现多比特错误检测。</li>
+</ul>
+<hr>
+<h1 id="卷积操作ABFT设计"><a href="#卷积操作ABFT设计" class="headerlink" title="卷积操作ABFT设计"></a>卷积操作ABFT设计</h1><h2 id="校对矩阵"><a href="#校对矩阵" class="headerlink" title="校对矩阵"></a>校对矩阵</h2><img src="/2023/02/08/ABFT/fig3.png" class="" title="校对矩阵">
+
+<p>在这个卷积操作里面假设输入矩阵D和W都是思维矩阵，校对矩阵中$C_{d1}$和$C_{d2}$分别是$D_i$的和以及加权和。如果在全校验的情况下，checkSum会有很多个；不同的checkSum的计算难度不同，其检错难度也不同，因此适用于不同的场景，或者可以分层次进行检测，以使本方法的开销更小一些。这就是本文的核心思想，其具体思路可以再重新找一下论文。</p>
+<h2 id="不同校验和组合产生的检错维度"><a href="#不同校验和组合产生的检错维度" class="headerlink" title="不同校验和组合产生的检错维度"></a>不同校验和组合产生的检错维度</h2><img src="/2023/02/08/ABFT/fig4.png" class="" title="检错维度">
+
+<h2 id="检测原理：以Checksum-of-Checksum为例"><a href="#检测原理：以Checksum-of-Checksum为例" class="headerlink" title="检测原理：以Checksum of Checksum为例"></a>检测原理：以Checksum of Checksum为例</h2><img src="/2023/02/08/ABFT/fig.png" class="" title="检错维度">
+
+<h2 id="检错能力和checksum的复杂度分析"><a href="#检错能力和checksum的复杂度分析" class="headerlink" title="检错能力和checksum的复杂度分析"></a>检错能力和checksum的复杂度分析</h2><img src="/2023/02/08/ABFT/fig5.png" class="" title="检错维度">
+
+<h2 id="分层的纠错框架"><a href="#分层的纠错框架" class="headerlink" title="分层的纠错框架"></a>分层的纠错框架</h2><img src="/2023/02/08/ABFT/fig6.png" class="" title="检错维度">
+
+<h2 id="实验结果：开销"><a href="#实验结果：开销" class="headerlink" title="实验结果：开销"></a>实验结果：开销</h2><img src="/2023/02/08/ABFT/fig8.png" class="" title="实验结果">
 
     
 
@@ -307,7 +350,7 @@
         </li>
         <li>
           <strong>本文链接：</strong>
-          <a href="https://recoderchris.github.io/2023/02/08/ABFT/" title="ABFT" target="_blank">https://recoderchris.github.io/2023/02/08/ABFT/</a>
+          <a href="https://recoderchris.github.io/2023/02/08/ABFT/" title="Algorithm-based Fault Tolerant(基于算法的容错)" target="_blank">https://recoderchris.github.io/2023/02/08/ABFT/</a>
         </li>
         
         <li>
@@ -414,7 +457,7 @@
   
   
     <a href="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Meta关于SDC的项目基金和已有的研究成果调研</div>
+      <div class="article-nav-title">SDC调研：Meta的两篇论文</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -441,7 +484,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ABFT%E8%A7%A3%E5%86%B3%E7%9F%A9%E9%98%B5%E4%B9%98%E9%97%AE%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">ABFT解决矩阵乘问题</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%B9ABFT%E5%AE%B9%E9%94%99%E7%9A%84%E6%B5%85%E8%96%84%E7%90%86%E8%A7%A3"><span class="toc-number">1.</span> <span class="toc-text">对ABFT容错的浅薄理解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9F%A9%E9%98%B5%E6%93%8D%E4%BD%9CABFT%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.</span> <span class="toc-text">矩阵操作ABFT设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%A1%E5%AF%B9%E7%9F%A9%E9%98%B5%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.1.</span> <span class="toc-text">校对矩阵设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E9%94%99%E6%96%B9%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">检错方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%B7%E7%A7%AF%E6%93%8D%E4%BD%9CABFT%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.</span> <span class="toc-text">卷积操作ABFT设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%A1%E5%AF%B9%E7%9F%A9%E9%98%B5"><span class="toc-number">3.1.</span> <span class="toc-text">校对矩阵</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E6%A0%A1%E9%AA%8C%E5%92%8C%E7%BB%84%E5%90%88%E4%BA%A7%E7%94%9F%E7%9A%84%E6%A3%80%E9%94%99%E7%BB%B4%E5%BA%A6"><span class="toc-number">3.2.</span> <span class="toc-text">不同校验和组合产生的检错维度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E6%B5%8B%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%A5Checksum-of-Checksum%E4%B8%BA%E4%BE%8B"><span class="toc-number">3.3.</span> <span class="toc-text">检测原理：以Checksum of Checksum为例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E9%94%99%E8%83%BD%E5%8A%9B%E5%92%8Cchecksum%E7%9A%84%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90"><span class="toc-number">3.4.</span> <span class="toc-text">检错能力和checksum的复杂度分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B1%82%E7%9A%84%E7%BA%A0%E9%94%99%E6%A1%86%E6%9E%B6"><span class="toc-number">3.5.</span> <span class="toc-text">分层的纠错框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%EF%BC%9A%E5%BC%80%E9%94%80"><span class="toc-number">3.6.</span> <span class="toc-text">实验结果：开销</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -580,15 +623,27 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DNN</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">近存储计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">加速器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">TPU</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">通用计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">加速器</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -609,18 +664,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PKU</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">DNN</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">近存储计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
               </li>
              
               <li class="article-tag-list-item">
