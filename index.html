@@ -241,39 +241,20 @@
     <h1 id="对ABFT容错的浅薄理解"><a href="#对ABFT容错的浅薄理解" class="headerlink" title="对ABFT容错的浅薄理解"></a>对ABFT容错的浅薄理解</h1><p>原理是针对某一种算法中的高频算子进行可靠性设计，以在较低的成本下保障算法大部分的可靠性。目前看到的两篇论文都是通过冗余计算，计算校验和对比结果来实现容错机制。这种方法相比于架构层和电路层的方法来说代价要更低，更加灵活。</p>
 <p>相关论文的主要方法是：</p>
 <ul>
-<li>设计校对矩阵</li>
-<li>设计checksum校对方法</li>
-<li>分析一下校对算法开销如何、能够实现什么级别的容错(可检测or可修正)</li>
-<li>设计相关的容错框架或者系统</li>
-<li>通过实验验证可靠性保证以及额外开销。</li>
+<li><p>设计校对矩阵</p>
+</li>
+<li><p>设计checksum校对方法</p>
+</li>
+<li><p>分析一下校对算法开销如何、能够实现什么级别的容错(可检测or可修正)</p>
+</li>
+<li><p>设计相关的容错框架或者系统</p>
+</li>
+<li><p>通过实验验证可靠性保证以及额外开销。</p>
+</li>
 </ul>
-<p>以后也可以多思考一下相关的算子有没有这样的机会做冗余计算。</p>
-<hr>
-<h1 id="矩阵操作ABFT设计"><a href="#矩阵操作ABFT设计" class="headerlink" title="矩阵操作ABFT设计"></a>矩阵操作ABFT设计</h1><p>原文：Algorithm-Based Fault Tolerance for Matrix Operations(1984, TC)</p>
-<h2 id="校对矩阵设计"><a href="#校对矩阵设计" class="headerlink" title="校对矩阵设计"></a>校对矩阵设计</h2><img src="/2023/02/08/ABFT/fig1.png" class="" title="校对矩阵">
-
-<p>简单来说就是有个矩阵M，然后里面每个元素的最大值(位宽决定)为8。这个矩阵的行校验矩阵$M_r$就是增加新的一列，这一列是前面几列的和，这个矩阵可以用来定位错误所在的行；同样这个矩阵的列校验矩阵$M_c$也同理定义，用来定位错误所在的列。$M_f$是矩阵的全校验矩阵，可以实现错误的定位和修复。</p>
-<h2 id="检错方法"><a href="#检错方法" class="headerlink" title="检错方法"></a>检错方法</h2><img src="/2023/02/08/ABFT/fig2.jpg" class="" title="校对矩阵">
-
-<ul>
-<li>适用于矩阵乘、加、LU分解、标量乘、转置操作</li>
-<li>可以实现单比特错误检测(右下角的数值C和整个结果矩阵的和对比)、定位、纠错(通过行和列定位后再算一下)</li>
-<li>可以实现多比特错误检测。</li>
-</ul>
-<hr>
-<h1 id="卷积操作ABFT设计"><a href="#卷积操作ABFT设计" class="headerlink" title="卷积操作ABFT设计"></a>卷积操作ABFT设计</h1><h2 id="校对矩阵"><a href="#校对矩阵" class="headerlink" title="校对矩阵"></a>校对矩阵</h2><img src="/2023/02/08/ABFT/fig3.png" class="" title="校对矩阵">
-
-<p>在这个卷积操作里面假设输入矩阵D和W都是思维矩阵，校对矩阵中$C_{d1}$和$C_{d2}$分别是$D_i$的和以及加权和。如果在全校验的情况下，checkSum会有很多个；不同的checkSum的计算难度不同，其检错难度也不同，因此适用于不同的场景，或者可以分层次进行检测，以使本方法的开销更小一些。这就是本文的核心思想，其具体思路可以再重新找一下论文。</p>
-<h2 id="不同校验和组合产生的检错维度"><a href="#不同校验和组合产生的检错维度" class="headerlink" title="不同校验和组合产生的检错维度"></a>不同校验和组合产生的检错维度</h2><img src="/2023/02/08/ABFT/fig4.png" class="" title="检错维度">
-
-<h2 id="检测原理：以Checksum-of-Checksum为例"><a href="#检测原理：以Checksum-of-Checksum为例" class="headerlink" title="检测原理：以Checksum of Checksum为例"></a>检测原理：以Checksum of Checksum为例</h2><img src="/2023/02/08/ABFT/fig.png" class="" title="检错维度">
-
-<h2 id="检错能力和checksum的复杂度分析"><a href="#检错能力和checksum的复杂度分析" class="headerlink" title="检错能力和checksum的复杂度分析"></a>检错能力和checksum的复杂度分析</h2><img src="/2023/02/08/ABFT/fig5.png" class="" title="检错维度">
-
-<h2 id="分层的纠错框架"><a href="#分层的纠错框架" class="headerlink" title="分层的纠错框架"></a>分层的纠错框架</h2><img src="/2023/02/08/ABFT/fig6.png" class="" title="检错维度">
-
-<h2 id="实验结果：开销"><a href="#实验结果：开销" class="headerlink" title="实验结果：开销"></a>实验结果：开销</h2><img src="/2023/02/08/ABFT/fig8.png" class="" title="实验结果">
-
+    
+    <a class="article-more-a" href="/2023/02/08/ABFT/#more">more >></a>
+    
     
 
     
@@ -302,6 +283,14 @@
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">软错误</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">2021</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">TPDS</a>
         		</li>
       		
 		</ul>
@@ -370,8 +359,7 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p>outline：软错误背景-SDC问题-meta在解决什么样的问题-meta推荐的研究方向-软件方向和硅方向-锁定在软件方向并且详细介绍(ABFT ai MM NN介绍)-AI方法怎么apply到这个上面(想做什么)</p>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>Meta的服务(facebook, instagram, whatsapp, messengers)都依赖于数据中心的服务。</p>
+    <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>Meta的服务(facebook, instagram, whatsapp, messengers)都依赖于数据中心的服务。</p>
 <img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig0.jpg" class="" title="SDC对应用层产生的影响">
 
 <p>然而，静默数据错误(SDC)无法被大型系统所发现，在硬件层面无法被捕获，有可能会随着软硬件栈一直传播，最终形成应用层面的数据损失。这些损失可能需要数个月来修复，是大型基础计算设施中潜在的问题。<br>以下在数据中心中出现的重大事故都与SDC问题相关：</p>
@@ -412,6 +400,10 @@
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">软错误</a>
         		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">2021</a>
+        		</li>
       		
 		</ul>
 	</div>
@@ -421,230 +413,6 @@
     
     <p class="article-more-link">
       <a class="article-more-a" href="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-FAST21-Behemoth" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/02/04/FAST21-Behemoth/" target="_blank">(FAST21)Behemoth:面向超大规模DNN、以闪存为中心存储的训练加速器</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/02/04/FAST21-Behemoth/" class="archive-article-date">
-        <time datetime="2023-02-04T14:22:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-02-04</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p><strong>Behemoth: A Flash-centric Training Accelerator for Extreme-scale DNNs</strong></p>
-<p><strong>作者：</strong>Shine Kim, Yunho Jin, Gina Sohn,  Jonghyun Bae, Tae Jun Ham and <strong>Jae W. Lee</strong> </p>
-<p>@ <em>Seoul National University, Samsung Electronics</em></p>
-<h1 id="一句话描述该论文解决了什么事情？"><a href="#一句话描述该论文解决了什么事情？" class="headerlink" title="一句话描述该论文解决了什么事情？"></a>一句话描述该论文解决了什么事情？</h1><p>本文针对以自然语言处理领域模型为代表的<strong>超大规模深度神经网络(DNN)<strong>模型的训练问题，构建了一种</strong>以闪存为中心存储</strong>的训练加速器。 </p>
-<h1 id="论文为什么要做这个事情？"><a href="#论文为什么要做这个事情？" class="headerlink" title="论文为什么要做这个事情？"></a>论文为什么要做这个事情？</h1><p>DNN在自然语言处理、计算机视觉、推荐算法等应用领域有广泛的应用。而增加模型参数的数量对于提升模型的准确度起到至关重要的作用。自然处理领域中各种基于Transformer的模型，其网络中的参数数量达到了超大规模(Extreme-scale)的级别。例如，GPT-3模型的参数数量达到了1,750亿以上。不仅如此，DNN模型的参数规模仍然在继续扩展，如如图1所示：</p>
-<img src="/2023/02/04/FAST21-Behemoth/fig1.png" class="" title="NLP领域模型参数数量的扩展趋势">
-    
-    <a class="article-more-a" href="/2023/02/04/FAST21-Behemoth/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">DNN</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">加速器</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">KAIST</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/02/04/FAST21-Behemoth/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-GPETPU" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/02/04/GPETPU/" target="_blank">(SC21)GPETPU:用EdgeTPU加速通用应用</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/02/04/GPETPU/" class="archive-article-date">
-        <time datetime="2023-02-04T13:44:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-02-04</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p><strong>GPTPU: Accelerating Applications using Edge Tensor Processing Units(SC 21′)</strong></p>
-<p>作者：<em>Kuan-Chieh Hsu</em> and <em>Hung-Wei Tseng</em> @<em>University of California, Riverside</em></p>
-<hr>
-<h2 id="1-一句话描述该论文解决了什么事情？"><a href="#1-一句话描述该论文解决了什么事情？" class="headerlink" title="1. 一句话描述该论文解决了什么事情？"></a>1. 一句话描述该论文解决了什么事情？</h2><p>本文介绍了一种在Edge TPU上进行通用计算加速的开源框架。</p>
-<hr>
-<h2 id="2-论文为什么要做这个事情？"><a href="#2-论文为什么要做这个事情？" class="headerlink" title="2. 论文为什么要做这个事情？"></a>2. 论文为什么要做这个事情？</h2><ul>
-<li><strong>理论可行性：</strong>NN加速器理论上是一种张量处理器，因此对于任何以张量为输入、输出的应用都有潜在的加速效果；</li>
-<li><strong>NN加速器的局限性：</strong>现有的商用NN加速器只向用户开放了AI或机器学习专用的调用接口，对通用领域没有相关设计；</li>
-<li><strong>框架的必要性：</strong>NN加速器几乎没有开放其硬件设计的细节，对于程序员来说，很难仅仅通过调用接口来加速通用的算法。因此，设计一个计算框架成为了提升可编程型的必要工作。</li>
-</ul>
-<p>多年之前，GPU只是用来着色和渲染的工具，有CUDA和OpenCL之后，GPU凭借其大规模并行能力，面向了矢量计算领域。本工作和TPU的关系与CUDA与GPU的关系异曲同工。</p>
-<hr>
-    
-    <a class="article-more-a" href="/2023/02/04/GPETPU/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">加速器</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">TPU</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">通用计算</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">UC(Riverside)</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/02/04/GPETPU/">展开全文 >></a>
     </p>
     
 
@@ -741,6 +509,10 @@
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Umich</a>
         		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">2006</a>
+        		</li>
       		
 		</ul>
 	</div>
@@ -779,6 +551,114 @@
 
 
   
+    <article id="post-eBPF" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2022/07/11/eBPF/" target="_blank">eBPF+CSD调研</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2022/07/11/eBPF/" class="archive-article-date">
+        <time datetime="2022-07-11T14:15:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-07-11</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>很多人认为融合eBPF技术会是未来计算型存储器**(Computational Storage,CSD)<strong>的一个重要发展方向。本文调研了</strong>eBPF技术的原理和应用场景**，并指出“Why eBPF+CSD”。此外，本文还调研了当下在CSD中使用eBPF技术的难点和可能的替代选项。</p>
+<hr>
+<h1 id="什么是eBPF技术？"><a href="#什么是eBPF技术？" class="headerlink" title="什么是eBPF技术？"></a>什么是eBPF技术？</h1><h2 id="前身：BPF-Berkeley-Package-Filter"><a href="#前身：BPF-Berkeley-Package-Filter" class="headerlink" title="前身：BPF(Berkeley Package Filter)"></a>前身：BPF(Berkeley Package Filter)</h2><p><strong>BPF背景：</strong>于1992年提出，当时unix操作系统提供了捕获数据包的设施以监控当前的网络情况。但是，网络监控程序(如tcpdump)处于<strong>用户态</strong>，数据包必须频繁地被<strong>从内核态被拷贝到用户态</strong>。因此，一些被称为【<strong>数据包过滤器</strong>】的内核代理被提出了，以尽早在内核就丢弃不想要的数据包，<strong>避免从操作系统内核向用户态复制其他对用户态程序无用的数据包，从而极大提高性能</strong>。BPF是其中一种。</p>
+<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YTRkNTMyMDA5MjQ4ZGIzOWI2ZmMwNTlmYzk5YTY1YzlfY3RWNmpXS2tPUGtUdjNsWERpT1pxMWZJYlNjRG9JMEFfVG9rZW46Ym94Y25OSXVWQUczRU9OZWt4YXc4dkJJbDVJXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+<p><em>图 经典的BPF</em></p>
+    
+    <a class="article-more-a" href="/2022/07/11/eBPF/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">eBPF</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">前沿系统</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2022/07/11/eBPF/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-图数据管理笔记2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -787,7 +667,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/" target="_blank">图数据管理-课程笔记2</a>
+	  <a class="article-title" href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/" target="_blank">图数据管理-课程笔记2</a>
   
     </h1>
   
@@ -795,8 +675,8 @@
 
   
   
-<a href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/" class="archive-article-date">
-        <time datetime="2023-02-04T12:16:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-02-04</time>
+<a href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/" class="archive-article-date">
+        <time datetime="2021-02-04T12:16:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-04</time>
 </a>
 
   
@@ -816,7 +696,7 @@
 <p><img src="https://s0.wp.com/latex.php?latex=N_k&bg=ffffff&fg=000&s=0&c=20201002" alt="N_k"> is number of nodes with degree <em>k</em>. Thus<img src="https://s0.wp.com/latex.php?latex=P(k)=%5Cfrac%7BN_k%7D%7BN%7D&bg=ffffff&fg=000&s=0&c=20201002" alt="P(k)=\frac{N_k}{N}">.</p>
 <p><img src="https://xinmiaozhang.files.wordpress.com/2021/07/pk.png?w=750" alt="pk"></p>
     
-    <a class="article-more-a" href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/#more">more >></a>
+    <a class="article-more-a" href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/#more">more >></a>
     
     
 
@@ -855,7 +735,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/">展开全文 >></a>
+      <a class="article-more-a" href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/">展开全文 >></a>
     </p>
     
 
@@ -893,7 +773,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/" target="_blank">图数据管理-课程笔记1</a>
+	  <a class="article-title" href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/" target="_blank">图数据管理-课程笔记1</a>
   
     </h1>
   
@@ -901,8 +781,8 @@
 
   
   
-<a href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/" class="archive-article-date">
-        <time datetime="2023-02-04T12:08:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-02-04</time>
+<a href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/" class="archive-article-date">
+        <time datetime="2021-02-04T12:08:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-04</time>
 </a>
 
   
@@ -920,7 +800,7 @@
 <p><img src="https://xinmiaozhang.files.wordpress.com/2021/06/seven-bridge.png?w=1024" alt="seven-bridge"></p>
 <p><strong>Solution:</strong> Seven Bridge Problem is to find the <strong>Euler Circuit</strong> in a graph. It is easier than finding a Hamilton Circuit.</p>
     
-    <a class="article-more-a" href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/#more">more >></a>
+    <a class="article-more-a" href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/#more">more >></a>
     
     
 
@@ -959,7 +839,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2023/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/">展开全文 >></a>
+      <a class="article-more-a" href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/">展开全文 >></a>
     </p>
     
 
@@ -1109,7 +989,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">DNN</a>
+                <a href="javascript:void(0)" class="js-tag color5">2021</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">TPDS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">eBPF</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1117,23 +1005,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">加速器</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">TPU</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">通用计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UC(Riverside)</a>
+                <a href="javascript:void(0)" class="js-tag color5">前沿系统</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1154,6 +1030,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Umich</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">2006</a>
               </li>
             
             <div class="clearfix"></div>

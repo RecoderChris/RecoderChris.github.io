@@ -6,36 +6,35 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://recoderchris.github.io">
-  <title>SDC调研：Meta的两篇论文 | Xinmiao的博客</title>
+  <title>eBPF+CSD调研 | Xinmiao的博客</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="背景Meta的服务(facebook, instagram, whatsapp, messengers)都依赖于数据中心的服务。   然而，静默数据错误(SDC)无法被大型系统所发现，在硬件层面无法被捕获，有可能会随着软硬件栈一直传播，最终形成应用层面的数据损失。这些损失可能需要数个月来修复，是大型基础计算设施中潜在的问题。以下在数据中心中出现的重大事故都与SDC问题相关：  AWS S3 因 b">
+  <meta name="description" content="很多人认为融合eBPF技术会是未来计算型存储器**(Computational Storage,CSD)的一个重要发展方向。本文调研了eBPF技术的原理和应用场景**，并指出“Why eBPF+CSD”。此外，本文还调研了当下在CSD中使用eBPF技术的难点和可能的替代选项。  什么是eBPF技术？前身：BPF(Berkeley Package Filter)BPF背景：于1992年提出，当时un">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SDC调研：Meta的两篇论文">
-<meta property="og:url" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/index.html">
+<meta property="og:title" content="eBPF+CSD调研">
+<meta property="og:url" content="https://recoderchris.github.io/2022/07/11/eBPF/index.html">
 <meta property="og:site_name" content="Xinmiao的博客">
-<meta property="og:description" content="背景Meta的服务(facebook, instagram, whatsapp, messengers)都依赖于数据中心的服务。   然而，静默数据错误(SDC)无法被大型系统所发现，在硬件层面无法被捕获，有可能会随着软硬件栈一直传播，最终形成应用层面的数据损失。这些损失可能需要数个月来修复，是大型基础计算设施中潜在的问题。以下在数据中心中出现的重大事故都与SDC问题相关：  AWS S3 因 b">
+<meta property="og:description" content="很多人认为融合eBPF技术会是未来计算型存储器**(Computational Storage,CSD)的一个重要发展方向。本文调研了eBPF技术的原理和应用场景**，并指出“Why eBPF+CSD”。此外，本文还调研了当下在CSD中使用eBPF技术的难点和可能的替代选项。  什么是eBPF技术？前身：BPF(Berkeley Package Filter)BPF背景：于1992年提出，当时un">
 <meta property="og:locale">
-<meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig0.jpg">
-<meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig1.jpg">
-<meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig2.jpg">
-<meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig3.jpg">
-<meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig4.jpg">
-<meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig5.jpg">
-<meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig6.jpg">
-<meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig7.jpg">
-<meta property="og:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig8.jpg">
-<meta property="article:published_time" content="2023-02-06T02:07:35.000Z">
-<meta property="article:modified_time" content="2023-02-11T14:45:15.018Z">
+<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YTRkNTMyMDA5MjQ4ZGIzOWI2ZmMwNTlmYzk5YTY1YzlfY3RWNmpXS2tPUGtUdjNsWERpT1pxMWZJYlNjRG9JMEFfVG9rZW46Ym94Y25OSXVWQUczRU9OZWt4YXc4dkJJbDVJXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
+<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NjZjYWIwZWI2YWQyNTIxYWM5ZGE2OTgwZTM2OWY1MGNfaEpnaW1GODZ6TThtWjI1d1lndkw1UTN5c09HaU1zQWhfVG9rZW46Ym94Y25WaFlQYTZsT1pWQ0c0dlBOcGJBUW1mXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
+<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MTIwYTIxMWEzZWYzMjQ3NjE4ZTMzZjVlZDE1NTNjZmRfUERVRHY4cUltTHVqQ2o5dE9DSHRIS0FuVFQ3M1JKWW1fVG9rZW46Ym94Y25PamdidUY2NVlnQ21ibzNpb05ZbUxlXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
+<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MjMwZTg1MWJhNjRiZjFhYjMxMDNlZDJhNzAzMmMwOThfVkJ2RERYNm1QUGtteWpVNTJpQWlza2p1bWNpckk5MjlfVG9rZW46Ym94Y25YRklRTXhwdlFKMWhSYzEzcDFBNFdkXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
+<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MzFhZmJkMTA1ZTBmYzkwNzVlMGI3ZjNmOGRmMTZlMTBfeHV4TVZqMWlnZExHSWNFYUJZMFE3VzFGUEZUNXZiWDlfVG9rZW46Ym94Y25PT1ZVdVhxSVRmcDVtZEFkM2w4NWJmXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
+<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NTJhMmYzZTYzMGY2MmFlMDU5YzMxZDg0NmQ4YjhjNGNfd1NjaWU4bmhhQTNxMm5jdlkxTHhOck9selhjVEhLQUVfVG9rZW46Ym94Y25oZTh1Y0lweXNNZDV0eW1qU2RPS0RkXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
+<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NGRkMzRiMTNiYzM2YjBkNGY3OGQwZjIxOWU4MzQ5OTZfbWt0bUZsVmhqOHZWaG9VMlc1QXE2Mld4TDVBajBXYk1fVG9rZW46Ym94Y25oZDJ2bEh1TUJPVDNEcVpsdWZJZDhmXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
+<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTMzZWEyMzAyY2IxOTYxMGJlOGI3YmUwMTgzMDUzZTNfMVA5TElGWkE4TmVnTmJPZmd6Nng4Rk5MS215NE8xUmxfVG9rZW46Ym94Y25xWjVOTnJGbGNTZmczMEJnSTNQSGRoXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
+<meta property="article:published_time" content="2022-07-11T14:15:15.000Z">
+<meta property="article:modified_time" content="2023-02-11T14:38:22.410Z">
 <meta property="article:author" content="Zhang Xinmiao">
-<meta property="article:tag" content="容错">
-<meta property="article:tag" content="SDC">
 <meta property="article:tag" content="论文阅读">
-<meta property="article:tag" content="软错误">
-<meta property="article:tag" content="2021">
+<meta property="article:tag" content="eBPF">
+<meta property="article:tag" content="近存储计算">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="前沿系统">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig0.jpg">
+<meta name="twitter:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YTRkNTMyMDA5MjQ4ZGIzOWI2ZmMwNTlmYzk5YTY1YzlfY3RWNmpXS2tPUGtUdjNsWERpT1pxMWZJYlNjRG9JMEFfVG9rZW46Ym94Y25OSXVWQUczRU9OZWt4YXc4dkJJbDVJXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
   
     <link rel="alternative" href="/atom.xml" title="Xinmiao的博客" type="application/atom+xml">
   
@@ -218,14 +217,14 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Meta关于SDC的项目基金和已有的研究成果调研" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-eBPF" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
   
   
     <h1 class="article-title" itemprop="name">
-      SDC调研：Meta的两篇论文
+      eBPF+CSD调研
     </h1>
   
 
@@ -237,8 +236,8 @@
               <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
         </span>
 
-<a href="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/" class="archive-article-date">
-        <time datetime="2023-02-06T02:07:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-02-06</time>
+<a href="/2022/07/11/eBPF/" class="archive-article-date">
+        <time datetime="2022-07-11T14:15:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-07-11</time>
 </a>
 
   
@@ -251,7 +250,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">6k字</span>
+      <span class="post-count">4k字</span>
     </span>
   </span>
 
@@ -260,7 +259,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">20分</span>
+      <span class="post-count">14分</span>
     </span>
   </span>
 </div>
@@ -271,168 +270,151 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>Meta的服务(facebook, instagram, whatsapp, messengers)都依赖于数据中心的服务。</p>
-<img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig0.jpg" class="" title="SDC对应用层产生的影响">
-
-<p>然而，静默数据错误(SDC)无法被大型系统所发现，在硬件层面无法被捕获，有可能会随着软硬件栈一直传播，最终形成应用层面的数据损失。这些损失可能需要数个月来修复，是大型基础计算设施中潜在的问题。<br>以下在数据中心中出现的重大事故都与SDC问题相关：</p>
-<ol>
-<li>AWS S3 因 bit corruption 造成 36 小时的服务中断</li>
-<li>Facebook 遇到 10%-15% 的图片无法访问 (48 小时)</li>
-<li>Netflix 宕机超过 3 天</li>
-</ol>
+    <p>很多人认为融合eBPF技术会是未来计算型存储器**(Computational Storage,CSD)<strong>的一个重要发展方向。本文调研了</strong>eBPF技术的原理和应用场景**，并指出“Why eBPF+CSD”。此外，本文还调研了当下在CSD中使用eBPF技术的难点和可能的替代选项。</p>
+<hr>
+<h1 id="什么是eBPF技术？"><a href="#什么是eBPF技术？" class="headerlink" title="什么是eBPF技术？"></a>什么是eBPF技术？</h1><h2 id="前身：BPF-Berkeley-Package-Filter"><a href="#前身：BPF-Berkeley-Package-Filter" class="headerlink" title="前身：BPF(Berkeley Package Filter)"></a>前身：BPF(Berkeley Package Filter)</h2><p><strong>BPF背景：</strong>于1992年提出，当时unix操作系统提供了捕获数据包的设施以监控当前的网络情况。但是，网络监控程序(如tcpdump)处于<strong>用户态</strong>，数据包必须频繁地被<strong>从内核态被拷贝到用户态</strong>。因此，一些被称为【<strong>数据包过滤器</strong>】的内核代理被提出了，以尽早在内核就丢弃不想要的数据包，<strong>避免从操作系统内核向用户态复制其他对用户态程序无用的数据包，从而极大提高性能</strong>。BPF是其中一种。</p>
+<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YTRkNTMyMDA5MjQ4ZGIzOWI2ZmMwNTlmYzk5YTY1YzlfY3RWNmpXS2tPUGtUdjNsWERpT1pxMWZJYlNjRG9JMEFfVG9rZW46Ym94Y25OSXVWQUczRU9OZWt4YXc4dkJJbDVJXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+<p><em>图 经典的BPF</em></p>
 <span id="more"></span>
 
+<p><strong>BPF实现：</strong>用户态的进程可以提供一个过滤程序，BPF功能用对于<strong>BPF<strong><strong>虚拟机</strong></strong>机器语言的解释器</strong>来实现。</p>
+<p><strong>extended BPF:</strong> 从3.18版本开始，linux内核中提供了一种扩展的BPF虚拟机(eBPF)，可以被用于<strong>非网络相关的内核其他用途，</strong>比如附着在不同的tracepoint上获取内核运行的信息，eBPF也被windows操作系统所采用。</p>
+<h2 id="eBPF技术简介"><a href="#eBPF技术简介" class="headerlink" title="eBPF技术简介"></a>eBPF技术简介</h2><p><strong>现代eBPF：</strong>eBPF现在已经不再是任何东西的缩写，而是一项单独的技术。它可以在不修改内核源代码或者加载内核模块的情况下，<strong>在特权上下文(如操作系统内核中)运行沙盒程序，被用来安全高效地拓展内核程序。</strong>可编程的部分直接添加到现有层中。</p>
+<p><strong>优势：</strong>由于内核具有监督、控制整个系统的特权，操作系统一直是实现可观察性、安全性和网络功能的理想场所。但是内核由于其核心作用和对稳定性和安全性的高要求，<strong>修改内核很难</strong>。eBPF则改变了这一点，并且由<strong>操作系统来保证其安全性和执行效率</strong>。</p>
+<p><strong>可编程性：</strong>因为eBPF虚拟机使用的是类似于汇编语言的指令，可编程性差。现在的编译器正在兼容高级语言<strong>生成BPF字节码</strong>。例如，LLVM在3.7版本开始支持BPF字节码作为后端输出。</p>
+<p><strong>eBPF的实现：</strong></p>
+<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NjZjYWIwZWI2YWQyNTIxYWM5ZGE2OTgwZTM2OWY1MGNfaEpnaW1GODZ6TThtWjI1d1lndkw1UTN5c09HaU1zQWhfVG9rZW46Ym94Y25WaFlQYTZsT1pWQ0c0dlBOcGJBUW1mXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+<p><em>图 eBPF开发流程</em></p>
+<h2 id="eBPF技术现有的应用领域"><a href="#eBPF技术现有的应用领域" class="headerlink" title="eBPF技术现有的应用领域"></a>eBPF技术现有的应用领域</h2><ul>
+<li><strong>网络（协议解析、转发逻辑）</strong></li>
+<li><strong>跟踪和分析</strong>（<strong>可以同时跟踪内核和用户程序的执行，提供强大的解决内核问题的能力</strong>）</li>
+<li><strong>安全性（更好的保护系统</strong>，<strong>允许结合所有方面的可靠性）</strong></li>
+<li><strong>传统存储（实现数据过滤）</strong></li>
+<li>……</li>
+</ul>
+<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MTIwYTIxMWEzZWYzMjQ3NjE4ZTMzZjVlZDE1NTNjZmRfUERVRHY4cUltTHVqQ2o5dE9DSHRIS0FuVFQ3M1JKWW1fVG9rZW46Ym94Y25PamdidUY2NVlnQ21ibzNpb05ZbUxlXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+<p><em>图 eBPF面向的应用场景和技术栈</em></p>
 <hr>
-<h1 id="潜在研究方向"><a href="#潜在研究方向" class="headerlink" title="潜在研究方向"></a>潜在研究方向</h1><p>我们固然可以执行非常严厉的计划来避免 SDC 问题，然而无论多么精巧的设计都不能 100% 避免问题的发生，而且会急剧降低系统的整体性能。这就要求系统设计者学会在性能与可靠性之间做工程上的平衡。</p>
-<p>针对以上前沿研究问题，Meta的系统和基础架构实验室已经开展了大量的工作并运用于云服务场景中以保证服务交付的准确性。经过多年的研究，Meta认为解决SDC问题有以下四个方向：</p>
+<h1 id="为什么说eBPF-CSD是一个重要的发展方向？"><a href="#为什么说eBPF-CSD是一个重要的发展方向？" class="headerlink" title="为什么说eBPF+CSD是一个重要的发展方向？"></a>为什么说eBPF+CSD是一个重要的发展方向？</h1><h2 id="当前CSD发展所目前面临的难点"><a href="#当前CSD发展所目前面临的难点" class="headerlink" title="当前CSD发展所目前面临的难点"></a>当前CSD发展所目前面临的难点</h2><p>目前，CSD的可编程性仍然很差：</p>
 <ol>
-<li>从**计算架构(Architecture)**层面处理SDC问题<ul>
-<li>架构层面上处理和转移SDC的方法，例如enhanced compute block ECC机制</li>
-<li>自测试(self-test)的架构模块和模式，例如lockstep computing, checkpointing和redundant computing，这些方法都需要评估计算成本和性能代价</li>
-<li>新颖的处理计算和内存错误的架构解决方案，包括但不仅限于增强传统的RAS架构。</li>
+<li>CSD的<strong>设计没有统一的标准</strong>。由于不了解设备内部的复杂程度，且很难去对内部编程，探索硬件模型和在主机上统一集成接口非常困难；</li>
+<li>CSD<strong>没有标准的编程抽象、<strong><strong>API</strong></strong>或者编程模型</strong>。之前的工作往往都是选定编程模型，而不是让开发者自己来自定义编程以适应当前工作负载。</li>
+</ol>
+<p>可编程性意味着可以<strong>动态、安全地运行用户提供的代码</strong>，能够方便的将用户需要的任务卸载到存储器上。而<strong>eBPF可以将用户定义的任务“注入”内核</strong>，刚好符合这样的要求；又因为eBPF有现有的工具链和库，CSD研究者们希望用eBPF来为CSD提供任务卸载。</p>
+<h2 id="为什么选择eBPF？"><a href="#为什么选择eBPF？" class="headerlink" title="为什么选择eBPF？"></a>为什么选择eBPF？</h2><ul>
+<li><strong>不影响内核：</strong>CSD需要在主机上开发程序并让存储控制器执行它们，而不影响控制器上原有固件的执行；而使用eBPF技术可以将eBPF程序挂载到内核中，而无需修改内核。</li>
+<li><strong>架构无关：</strong>eBPF<strong>与架构无关。</strong>在计算型存储器中我们希望<strong>使用与硬件无关的指令集</strong>，而不是预先知道CSD上处理器的型号再来下载对应的代码(X86或ARM)。</li>
+</ul>
+<p>想象一个可能的应用场景：假设我们要对压缩加密后的大型数据库表进行数据分析。首先，借助CSD的可编程部分，我们可以在<strong>离线阶段</strong>在CSD中定义一个通用的<strong>控制程序</strong>，例如将数据读取到CSD的内存缓冲区，并解压解密数据放入CSD上的一个本地位置；<strong>在线阶段</strong>用户可以通过eBPF自定义<strong>计算程序</strong>，对数据进行过滤，最后再将过滤后的数据传输到主机。这样可以通过自定义的方式，能够更好地贴合数据特征，进一步节省内存和带宽，比之前的方式灵活的多。</p>
+<h2 id="CSD与内核的相同点和不同点"><a href="#CSD与内核的相同点和不同点" class="headerlink" title="CSD与内核的相同点和不同点"></a>CSD与内核的相同点和不同点</h2><ul>
+<li><strong>相同点：</strong>eBPF指令集和工具链已经相对来说比较成熟。<strong>我们像kernel中一样地把 C 程序编译成eBPF 目标文件，就可以在<strong><strong>CSD</strong></strong>中使用 eBPF 生态中已有的东西。</strong> </li>
+<li><strong>不同点：</strong>eBPF发源于内核，而<strong>内核对 eBPF 程序允许执行的操作有非常多的限制</strong>。例如，eBPF 指令集是允许用户写无限循环的，但Linux内核中的虚拟机在检查时会拒绝该程序。这是由之前的应用场景导致的：因为内核在处理数据包的时候没有那么复杂的操作。但是在CSD的场景下，我们可能希望运行 eBPF 做计算，这就需要对一些复杂数据结构进行处理，要放宽原有的限制。</li>
+</ul>
+<h2 id="CSD-eBPF产生的研究性问题"><a href="#CSD-eBPF产生的研究性问题" class="headerlink" title="CSD+eBPF产生的研究性问题"></a>CSD+eBPF产生的研究性问题</h2><ul>
+<li><strong>如何让eBPF执行计算任务：</strong>eBPF目前的应用主要是一些<strong>计算复杂度低</strong>的<strong>控制类程序</strong>，且必须要通过现有的应用于Kernel场景的eBPF虚拟机进行验证。但计算程序更复杂，运行时间更长。因此，如何将eBPF应用到计算任务上，以使得程序运行效率接近基于目标硬件指令集的程序是目前eBPF开发人员关注的一个重要问题。<ul>
+<li>可能的方法：修改eBPF虚拟机定义的正确运行时限制、定义新的计算指令<strong>（跟<strong><strong>CSD</strong></strong>无关）</strong></li>
 </ul>
 </li>
-<li>从**分布式计算(Distributed Computing)**层面处理SDC的传播<ul>
-<li>遏制SDC传播的分布式计算弹性模型和解决方案</li>
-<li>跨越多个子系统的错误检测能力</li>
-<li>分布式规模的错误控制和测试机制</li>
-<li>自测试SDC的分布式系统架构和恢复方案</li>
+<li><strong>任务卸载：</strong>对于一般的大型计算任务，<strong>哪些工作负载卸载在<strong><strong>CSD</strong></strong>上会更有意义</strong>？我们如何为这些任务定义一个通用的 API 或框架？</li>
+<li><strong>通信问题：</strong>在存储设备中的CPU往往算力较小，因此其需要辅有其他专用硬件来完成计算。<strong>eBPF程序与存储上其他设备的通信方式</strong>也是难点之一。</li>
 </ul>
-</li>
-<li>从**软件(Software)**层面提供弹性服务<ul>
-<li>软件层面实现对SDC的弹性，例如冗余机制、概率和算法的容错机制</li>
-<li>实现抗SDC的通用计算和数据搬运库</li>
-<li>针对SDC的实时检测和遏制软件方法(需要评估计算成本和性能开销)</li>
-<li>从过去的SDC中归纳SDC解决算法</li>
+<hr>
+<h1 id="一个可能的eBPF-CSD-prototype"><a href="#一个可能的eBPF-CSD-prototype" class="headerlink" title="一个可能的eBPF+CSD prototype"></a>一个可能的eBPF+CSD prototype</h1><p>来自<strong>阿姆斯特丹自由大学</strong>的团队探索了**基于QEMU仿真ZNS，来实现eBPF+**<strong>CSD</strong>的一个prototype。(仍然在开发中，文档健全；官网给出运行的视频样例)(<a target="_blank" rel="noopener" href="https://github.com/Dantali0n/OpenCSD)%E3%80%82%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%8E%BB%E5%B1%95%E6%9C%9B%E4%B8%80%E4%B8%8BeBPF+CSD%E7%9A%84%E8%AE%BE%E8%AE%A1%EF%BC%9A">https://github.com/Dantali0n/OpenCSD)。我们可以通过这个项目去展望一下eBPF+CSD的设计：</a></p>
+<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MjMwZTg1MWJhNjRiZjFhYjMxMDNlZDJhNzAzMmMwOThfVkJ2RERYNm1QUGtteWpVNTJpQWlza2p1bWNpckk5MjlfVG9rZW46Ym94Y25YRklRTXhwdlFKMWhSYzEzcDFBNFdkXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+<p><em>图 技术报告封面</em></p>
+<p><strong>配置</strong></p>
+<ul>
+<li><strong>QEMU：</strong>仿真Zone NameSpace SSD（ZNS）。</li>
+<li><strong>SPDK：</strong>一种与用户空间的存储设备接口（在本项目中就是指能够与QEMU仿真的ZNS）的技术。</li>
+<li><strong>uBPF(user-space BPF)：</strong>一种ebpf虚拟机。</li>
 </ul>
-</li>
-<li>从**硅设计(Silicon Design)**层面提供更可靠的硬件工艺<ul>
-<li>面向SDC问题，优化硅设计和制造策略</li>
-<li>用于硅制造过程的进阶模拟、仿真和测试策略</li>
-<li>硅测试的覆盖率评估、硅模块内发生故障的概率评估模型</li>
-<li>用于SDC检测的生产过程中的测试例程开发</li>
-<li>硅模块使用过程中逐渐衰退的模型和评估机制</li>
-</ul>
-</li>
+<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MzFhZmJkMTA1ZTBmYzkwNzVlMGI3ZjNmOGRmMTZlMTBfeHV4TVZqMWlnZExHSWNFYUJZMFE3VzFGUEZUNXZiWDlfVG9rZW46Ym94Y25PT1ZVdVhxSVRmcDVtZEFkM2w4NWJmXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+<p><em>图 ZCSD的工作流程</em></p>
+<p><strong>主机端</strong></p>
+<ol>
+<li><strong>编写程序BPF程序：</strong>用户编写的BPF程序中应当包含所有需要在CSD上运行的API；</li>
+<li><strong>编译：</strong>Clang+LLVM编译生成bpf字节码；</li>
+<li><strong>格式转换：</strong>Bpftool转换将bpf字节码转换为要用户程序包含的头文件，其中包含有elf格式的字节码；</li>
+<li><strong>包含头文件：</strong>头文件包含在用户写的程序中，用户有了调用CSD上eBPF程序接口的能力</li>
+</ol>
+<p>之后编译好的BPF程序可以通过用户写的程序连同NVMe API来使用了。</p>
+<p><strong>存储端</strong></p>
+<ol>
+<li><strong>程序提交：</strong>用户程序以elf格式提交用户程序</li>
+<li><strong>虚拟机****执行：</strong>uBPF被用来执行BPF程序，提供BPF API的实现</li>
+<li><strong>取数据：</strong>BPF程序通过SPDK在底层的ZNS中取数据，ZNS返回的数据由驱动程序和SPDK处理。</li>
+<li><strong>自定义计算：</strong>BPF程序进行计算或过滤，将数据返回给用户程序。</li>
+<li><strong>用户接收数据：</strong>用户程序接收数据。</li>
+</ol>
+<p><strong>NVMe扩展了原有的NVMe指令集：</strong></p>
+<ol>
+<li><strong>下载eBPF程序：</strong>以elf格式发送BPF程序；</li>
+<li><strong>返回处理数据：</strong>将eBPF程序的返回数据提取出来。</li>
 </ol>
 <hr>
-<h1 id="Facebook在大规模集群中对SDC问题的理解"><a href="#Facebook在大规模集群中对SDC问题的理解" class="headerlink" title="Facebook在大规模集群中对SDC问题的理解"></a>Facebook在大规模集群中对SDC问题的理解</h1><p>以下内容来自论文《Silent Data Corruptions at Scale》(Arxiv) @Facebook。</p>
-<h2 id="补充背景"><a href="#补充背景" class="headerlink" title="补充背景"></a>补充背景</h2><p>以往的工作往往研究由于辐射或者合成错误注入产生的软错误问题，Meta的研究则注意到，由于设备的特性，SDC可能会发生并且大规模重复，这种SDC是可复现、非瞬态的。此外，在之前的错误注入模型的研究中，CPU的SDC概率被定为到百万分之一的几率级别，而在真实场景下，由于CPU功能模块中为了性能往往采用最小纠错机制，CPU SDC的概率要比预计高几个数量级。</p>
-<h2 id="产生缺陷的原因"><a href="#产生缺陷的原因" class="headerlink" title="产生缺陷的原因"></a>产生缺陷的原因</h2><h3 id="设备缺陷-Device-Errors"><a href="#设备缺陷-Device-Errors" class="headerlink" title="设备缺陷(Device Errors)"></a>设备缺陷(Device Errors)</h3><p>在生产和设计阶段，设备本身有可能会有潜在的缺陷：</p>
-<ol>
-<li>有些设计有可能有corner case。例如，在某个特定的功耗状态下管理cache控制器的模块，其功能会受到限制，有可能导致设备运行被卡住或者产生功能上发生错误；</li>
-<li>在CPU布局布线期间，不能确定信号的到达时间，有可能导致错误的位翻转。例如timing path error</li>
-<li>制造过程中，有可能所有的晶体管的蚀刻不够可靠，使得晶体管没有相同的峰值工作电压或功率阈值，各个设备的模块特点不同，导致制造上的错误。</li>
-</ol>
-<h3 id="早期故障-Early-Life-Failures"><a href="#早期故障-Early-Life-Failures" class="headerlink" title="早期故障(Early Life Failures)"></a>早期故障(Early Life Failures)</h3><p>有些故障在生产过程中就被发现了，有些故障要等到硬件真正运行服务的过程中才会出现。根据晶体管内部缺陷的类型，故障可能会在运行前几周、几个月或预期设备寿命结束前的任何时间出现。 这些故障全部被归类为早期故障(Early Life Failures)。</p>
-<h3 id="设备老化-Degradation"><a href="#设备老化-Degradation" class="headerlink" title="设备老化(Degradation)"></a>设备老化(Degradation)</h3><p>随着频繁的使用，设备会逐渐老化。频繁使用的计算部分比 CPU 的其他部分老化的更快。与早期故障相比，这些由于设备老化而产生的故障并不常见，但仍有相关的例子，例如针对 DDR4 内存的RowHammer攻击。 芯片内部使用纠错机制(ECC)，可以防止设备内部性能下降。</p>
-<h3 id="晚期磨损-End-of-Life-Wear-Out"><a href="#晚期磨损-End-of-Life-Wear-Out" class="headerlink" title="晚期磨损(End-of-Life Wear-Out)"></a>晚期磨损(End-of-Life Wear-Out)</h3><p>当设备在现场服务工作负载一段时间后，超出其额定寿命，整个硅开始出现磨损，这在大多数组件中都可以观察到。</p>
-<h2 id="Case-Study：应用层看SDC造成的影响"><a href="#Case-Study：应用层看SDC造成的影响" class="headerlink" title="Case Study：应用层看SDC造成的影响"></a>Case Study：应用层看SDC造成的影响</h2><p>Facebook中有大量不同类型的应用。我们以查询设施为例，最基本的查询基础设施是用来获取并执行SQL查询的设施，例如Spark, Presto, Hive等。下面以spark为例来描述SDC会给应用带来什么样的影响。</p>
-<h3 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a>Spark</h3><img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig1.jpg" class="" title="Spark架构">
-
-<p>在Spark架构中，数据集被分为多个部分，这种数据集叫做<strong>弹性分布式数据集</strong>(Resilient Distributed Dataset, RDD)，每个数据集是单独并行执行的。执行过程是每个worker node上会分布有几个RDD块，每个worker首先做map，然后在shuffle reduce阶段将结果进行综合，最后再对用户提供请求的结果。</p>
-<h3 id="FaceBook解压缩应用"><a href="#FaceBook解压缩应用" class="headerlink" title="FaceBook解压缩应用"></a>FaceBook解压缩应用</h3><p>FaceBook使用Spark进行压缩。这里，我们主要讨论解压缩的部分。当解压缩请求运行时，多组压缩文件会被输入到解压缩流水线中。在解压缩之前，系统会检查压缩文件的大小看是否大于0。如果结果大于0，才会执行解压缩。</p>
-<img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig2.jpg" class="" title="SDC对应用层产生的影响">
-
-<p>在Spark中，解压缩流水线会提供文件的尺寸作为解压缩算法的输入，算法将执行Scala库的幂函数。有趣的是，FB在日常维护中发现了这样一个case study：幂函数会对一个已知具有非零大小的压缩文件返回0值。由于文件大小为0，因此这个文件不会被解压，这意味着随机丢失了一些文件。接下来，为压缩文件保留着k-v对的应用会发现这个错误，并且注意到此错误已经不可还原了，使得应用程序出错。</p>
-<h2 id="对以上问题做debug"><a href="#对以上问题做debug" class="headerlink" title="对以上问题做debug"></a>对以上问题做debug</h2><p>所有工程团队用日志记录下每一个worker的每一步的结果，并复现以上的错误→从日志中锁定出错机器→单机上复现错误→锁定错误只在某一核心上被某一组特定值触发→scala无法使用GDB调试，但可以用JVM兼容JAVA字节码</p>
-<h3 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h3><p>为了找出根本原因，Meta团队希望在不改变复现实验的含义的情况下，将编程语言从Scala转换为Java，再转换为JAVA字节码，最终到达指令级别来再通过GDB调试，以锁定错误出现的范围。但是java是即时编译的，并不能深入到指令级别，所以还需要一个提前的编译器编译出这些指令；或者需要一个探测器，可以在执行JAVA字节码时提供已经执行的二进制指令。</p>
-<ul>
-<li><strong>语言转换</strong>：Scala Compiler(scalac)，转换后可以生成交叉编译的java类型文件，可以当做java字节码</li>
-<li><strong>提前(ahead-of-time)编译器</strong>：GCJ，可以将java字节码转换成对象文件和二进制码，二进制码可以用GDB来debug。然而这个工具已经很久没有维护了，其他也没有更好的编译器工具。</li>
-<li>**探测器(probe)**：JAVA提供+printassembly选项，用HotSpot追踪可以打印出已经运行出的汇编代码。</li>
+<h1 id="eBPF不是唯一的选择"><a href="#eBPF不是唯一的选择" class="headerlink" title="eBPF不是唯一的选择"></a>eBPF不是唯一的选择</h1><p>现有的一些讨论将eBPF视为对CSD进行卸载的主要方案，这一观点并没有仔细考虑其他的选项。<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2111.01947%E8%BF%99%E7%AF%87%E8%AE%BA%E6%96%87%E4%BB%8E**%E5%AE%9A%E6%80%A7**%E5%92%8C**%E5%AE%9A%E9%87%8F**%E7%9A%84%E8%A7%92%E5%BA%A6%E6%9D%A5%E7%BB%BC%E5%90%88%E6%AF%94%E8%BE%83%E4%BA%86**eBPF**%E5%92%8C**WebAssembly(%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%98%93%E4%BA%8E%E7%A7%BB%E6%A4%8D%E7%9A%84%E3%80%81%E4%BD%8E%E5%B1%82%E6%AC%A1%E7%9A%84%E5%AD%97%E8%8A%82%E7%A0%81%EF%BC%8C%E7%94%A8%E4%BA%8E%E5%9F%BA%E4%BA%8E%E5%A0%86%E6%A0%88%E7%9A%84****%E8%99%9A%E6%8B%9F%E6%9C%BA****)**%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%8C%E7%BB%99%E5%87%BA%E4%BA%86%E4%BB%96%E4%BB%AC%E5%AF%B9%E4%BA%8E%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%81%E8%A7%A3%E3%80%82">https://arxiv.org/abs/2111.01947这篇论文从**定性**和**定量**的角度来综合比较了**eBPF**和**WebAssembly(另一种易于移植的、低层次的字节码，用于基于堆栈的****虚拟机****)**的区别，给出了他们对于这个问题的见解。</a></p>
+<h2 id="CSD的其他选择"><a href="#CSD的其他选择" class="headerlink" title="CSD的其他选择"></a>CSD的其他选择</h2><ul>
+<li><strong>eBPF：</strong>现在指允许在Linux内核总运行沙盒程序的技术的总称。但是我们在这里尤其对基于寄存器的eBPF字节码感兴趣。eBPF现在应用在网络包过滤以及系统监视等多种应用场景中。以下展示了用eBPF写I&#x2F;O tracer的工作过程：用户用C语言写一个I&#x2F;Otracer，然后用clang编译成eBPF字节码，这个字节码将会被libbpf加载进内核执行。虽然目前来看eBPF字节码常常被用于linux kernel的场景下，但是也有很多工作去尝试独立运行eBPF的字节码。</li>
+<li><strong>WebAssembly：</strong>WebAssembly是一易于移植的、低层次的字节码，用于基于堆栈的虚拟机。它是为在浏览器中安全高效的运行而设计的。已经有工具从python或C语言来生成WebAssembly的代码，为了在浏览器环境之外执行这些字节码，可以使用wasmtime&#x2F;wasmer&#x2F;GraalVM等带有JIT的虚拟机。</li>
 </ul>
-<p>通过以上三个工具实现了GDB对代码进行debug。但是出来的都是汇编代码，且数量非常大(430K)，为了定位到错误的汇编代码，本文通过先将相关的函数筛选出来，再进行反向工程，实现对错误的定位。</p>
-<h3 id="很好的一些调试经验-略过了，太工程，大部分谷歌翻译了"><a href="#很好的一些调试经验-略过了，太工程，大部分谷歌翻译了" class="headerlink" title="很好的一些调试经验(略过了，太工程，大部分谷歌翻译了)"></a>很好的一些调试经验(略过了，太工程，大部分谷歌翻译了)</h3><img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig3.jpg" class="" title="SDC对应用层产生的影响">
-
+<p>计算型存储器背后的思想是代码迁移，将处理直接卸载到存储设备中。过去的方案试图为特定类型的工作负载提供专用软硬件，而缺乏对通用计算卸载的讨论，例如用户可编程的、动态可卸载的计算。</p>
+<h2 id="分析目标"><a href="#分析目标" class="headerlink" title="分析目标"></a>分析目标</h2><p>通过定性和定量评估eBPF和WebAssembly两种卸载机制来重启关于通用计算任务卸载机制的讨论。具体来说是回答以下问题：</p>
 <ul>
-<li><p><strong>绝对地址引用</strong>：将绝对地址留在代码中跳转会导致分段错误。如果发现汇编的该部分对再现性没有依赖性，则最好消除绝对地址引用。</p>
-</li>
-<li><p><strong>意外的分支</strong>：如果意外的分支和跳转调用没有被映射，代码会因分段错误而崩溃。最好限制复现器的可变性。</p>
-</li>
-<li><p><strong>外部库引用</strong>：建议最好不要依赖外部库。</p>
-</li>
-<li><p><strong>编译器优化</strong>：高性能代码具有多次编译器优化功能，观察数学方程式的优化有助于理解复制器所需的关键组件。 在逐步执行汇编指令时，优化可能不直观。</p>
-</li>
-<li><p><strong>冗余指令</strong>：最好消除冗余指令，例如stub指令</p>
-</li>
-<li><p><strong>输入&#x2F;输出寄存器</strong>：我们需要为关键指令识别数据输入和结果寄存器。识别后，必须添加额外的指令来提供用户输入、获得结果。 这实现了稳定的reproducer代码，并能够识别SDC的数据依赖性。</p>
-</li>
-<li><p><strong>管理堆栈帧：</strong>独立的Reproducer需要适当地管理堆栈帧。 管理堆栈帧中的事务以防止缓冲区溢出或下溢对于稳定性至关重要。 没有堆栈框架，复制器代码无法管理基于堆栈的请求或函数调用。</p>
-</li>
-<li><p><strong>内存偏移量引用</strong>：寄存器通常在指令中使用内存偏移量。 必须适当地初始化偏移量。 如果未计算和初始化偏移量，我们将遇到由于未初始化数据而导致的分段错误或复制器损坏。</p>
-</li>
-<li><p><strong>特殊功能单元</strong>：需要监控特殊功能单元（如 ALU、DSP、FPU、AVX 等）的事务，它们会带来近似值。 此外，特殊功能单元利用不同的位宽、特殊功能寄存器和堆栈结构。</p>
-</li>
-<li><p><strong>主框架</strong>：如果没有合适的主框架和功能框架，一个独立的reproducer是不完整的。 这使得代码可执行。</p>
-<p>通过逆向工程，可以获得一个更简单的reproducer代码，之后通过GDB可以获得导致错误的指令，最终锁定在60行的汇编代码中。</p>
-</li>
+<li>这两个卸载机制当前处于一个什么样的状态？</li>
+<li>二者的优缺点分别是什么？</li>
+<li>在计算型存储器的背景下怎么去改进这些两种机制？</li>
 </ul>
-<h2 id="重新审视应用的错误"><a href="#重新审视应用的错误" class="headerlink" title="重新审视应用的错误"></a>重新审视应用的错误</h2><p>此后，本文注意到具有不同精度的不正确值，结果不尽相同。因此，应用程序可能解压缩了大小不正确的文件，并且将文件在没有在EoF终止符的时候下被错误截断。 这会导致文件节点悬空、数据丢失等无法跟踪的错误。 因为复杂的数据依赖以及数据的输入，如果无法没有复现代码，这种数据损坏几乎不可能被检测并溯源，尤其是在集群拥有数十万台机器、每秒执行几百万次计算的情况下。因此，以上的方法可以更快地溯源集群内SDC的根本原因。</p>
-<h3 id="对抗SDC的硬件方法"><a href="#对抗SDC的硬件方法" class="headerlink" title="对抗SDC的硬件方法"></a>对抗SDC的硬件方法</h3><p>我们观察到，在大规模基础设施中，SDC并不是局限于百万分之一概率的罕见事件。 这些错误是系统性的，不像其他故障模式那样容易理解。以下几种硬件方法可以降低处理器内的软错误率，对SDC也有效：</p>
+<h2 id="定性分析"><a href="#定性分析" class="headerlink" title="定性分析"></a>定性分析</h2><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NTJhMmYzZTYzMGY2MmFlMDU5YzMxZDg0NmQ4YjhjNGNfd1NjaWU4bmhhQTNxMm5jdlkxTHhOck9selhjVEhLQUVfVG9rZW46Ym94Y25oZTh1Y0lweXNNZDV0eW1qU2RPS0RkXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+<h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><p>这里的安全性是指抵御人为错误的机制：如果卸载的bytecode里有bug，能发生的最坏结果是什么？</p>
 <ul>
-<li><strong>保护数据路径</strong>：使用ECC增强设备内的块，保护数据路径，提高设备的弹性。</li>
-<li><strong>专用的筛选模式</strong>：在制造流程中，设计专用的筛选和测试模式</li>
-<li><strong>了解大规模下SDC的行为</strong>：与大规模使用设备的客户密切合作，了解和评估SDC的影响。 研究发生率、生产故障时间、对频率、电压和环境条件的依赖性，有助于深入了解 SDC 的表现形式。</li>
-<li><strong>架构优先级</strong>：将来架构选择中，会优先考虑防止SDC的架构。</li>
+<li>WebAssembly：卸载的代码会在一个隔离的内存空间中运行，并且默认是不允许访问文件系统。因此bug可能最差会引起CPU时钟周期的浪费，但是并不会在runtime之外造成什么影响。</li>
+<li>eBPF：主要取决于验证器。Linux内核验证非常严谨，禁止很多类的循环和数据访问；而使用这样的内核进行数据处理显然不适用。新的验证器仍然待开发，因此还不能说eBPF的安全性如何。</li>
 </ul>
-<h2 id="探测SDC的方法-不增加其他额外开销"><a href="#探测SDC的方法-不增加其他额外开销" class="headerlink" title="探测SDC的方法(不增加其他额外开销)"></a>探测SDC的方法(不增加其他额外开销)</h2><p>为了探测到SDC，我们需要额外的机器来进行计算，之后与参考值比较结果。以下三种方法可以实现对SDC的探测：</p>
-<h3 id="找机会"><a href="#找机会" class="headerlink" title="找机会"></a>找机会</h3><p>找机会利用处于维护状态的机器，并使用随机数据输入，执行指令级准确性验证。 这里的挑战在于其覆盖范围主要取决于机器有机会处于维护状态的频率。 在大型的集群中，我们并不希望有很大比例的机器处于这些状态。</p>
-<h3 id="周期性"><a href="#周期性" class="headerlink" title="周期性"></a>周期性</h3><p>实施一个调度程序，定期监视机器的SDC覆盖率，然后根据定期计时器安排机器进行测试。这种方案的的开销很高。</p>
-<h3 id="对生产友好的方案"><a href="#对生产友好的方案" class="headerlink" title="对生产友好的方案"></a>对生产友好的方案</h3><p>当测试可以优化为最小的大小和运行时间时，可以使测试指令与机器上的工作负载同时执行。 结果被发送到收集器以通知机器的通过或失败状态。 此方法需要与工作负载密切配合，以免对生产工作负载产生任何不利影响。</p>
-<h2 id="软件容错机制"><a href="#软件容错机制" class="headerlink" title="软件容错机制"></a>软件容错机制</h2><p>为了处理静默错误，我们需要重新考虑基础架构软件设计理念和软件抽象的鲁棒性。</p>
-<h3 id="冗余机制"><a href="#冗余机制" class="headerlink" title="冗余机制"></a>冗余机制</h3><p>防止应用程序级故障的更好方法是实施软件级冗余，并定期验证正在计算的数据在多个检查点是否准确。在将这些方法应用于大规模数据中心时，要考虑精确计算的成本。 冗余的代价对资源有着直接的影响：架构越冗余，重复资源池的需求就越大。 但是冗余为应用程序提供了容错的概率。</p>
-<h3 id="容错库"><a href="#容错库" class="headerlink" title="容错库"></a>容错库</h3><p>将容错机制添加到 PyTorch 等知名开源库中将极大地帮助应用程序防止暴露于SDC。 构建容错的算法会增加应用程序的额外开销。因此，如果在性能下降可忽略不计的情况下，这一点可以被实现。 这项工作需要SDC研究社区和软件库社区之间的密切合作。</p>
-<hr>
-<h1 id="Facebook检测SDC问题的方法"><a href="#Facebook检测SDC问题的方法" class="headerlink" title="Facebook检测SDC问题的方法"></a>Facebook检测SDC问题的方法</h1><p>以下内容来自论文《Detecting silent data corruptions in the wild》(Arxiv) @Facebook。</p>
-<h2 id="硅测试流程"><a href="#硅测试流程" class="headerlink" title="硅测试流程"></a>硅测试流程</h2><p>在投入使用之前，基于硅的电子设备要经历不同的开发阶段。因此，我们要了解不同开发阶段所使用的测试策略，以理解集群范围内的与测试有关的开销，由此了解为什么测试是一件很难的事情。测试流程看重三点：测试量、测试时间、在该阶段出错产生的影响。</p>
-<img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig4.jpg" class="" title="SDC对应用层产生的影响">
-
-<h3 id="设计和验证-Design-and-Verification"><a href="#设计和验证-Design-and-Verification" class="headerlink" title="设计和验证(Design and Verification)"></a>设计和验证(Design and Verification)</h3><p>采用模拟和仿真(Simulation and Emulation)的手段来进行方案的测试。测试的时间会很长，但是由于方案不断改变、新的器件会加入，所以测试周期一般会很短。在该阶段出错的代价相对来说是很低的</p>
-<h3 id="硅上验证-Post-Silicon-Validation"><a href="#硅上验证-Post-Silicon-Validation" class="headerlink" title="硅上验证(Post  Silicon  Validation)"></a>硅上验证(Post  Silicon  Validation)</h3><p>此阶段产生少量的样本进行验证。与之前一个阶段相比，设计加入了生产过程的变量。从开销上来说，这一阶段的验证会引入生产的开销。如果出错，需要对原始方案推倒重新设计，此外，在真实电路上开展测试的测试开销也很大。通过测试的方案被视为可以进行大规模生产。</p>
-<h3 id="生产厂商测试-Manufacturer-testing"><a href="#生产厂商测试-Manufacturer-testing" class="headerlink" title="生产厂商测试(Manufacturer testing)"></a>生产厂商测试(Manufacturer testing)</h3><p>大规模生产之后，每个设备将用更加高级的测试设备进行自动测试。测试时间对生产通量有明显的影响，测试总量也从之前的几百个上升到上百万的量级。测试的开销随着数量也线性扩展。在这个阶段如果出错，开销会更大，往往导致重新设计或者重新生产该芯片。</p>
-<h3 id="集成测试"><a href="#集成测试" class="headerlink" title="集成测试"></a>集成测试</h3><p>这一阶段设备被运送到终端消费者手中，消费者用此设备集成到自己的开发环境中，集成阶段往往由集成者来协调。在这一阶段，需要跟其他不同的设备相配合，测试的复杂度也升高了；此外，测试的开销也从单设备到多种设备、多种配置的综合测试。此阶段出错，可能会导致不同的机架重新组装或者重新安装。</p>
-<h3 id="基础设施引入测试"><a href="#基础设施引入测试" class="headerlink" title="基础设施引入测试"></a>基础设施引入测试</h3><p>这一阶段主要是将机器接入网络，进行应用层面的测试。往往要持续几个小时到一天的时间。由于故障的来源多，所以锁定错误要更难一些。</p>
-<h3 id="基础设施集群测试"><a href="#基础设施集群测试" class="headerlink" title="基础设施集群测试"></a>基础设施集群测试</h3><p>正常的测试流程到上面就结束了。但是因为有SDC，如果不运行某个特定的测试程序是找不到SDC问题，以保护基础架构上运行的应用的。因此，按期进行检查是很有必要的。这种测试所需要花费的开销会更大，因为需要在保证程序正常运行的情况下对程序进行复杂的编排和调度。</p>
-<p>此外，由于硬件的复杂度和配置的复杂度，分类和溯源错误是很昂贵的。因此，需要花费比较昂贵的开销，采用更多高级的方法来探测SDC。</p>
-<h2 id="SDC为什么是一个很难的问题？"><a href="#SDC为什么是一个很难的问题？" class="headerlink" title="SDC为什么是一个很难的问题？"></a>SDC为什么是一个很难的问题？</h2><p>SDC可能的来源：</p>
+<h3 id="工具链"><a href="#工具链" class="headerlink" title="工具链"></a>工具链</h3><ul>
+<li>开发工具：对于WebAssembly，有一系列叫做wabt(WebAssembly Binary ToolKit)的工具可以来检查和转换WebAssembly的二进制文件。对于eBPF，bpftool能够用来检查eBPF程序，但是本质上它与内核的使用绑定，所以在独立的场景下没法使用。Llvm-objdump对于ebpf来说是更好的选择。</li>
+<li>虚拟机：如之前所提到的，WebAssembly有至少三种适合不同场景的虚拟机实现。虽然他们都有一些同样的特点例如JIT支持，但是他们也有很多独立的特征；但是eBPF却仍然还有很长的路要走。uBPF和rBPF都有JIT支持(仅x86_64)，但是他们仍然缺乏分析和调试等方面的功能。</li>
+</ul>
+<h3 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h3><p>这里的兼容性指重用现有生态中库的能力，任何外部依赖项(包括C库libc)都要被重新编译并静态链接。</p>
 <ul>
-<li><p><strong>数据相关</strong>：SDC有可能天然与数据相关，也就是说这个CPU坏了，有可能大部分的计算还是正确的，但是就是一小部分是错误的。这使得测试的空间非常大。</p>
-</li>
-<li><p><strong>电气因素</strong>：改变的电压、频率和电流会引起更多的错误，虽然在某一组电气配置下结果对了，但是其他情况不保证。这也使得测试空间非常大。</p>
-</li>
-<li><p><strong>环境因素</strong>：地理位置的差异也会加速SDC问题的出现，这与温度、湿度都有很强的相关性。在大型集群中，也有可能因为workload不均匀一些机器温度高，使得某些计算中心结果和其他不一样。</p>
-</li>
-<li><p><strong>寿命因素</strong>：随着时间，硅片的性能和可靠性也会改变。此外，SDC问题可能跟现有模型的预测有出入。因此今天计算正确，明天就不一定正确了。</p>
-<p>从以上四点，本文总结保护集群以对抗SDC的唯一方法是通过不断改进的测试例程和高级测试模式生成来反复测试基础设施。</p>
-</li>
+<li>WebAssembly：使用wasi-sdk进行编译，但是也有一些函数例如fork&#x2F;pthread无法build。</li>
+<li>eBPF：没有wasi-sdk这样的工具，由于无法调用C库，所以大量现存的库也无法使用了；除此之外，由于clang -target bpf不支持一些种类的数值操作和浮点操作，一些数据类型也可能不支持，这主要是因为eBPF缺乏合适的指令让clang来生成。因此，我们并不知道这些操作将如何被eBPF来使用除非eBPF有重大的扩展。</li>
 </ul>
-<h2 id="基础设施集群测试的方法-Infrastructure-Fleet-Testing"><a href="#基础设施集群测试的方法-Infrastructure-Fleet-Testing" class="headerlink" title="基础设施集群测试的方法(Infrastructure Fleet Testing)"></a>基础设施集群测试的方法(Infrastructure Fleet Testing)</h2><p>两个主要的测试方法：</p>
+<h3 id="可移植性"><a href="#可移植性" class="headerlink" title="可移植性"></a>可移植性</h3><p>由于二者都是字节码，所以都比较好移植</p>
 <ul>
-<li>停产测试(Out-of-production Testing)</li>
-<li>不停产测试(In-production Testing)</li>
+<li>eBPF：并不是大小端独立的。ebpf的大小端依赖会影响他的移植</li>
+<li>WebAssembly：总是用小端模式，如果host架构是大端的，runtime可以来负责转换</li>
 </ul>
-<h3 id="停产测试-Out-of-production-Testing"><a href="#停产测试-Out-of-production-Testing" class="headerlink" title="停产测试(Out-of-production Testing)"></a>停产测试(Out-of-production Testing)</h3><img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig5.jpg" class="" title="SDC对应用层产生的影响">
-
-<p>停产测试是指让机器接受一组固定特征的输入，将其输出与已知参考值进行比较的过程。这种测试往往在机器没有执行生产负载的时候执行，并且测试要经历不同的温度、电压、机器条件和地域环境等复杂条件。</p>
-<p>测试的特征往往是根据生产经验以及对硅架构本身的理解来生成的，以匹配常见的一些缺陷。一般来说，在大型基础设施中，总是会有一部分机器处于维护状态，在维护开始之前，机器上的负载会被迁移下来，这叫做draining phase。之后会进行维护，例如固件升级、内核升级、环境配置、修理等措施，之后再重新将工作负载迁移回来。</p>
-<p>之后进行停产测试：用于停产测试的工具是Meta开发的<strong>Fleetscanner</strong>。Fleetscanner会找机会识别那些进入和退出维护状态的机器，并且使已经完成维护的机器进入停产测试SDC阶段。在所有情况下，根据可用的测试时间、识别的机器类型，fleetscanner会运行优化的测试，并提供设备对敏感的架构代码路径的响应快照，并验证计算是否准确。此时，大量的机器相关的参数会被瞬间捕捉到，以在分析过程中理解设备出错的具体条件。任何被鉴别为出SDC错误的机器会被放进quarantine pool中，以待进一步的观察和测试。</p>
-<h3 id="不停产测试-In-production-Testing"><a href="#不停产测试-In-production-Testing" class="headerlink" title="不停产测试(In-production Testing)"></a>不停产测试(In-production Testing)</h3><p>不停产测试是指在集群内机器仍然运行工作负载的情况下，同时进行测试。如果不对测试例程和工作负载有细致的了解，则很难实现这一点。Meta实现了一种叫做ripple的测试方法，与工作负载同时存在，并且每次实现毫秒级别的测试时长。在停产测试中使用的测试序列被修改，以通过ripple测试。</p>
-<img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig6.jpg" class="" title="SDC对应用层产生的影响">
-
-<h4 id="影子测试"><a href="#影子测试" class="headerlink" title="影子测试"></a>影子测试</h4><img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig7.jpg" class="" title="SDC对应用层产生的影响">
-
-<p>Meta实施了可以跨多组工作负载的ripple，并且精心设计了ripple测试架构，以防止整个集群的错误。 影子测试的一个主要挑战是实现托管。 基于工作负载的扩展，测试规模必须缩小。 对于 Meta 的每种类型的工作负载，确定了缩放因子的评估过程。此外，Meta还建立了与测试相关的开销分析，每种工作负载类型的托管都会提供开销，该工具的目标是将其开销降至特定阈值以下。通过反复试验，我们建立了控制结构和保障措施，以便为不同的工作负载启用不同的选项，然后将解决方案扩展到整个集群。</p>
-<h4 id="持续不停产"><a href="#持续不停产" class="headerlink" title="持续不停产"></a>持续不停产</h4><p>持续不停产的纠错机制始终处于开启状态，只有它运行的规模是通过集群内的配置动态控制的。 这种方法在查找需要对相同数据输入进行数千次迭代的缺陷，以及识别正在退化的设备等方面非常有效。 在几周内，通过测试随机化和缺陷模式匹配，可以将设备中识别的新签名扩展到整个设备群。 这种方法在识别硅过渡缺陷方面也非常有效。 </p>
-<h2 id="效果对比"><a href="#效果对比" class="headerlink" title="效果对比"></a>效果对比</h2><img src="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/fig8.jpg" class="" title="对比">
-
-<p>根据三年的真实测试对比两种策略。</p>
+<h3 id="用户体验"><a href="#用户体验" class="headerlink" title="用户体验"></a>用户体验</h3><ul>
+<li>编译：WebAssembly可以由多种语言产生，可以用两种方式(Emscripten和wasi-sdk)来编译进行C库支持。除此之外，支持链接时间优化、关闭系统C库、无main入口支持等选项，最后还可以对生成的code码来缩减大小；ebpf可以用clang的bpf选项来编译，但是实际上是对内核内部的应用进行编译的。</li>
+<li>字节码检查：wabt工具链中有一个wasm2wat的工具，能够将二进制webassembly文件转换为可读的文本文件。也可以使用wasm-objdump进行反编译。ebpf虽然还没有正式的文本格式，如果ebpf二进制文件是由debugging信息编译成的，可以用交叉源代码查看反汇编的二进制文件。</li>
+</ul>
+<h3 id="语言不可知性"><a href="#语言不可知性" class="headerlink" title="语言不可知性"></a>语言不可知性</h3><ul>
+<li>webassembly：可以用大量的源语言。但是实际上，源语言必须支持导出malloc()以分配buffer，并且在主机和虚拟机之间传递程序。</li>
+<li>ebpf：目前只支持C语言为源语言。</li>
+</ul>
+<h2 id="定量分析"><a href="#定量分析" class="headerlink" title="定量分析"></a>定量分析</h2><p>内存占用：rbpf和ubpf接近原生表现</p>
+<p>运行时间：实际计算所花费的时间，rBPF和uBPF表现非常好，以至于能够击败host上的binary。</p>
+<p>总时间：rBPF和uBPF在x64架构上经常击败基于host的方式</p>
+<h2 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h2><p>虽然eBPF虚拟机在<strong>定量分析中显示占有更少的内存、计算性能更好</strong>，但是作者从定性分析的角度，认为eBPF存在更多的缺陷，而<strong>webAssembly可能是更成熟、更容易上手的选择</strong>。</p>
+<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NGRkMzRiMTNiYzM2YjBkNGY3OGQwZjIxOWU4MzQ5OTZfbWt0bUZsVmhqOHZWaG9VMlc1QXE2Mld4TDVBajBXYk1fVG9rZW46Ym94Y25oZDJ2bEh1TUJPVDNEcVpsdWZJZDhmXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+<p><em>图 定量分析实验其中之一</em></p>
+<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTMzZWEyMzAyY2IxOTYxMGJlOGI3YmUwMTgzMDUzZTNfMVA5TElGWkE4TmVnTmJPZmd6Nng4Rk5MS215NE8xUmxfVG9rZW46Ym94Y25xWjVOTnJGbGNTZmczMEJnSTNQSGRoXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+<p><em>图 对eBPF和WebAssembly定性分析的总结</em></p>
+<p>下面是一些潜在的可能提升机会：</p>
+<p><strong>webassembly：作为一个相当成熟的技术，仍然有以下改进方向</strong></p>
 <ul>
-<li>使用 ripple 可以在 15 天内完成 70% 的常见覆盖检测，Fleetscanner 在 6 个月内将覆盖范围扩大到剩余的 23%</li>
-<li>独特的 7% 覆盖率是通过集群内重复的ripple实例实现的。</li>
-<li>通过不断地重新审视和评估这些覆盖率指标，可以知道围绕测试向量、测试节奏和测试运行时间的集群范围内的测试策略。 对于不同类型的缺陷，覆盖率会有所不同。</li>
+<li>实现SIMD和多线程</li>
+<li>提供与host数据共享的接口</li>
+<li>解决安全问题</li>
 </ul>
-<hr>
+<p><strong>eBPF：根据前面的评估，eBPF在成为适合的数据处理工具之前还需要做很多工作</strong></p>
+<ul>
+<li>成熟的虚拟机，能够支持debug和性能分析</li>
+<li>扩展指令集，以支持多种数字运算</li>
+<li>明确定义允许操作的规范</li>
+<li>与规范同步开发的可靠验证器</li>
+<li>C库和其他系统服务的支持</li>
+</ul>
 
     
 
@@ -479,7 +461,7 @@
         </li>
         <li>
           <strong>本文链接：</strong>
-          <a href="https://recoderchris.github.io/2023/02/06/Meta关于SDC的项目基金和已有的研究成果调研/" title="SDC调研：Meta的两篇论文" target="_blank">https://recoderchris.github.io/2023/02/06/Meta关于SDC的项目基金和已有的研究成果调研/</a>
+          <a href="https://recoderchris.github.io/2022/07/11/eBPF/" title="eBPF+CSD调研" target="_blank">https://recoderchris.github.io/2022/07/11/eBPF/</a>
         </li>
         
         <li>
@@ -501,23 +483,23 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">容错</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">SDC</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">软错误</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">eBPF</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">2021</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">前沿系统</a>
         		</li>
       		
 		</ul>
@@ -573,7 +555,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://recoderchris.github.io/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/" alt="微信分享二维码"> -->
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://recoderchris.github.io/2022/07/11/eBPF/" alt="微信分享二维码"> -->
     </div>
 </div>
 
@@ -588,18 +570,18 @@
 
 <nav id="article-nav">
   
-    <a href="/2023/02/08/ABFT/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Algorithm-based Fault Tolerant(基于算法的容错)
+          (HPCA06)从体系结构角度看软错误问题
         
       </div>
     </a>
   
   
-    <a href="/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">(HPCA06)从体系结构角度看软错误问题</div>
+    <a href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">图数据管理-课程笔记2</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -626,7 +608,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BD%9C%E5%9C%A8%E7%A0%94%E7%A9%B6%E6%96%B9%E5%90%91"><span class="toc-number">2.</span> <span class="toc-text">潜在研究方向</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Facebook%E5%9C%A8%E5%A4%A7%E8%A7%84%E6%A8%A1%E9%9B%86%E7%BE%A4%E4%B8%AD%E5%AF%B9SDC%E9%97%AE%E9%A2%98%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-number">3.</span> <span class="toc-text">Facebook在大规模集群中对SDC问题的理解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A5%E5%85%85%E8%83%8C%E6%99%AF"><span class="toc-number">3.1.</span> <span class="toc-text">补充背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A7%E7%94%9F%E7%BC%BA%E9%99%B7%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-number">3.2.</span> <span class="toc-text">产生缺陷的原因</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87%E7%BC%BA%E9%99%B7-Device-Errors"><span class="toc-number">3.2.1.</span> <span class="toc-text">设备缺陷(Device Errors)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A9%E6%9C%9F%E6%95%85%E9%9A%9C-Early-Life-Failures"><span class="toc-number">3.2.2.</span> <span class="toc-text">早期故障(Early Life Failures)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87%E8%80%81%E5%8C%96-Degradation"><span class="toc-number">3.2.3.</span> <span class="toc-text">设备老化(Degradation)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%9A%E6%9C%9F%E7%A3%A8%E6%8D%9F-End-of-Life-Wear-Out"><span class="toc-number">3.2.4.</span> <span class="toc-text">晚期磨损(End-of-Life Wear-Out)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Case-Study%EF%BC%9A%E5%BA%94%E7%94%A8%E5%B1%82%E7%9C%8BSDC%E9%80%A0%E6%88%90%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-number">3.3.</span> <span class="toc-text">Case Study：应用层看SDC造成的影响</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spark"><span class="toc-number">3.3.1.</span> <span class="toc-text">Spark</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FaceBook%E8%A7%A3%E5%8E%8B%E7%BC%A9%E5%BA%94%E7%94%A8"><span class="toc-number">3.3.2.</span> <span class="toc-text">FaceBook解压缩应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E4%BB%A5%E4%B8%8A%E9%97%AE%E9%A2%98%E5%81%9Adebug"><span class="toc-number">3.4.</span> <span class="toc-text">对以上问题做debug</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">3.4.1.</span> <span class="toc-text">工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%88%E5%A5%BD%E7%9A%84%E4%B8%80%E4%BA%9B%E8%B0%83%E8%AF%95%E7%BB%8F%E9%AA%8C-%E7%95%A5%E8%BF%87%E4%BA%86%EF%BC%8C%E5%A4%AA%E5%B7%A5%E7%A8%8B%EF%BC%8C%E5%A4%A7%E9%83%A8%E5%88%86%E8%B0%B7%E6%AD%8C%E7%BF%BB%E8%AF%91%E4%BA%86"><span class="toc-number">3.4.2.</span> <span class="toc-text">很好的一些调试经验(略过了，太工程，大部分谷歌翻译了)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E5%AE%A1%E8%A7%86%E5%BA%94%E7%94%A8%E7%9A%84%E9%94%99%E8%AF%AF"><span class="toc-number">3.5.</span> <span class="toc-text">重新审视应用的错误</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%8A%97SDC%E7%9A%84%E7%A1%AC%E4%BB%B6%E6%96%B9%E6%B3%95"><span class="toc-number">3.5.1.</span> <span class="toc-text">对抗SDC的硬件方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A2%E6%B5%8BSDC%E7%9A%84%E6%96%B9%E6%B3%95-%E4%B8%8D%E5%A2%9E%E5%8A%A0%E5%85%B6%E4%BB%96%E9%A2%9D%E5%A4%96%E5%BC%80%E9%94%80"><span class="toc-number">3.6.</span> <span class="toc-text">探测SDC的方法(不增加其他额外开销)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%BE%E6%9C%BA%E4%BC%9A"><span class="toc-number">3.6.1.</span> <span class="toc-text">找机会</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%A8%E6%9C%9F%E6%80%A7"><span class="toc-number">3.6.2.</span> <span class="toc-text">周期性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E7%94%9F%E4%BA%A7%E5%8F%8B%E5%A5%BD%E7%9A%84%E6%96%B9%E6%A1%88"><span class="toc-number">3.6.3.</span> <span class="toc-text">对生产友好的方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%B9%E9%94%99%E6%9C%BA%E5%88%B6"><span class="toc-number">3.7.</span> <span class="toc-text">软件容错机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%97%E4%BD%99%E6%9C%BA%E5%88%B6"><span class="toc-number">3.7.1.</span> <span class="toc-text">冗余机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E9%94%99%E5%BA%93"><span class="toc-number">3.7.2.</span> <span class="toc-text">容错库</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Facebook%E6%A3%80%E6%B5%8BSDC%E9%97%AE%E9%A2%98%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">Facebook检测SDC问题的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%85%E6%B5%8B%E8%AF%95%E6%B5%81%E7%A8%8B"><span class="toc-number">4.1.</span> <span class="toc-text">硅测试流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E5%92%8C%E9%AA%8C%E8%AF%81-Design-and-Verification"><span class="toc-number">4.1.1.</span> <span class="toc-text">设计和验证(Design and Verification)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%85%E4%B8%8A%E9%AA%8C%E8%AF%81-Post-Silicon-Validation"><span class="toc-number">4.1.2.</span> <span class="toc-text">硅上验证(Post  Silicon  Validation)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E5%8E%82%E5%95%86%E6%B5%8B%E8%AF%95-Manufacturer-testing"><span class="toc-number">4.1.3.</span> <span class="toc-text">生产厂商测试(Manufacturer testing)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95"><span class="toc-number">4.1.4.</span> <span class="toc-text">集成测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E5%BC%95%E5%85%A5%E6%B5%8B%E8%AF%95"><span class="toc-number">4.1.5.</span> <span class="toc-text">基础设施引入测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E9%9B%86%E7%BE%A4%E6%B5%8B%E8%AF%95"><span class="toc-number">4.1.6.</span> <span class="toc-text">基础设施集群测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SDC%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E4%B8%80%E4%B8%AA%E5%BE%88%E9%9A%BE%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">4.2.</span> <span class="toc-text">SDC为什么是一个很难的问题？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E9%9B%86%E7%BE%A4%E6%B5%8B%E8%AF%95%E7%9A%84%E6%96%B9%E6%B3%95-Infrastructure-Fleet-Testing"><span class="toc-number">4.3.</span> <span class="toc-text">基础设施集群测试的方法(Infrastructure Fleet Testing)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%9C%E4%BA%A7%E6%B5%8B%E8%AF%95-Out-of-production-Testing"><span class="toc-number">4.3.1.</span> <span class="toc-text">停产测试(Out-of-production Testing)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%81%9C%E4%BA%A7%E6%B5%8B%E8%AF%95-In-production-Testing"><span class="toc-number">4.3.2.</span> <span class="toc-text">不停产测试(In-production Testing)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BD%B1%E5%AD%90%E6%B5%8B%E8%AF%95"><span class="toc-number">4.3.2.1.</span> <span class="toc-text">影子测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%81%E7%BB%AD%E4%B8%8D%E5%81%9C%E4%BA%A7"><span class="toc-number">4.3.2.2.</span> <span class="toc-text">持续不停产</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%AF%B9%E6%AF%94"><span class="toc-number">4.4.</span> <span class="toc-text">效果对比</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFeBPF%E6%8A%80%E6%9C%AF%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是eBPF技术？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%BA%AB%EF%BC%9ABPF-Berkeley-Package-Filter"><span class="toc-number">1.1.</span> <span class="toc-text">前身：BPF(Berkeley Package Filter)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#eBPF%E6%8A%80%E6%9C%AF%E7%AE%80%E4%BB%8B"><span class="toc-number">1.2.</span> <span class="toc-text">eBPF技术简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#eBPF%E6%8A%80%E6%9C%AF%E7%8E%B0%E6%9C%89%E7%9A%84%E5%BA%94%E7%94%A8%E9%A2%86%E5%9F%9F"><span class="toc-number">1.3.</span> <span class="toc-text">eBPF技术现有的应用领域</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%B4eBPF-CSD%E6%98%AF%E4%B8%80%E4%B8%AA%E9%87%8D%E8%A6%81%E7%9A%84%E5%8F%91%E5%B1%95%E6%96%B9%E5%90%91%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">为什么说eBPF+CSD是一个重要的发展方向？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%93%E5%89%8DCSD%E5%8F%91%E5%B1%95%E6%89%80%E7%9B%AE%E5%89%8D%E9%9D%A2%E4%B8%B4%E7%9A%84%E9%9A%BE%E7%82%B9"><span class="toc-number">2.1.</span> <span class="toc-text">当前CSD发展所目前面临的难点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9eBPF%EF%BC%9F"><span class="toc-number">2.2.</span> <span class="toc-text">为什么选择eBPF？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSD%E4%B8%8E%E5%86%85%E6%A0%B8%E7%9A%84%E7%9B%B8%E5%90%8C%E7%82%B9%E5%92%8C%E4%B8%8D%E5%90%8C%E7%82%B9"><span class="toc-number">2.3.</span> <span class="toc-text">CSD与内核的相同点和不同点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSD-eBPF%E4%BA%A7%E7%94%9F%E7%9A%84%E7%A0%94%E7%A9%B6%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-number">2.4.</span> <span class="toc-text">CSD+eBPF产生的研究性问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E5%8F%AF%E8%83%BD%E7%9A%84eBPF-CSD-prototype"><span class="toc-number">3.</span> <span class="toc-text">一个可能的eBPF+CSD prototype</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#eBPF%E4%B8%8D%E6%98%AF%E5%94%AF%E4%B8%80%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-number">4.</span> <span class="toc-text">eBPF不是唯一的选择</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CSD%E7%9A%84%E5%85%B6%E4%BB%96%E9%80%89%E6%8B%A9"><span class="toc-number">4.1.</span> <span class="toc-text">CSD的其他选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E7%9B%AE%E6%A0%87"><span class="toc-number">4.2.</span> <span class="toc-text">分析目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E6%80%A7%E5%88%86%E6%9E%90"><span class="toc-number">4.3.</span> <span class="toc-text">定性分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-number">4.3.1.</span> <span class="toc-text">安全性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E9%93%BE"><span class="toc-number">4.3.2.</span> <span class="toc-text">工具链</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="toc-number">4.3.3.</span> <span class="toc-text">兼容性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E7%A7%BB%E6%A4%8D%E6%80%A7"><span class="toc-number">4.3.4.</span> <span class="toc-text">可移植性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E4%BD%93%E9%AA%8C"><span class="toc-number">4.3.5.</span> <span class="toc-text">用户体验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E8%A8%80%E4%B8%8D%E5%8F%AF%E7%9F%A5%E6%80%A7"><span class="toc-number">4.3.6.</span> <span class="toc-text">语言不可知性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E9%87%8F%E5%88%86%E6%9E%90"><span class="toc-number">4.4.</span> <span class="toc-text">定量分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A8%E8%AE%BA"><span class="toc-number">4.5.</span> <span class="toc-text">讨论</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>

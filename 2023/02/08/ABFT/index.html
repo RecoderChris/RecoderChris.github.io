@@ -10,12 +10,12 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="对ABFT容错的浅薄理解原理是针对某一种算法中的高频算子进行可靠性设计，以在较低的成本下保障算法大部分的可靠性。目前看到的两篇论文都是通过冗余计算，计算校验和对比结果来实现容错机制。这种方法相比于架构层和电路层的方法来说代价要更低，更加灵活。 相关论文的主要方法是：  设计校对矩阵 设计checksum校对方法 分析一下校对算法开销如何、能够实现什么级别的容错(可检测or可修正) 设计相关的容错框">
+  <meta name="description" content="对ABFT容错的浅薄理解原理是针对某一种算法中的高频算子进行可靠性设计，以在较低的成本下保障算法大部分的可靠性。目前看到的两篇论文都是通过冗余计算，计算校验和对比结果来实现容错机制。这种方法相比于架构层和电路层的方法来说代价要更低，更加灵活。 相关论文的主要方法是：  设计校对矩阵  设计checksum校对方法  分析一下校对算法开销如何、能够实现什么级别的容错(可检测or可修正)  设计相关的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Algorithm-based Fault Tolerant(基于算法的容错)">
 <meta property="og:url" content="https://recoderchris.github.io/2023/02/08/ABFT/index.html">
 <meta property="og:site_name" content="Xinmiao的博客">
-<meta property="og:description" content="对ABFT容错的浅薄理解原理是针对某一种算法中的高频算子进行可靠性设计，以在较低的成本下保障算法大部分的可靠性。目前看到的两篇论文都是通过冗余计算，计算校验和对比结果来实现容错机制。这种方法相比于架构层和电路层的方法来说代价要更低，更加灵活。 相关论文的主要方法是：  设计校对矩阵 设计checksum校对方法 分析一下校对算法开销如何、能够实现什么级别的容错(可检测or可修正) 设计相关的容错框">
+<meta property="og:description" content="对ABFT容错的浅薄理解原理是针对某一种算法中的高频算子进行可靠性设计，以在较低的成本下保障算法大部分的可靠性。目前看到的两篇论文都是通过冗余计算，计算校验和对比结果来实现容错机制。这种方法相比于架构层和电路层的方法来说代价要更低，更加灵活。 相关论文的主要方法是：  设计校对矩阵  设计checksum校对方法  分析一下校对算法开销如何、能够实现什么级别的容错(可检测or可修正)  设计相关的">
 <meta property="og:locale">
 <meta property="og:image" content="https://recoderchris.github.io/2023/02/08/ABFT/fig1.png">
 <meta property="og:image" content="https://recoderchris.github.io/2023/02/08/ABFT/fig2.jpg">
@@ -26,12 +26,14 @@
 <meta property="og:image" content="https://recoderchris.github.io/2023/02/08/ABFT/fig6.png">
 <meta property="og:image" content="https://recoderchris.github.io/2023/02/08/ABFT/fig8.png">
 <meta property="article:published_time" content="2023-02-08T09:44:29.000Z">
-<meta property="article:modified_time" content="2023-02-11T13:42:37.821Z">
+<meta property="article:modified_time" content="2023-02-11T14:44:37.843Z">
 <meta property="article:author" content="Zhang Xinmiao">
 <meta property="article:tag" content="容错">
 <meta property="article:tag" content="SDC">
 <meta property="article:tag" content="论文阅读">
 <meta property="article:tag" content="软错误">
+<meta property="article:tag" content="2021">
+<meta property="article:tag" content="TPDS">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://recoderchris.github.io/2023/02/08/ABFT/fig1.png">
   
@@ -249,7 +251,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">645字</span>
+      <span class="post-count">654字</span>
     </span>
   </span>
 
@@ -272,12 +274,19 @@
     <h1 id="对ABFT容错的浅薄理解"><a href="#对ABFT容错的浅薄理解" class="headerlink" title="对ABFT容错的浅薄理解"></a>对ABFT容错的浅薄理解</h1><p>原理是针对某一种算法中的高频算子进行可靠性设计，以在较低的成本下保障算法大部分的可靠性。目前看到的两篇论文都是通过冗余计算，计算校验和对比结果来实现容错机制。这种方法相比于架构层和电路层的方法来说代价要更低，更加灵活。</p>
 <p>相关论文的主要方法是：</p>
 <ul>
-<li>设计校对矩阵</li>
-<li>设计checksum校对方法</li>
-<li>分析一下校对算法开销如何、能够实现什么级别的容错(可检测or可修正)</li>
-<li>设计相关的容错框架或者系统</li>
-<li>通过实验验证可靠性保证以及额外开销。</li>
+<li><p>设计校对矩阵</p>
+</li>
+<li><p>设计checksum校对方法</p>
+</li>
+<li><p>分析一下校对算法开销如何、能够实现什么级别的容错(可检测or可修正)</p>
+</li>
+<li><p>设计相关的容错框架或者系统</p>
+</li>
+<li><p>通过实验验证可靠性保证以及额外开销。</p>
+</li>
 </ul>
+<span id="more"></span>
+
 <p>以后也可以多思考一下相关的算子有没有这样的机会做冗余计算。</p>
 <hr>
 <h1 id="矩阵操作ABFT设计"><a href="#矩阵操作ABFT设计" class="headerlink" title="矩阵操作ABFT设计"></a>矩阵操作ABFT设计</h1><p>原文：Algorithm-Based Fault Tolerance for Matrix Operations(1984, TC)</p>
@@ -292,7 +301,8 @@
 <li>可以实现多比特错误检测。</li>
 </ul>
 <hr>
-<h1 id="卷积操作ABFT设计"><a href="#卷积操作ABFT设计" class="headerlink" title="卷积操作ABFT设计"></a>卷积操作ABFT设计</h1><h2 id="校对矩阵"><a href="#校对矩阵" class="headerlink" title="校对矩阵"></a>校对矩阵</h2><img src="/2023/02/08/ABFT/fig3.png" class="" title="校对矩阵">
+<h1 id="卷积操作ABFT设计"><a href="#卷积操作ABFT设计" class="headerlink" title="卷积操作ABFT设计"></a>卷积操作ABFT设计</h1><p>FT-CNN: Algorithm-Based Fault Tolerance for Convolutional Neural Networks</p>
+<h2 id="校对矩阵"><a href="#校对矩阵" class="headerlink" title="校对矩阵"></a>校对矩阵</h2><img src="/2023/02/08/ABFT/fig3.png" class="" title="校对矩阵">
 
 <p>在这个卷积操作里面假设输入矩阵D和W都是思维矩阵，校对矩阵中$C_{d1}$和$C_{d2}$分别是$D_i$的和以及加权和。如果在全校验的情况下，checkSum会有很多个；不同的checkSum的计算难度不同，其检错难度也不同，因此适用于不同的场景，或者可以分层次进行检测，以使本方法的开销更小一些。这就是本文的核心思想，其具体思路可以再重新找一下论文。</p>
 <h2 id="不同校验和组合产生的检错维度"><a href="#不同校验和组合产生的检错维度" class="headerlink" title="不同校验和组合产生的检错维度"></a>不同校验和组合产生的检错维度</h2><img src="/2023/02/08/ABFT/fig4.png" class="" title="检错维度">
@@ -385,6 +395,14 @@
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">软错误</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">2021</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">TPDS</a>
         		</li>
       		
 		</ul>
@@ -623,7 +641,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">DNN</a>
+                <a href="javascript:void(0)" class="js-tag color5">2021</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">TPDS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">eBPF</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -631,23 +657,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">加速器</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">TPU</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">通用计算</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UC(Riverside)</a>
+                <a href="javascript:void(0)" class="js-tag color5">前沿系统</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -668,6 +682,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Umich</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">2006</a>
               </li>
             
             <div class="clearfix"></div>
