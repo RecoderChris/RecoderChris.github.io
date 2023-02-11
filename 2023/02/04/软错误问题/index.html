@@ -19,7 +19,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="https://recoderchris.github.io/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/soft_error.jpg">
 <meta property="article:published_time" content="2023-02-04T13:34:34.000Z">
-<meta property="article:modified_time" content="2023-02-11T14:44:23.409Z">
+<meta property="article:modified_time" content="2023-02-11T15:00:46.380Z">
 <meta property="article:author" content="Zhang Xinmiao">
 <meta property="article:tag" content="容错">
 <meta property="article:tag" content="SDC">
@@ -266,8 +266,6 @@
     
     <p>以下内容来自HPCA’06的论文《<em><strong>The Soft Error Problem: An Architectural Perspective</strong></em>》。</p>
 <h1 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h1><h2 id="什么是软错误"><a href="#什么是软错误" class="headerlink" title="什么是软错误"></a>什么是软错误</h2><p><strong>高能粒子</strong>(e.g. <em>宇宙射线中的中子和封装材料中的α粒子</em>)通过半导体设备(电路)时，会在其上产生<strong>电子空穴对</strong>(electron-hole pairs)，这会可能会导致<strong>瞬态错误</strong>(Transient Fault)。具体来说，电子空穴对会对晶体管的源(source)和扩散节点充电，如果充电量到达一定的阈值，会使得设备上某个组件(e.g. SRAM、锁存器、门电路)的逻辑状态发生改变，最终使得整个电路的运行结果产生逻辑错误，这种因为瞬态错误继而产生的运行错误被称为**软错误(soft error)**。</p>
-<span id="more"></span>
-
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PS: 与此相对应，硬错误(hard error)是指电路原件发生破坏，错误无法在短时间内修正的错误。个人理解是：软错误相对于硬错误来说是一种逻辑错误，而不是真实硬件发生了错误。软错误在接下来也许很难复现。</span><br></pre></td></tr></table></figure>
 
 <p>一般来说，每个电子元器件器件的纯软错误率(raw error rate)是一个常数。随着工艺水平的提升，单位面积的电路中将会集成更多的电子元器件，因而整个电路的纯软错误率线性增长。为了降低纯软错误率，一些DRAM厂商通过<strong>减缓单位电容的提升</strong>、<strong>降低供电电压</strong>等措施来降低每比特的软错误率，以应对工艺迭代会造成的软错误率提升。</p>
@@ -288,6 +286,7 @@
 <li>**DUE(Detected Unrecoverable Error，被探测到且无法修复错误)**：被探测到了，但是无法被修复的错误。</li>
 </ul>
 <p>目前，业界认为软错误率为SDC和DUE之和。DUE错误因为无法修正，所以它并不会影响整体的错误率。对抗DUE错误的最基本的对抗办法是fail-stop(重新运行)，以保证最后结果是正确的，但是它实际上并没有降低错误率。</p>
+<span id="more"></span>
 <p>DUE有两种分类：</p>
 <ol>
 <li><p>第一种分类：会对最终结果产生影响的被称为<strong>true DUE</strong>，不会产生影响的被成为<strong>false DUE</strong>。保守的系统会对所有的DUE错误进行处理，一些系统则会分辨false DUE，例如错误选择路径的指令，来分门别类进行处理。</p>
@@ -553,14 +552,14 @@
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          SDC调研：Meta的两篇论文
+          SDC调研：Meta两篇论文
         
       </div>
     </a>
   
   
-    <a href="/2022/07/11/eBPF/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">eBPF+CSD调研</div>
+    <a href="/2022/12/02/networked-SSD/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">(MICRO22)Networked SSD:面向高带宽SSD设备的Flash memory互连网络</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -734,11 +733,67 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">eBPF</a>
+                <a href="javascript:void(0)" class="js-tag color4">TPU</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">通用计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">加速器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UC(Riverside)</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">SC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DNN</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">近存储计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">FAST</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">FPGA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ETH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MICRO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">2018</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">模拟器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">eBPF</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -747,6 +802,54 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">前沿系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">ASPLOS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Cambridge</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">预取器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">数据访问优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">2022</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据管理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">存储技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CQU</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JSA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ISCA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">GNN</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">图随机游走</a>
               </li>
              
               <li class="article-tag-list-item">

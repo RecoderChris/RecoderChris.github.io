@@ -252,6 +252,18 @@
 <li><p>通过实验验证可靠性保证以及额外开销。</p>
 </li>
 </ul>
+<p>以后也可以多思考一下相关的算子有没有这样的机会做冗余计算。</p>
+<hr>
+<h1 id="矩阵操作ABFT设计"><a href="#矩阵操作ABFT设计" class="headerlink" title="矩阵操作ABFT设计"></a>矩阵操作ABFT设计</h1><p>原文：Algorithm-Based Fault Tolerance for Matrix Operations(1984, TC)</p>
+<h2 id="校对矩阵设计"><a href="#校对矩阵设计" class="headerlink" title="校对矩阵设计"></a>校对矩阵设计</h2><img src="/2023/02/08/ABFT/fig1.png" class="" title="校对矩阵">
+
+<p>简单来说就是有个矩阵M，然后里面每个元素的最大值(位宽决定)为8。这个矩阵的行校验矩阵$M_r$就是增加新的一列，这一列是前面几列的和，这个矩阵可以用来定位错误所在的行；同样这个矩阵的列校验矩阵$M_c$也同理定义，用来定位错误所在的列。$M_f$是矩阵的全校验矩阵，可以实现错误的定位和修复。</p>
+<h2 id="检错方法"><a href="#检错方法" class="headerlink" title="检错方法"></a>检错方法</h2><img src="/2023/02/08/ABFT/fig2.jpg" class="" title="校对矩阵">
+
+<ul>
+<li>适用于矩阵乘、加、LU分解、标量乘、转置操作</li>
+<li>可以实现单比特错误检测(右下角的数值C和整个结果矩阵的和对比)、定位、纠错(通过行和列定位后再算一下)</li>
+<li>可以实现多比特错误检测。
     
     <a class="article-more-a" href="/2023/02/08/ABFT/#more">more >></a>
     
@@ -338,7 +350,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/" target="_blank">SDC调研：Meta的两篇论文</a>
+	  <a class="article-title" href="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/" target="_blank">SDC调研：Meta两篇论文</a>
   
     </h1>
   
@@ -368,6 +380,40 @@
 <li>Facebook 遇到 10%-15% 的图片无法访问 (48 小时)</li>
 <li>Netflix 宕机超过 3 天</li>
 </ol>
+<hr>
+<h1 id="潜在研究方向"><a href="#潜在研究方向" class="headerlink" title="潜在研究方向"></a>潜在研究方向</h1><p>我们固然可以执行非常严厉的计划来避免 SDC 问题，然而无论多么精巧的设计都不能 100% 避免问题的发生，而且会急剧降低系统的整体性能。这就要求系统设计者学会在性能与可靠性之间做工程上的平衡。</p>
+<p>针对以上前沿研究问题，Meta的系统和基础架构实验室已经开展了大量的工作并运用于云服务场景中以保证服务交付的准确性。经过多年的研究，Meta认为解决SDC问题有以下四个方向：</p>
+<ol>
+<li>从**计算架构(Architecture)**层面处理SDC问题<ul>
+<li>架构层面上处理和转移SDC的方法，例如enhanced compute block ECC机制</li>
+<li>自测试(self-test)的架构模块和模式，例如lockstep computing, checkpointing和redundant computing，这些方法都需要评估计算成本和性能代价</li>
+<li>新颖的处理计算和内存错误的架构解决方案，包括但不仅限于增强传统的RAS架构。</li>
+</ul>
+</li>
+<li>从**分布式计算(Distributed Computing)**层面处理SDC的传播<ul>
+<li>遏制SDC传播的分布式计算弹性模型和解决方案</li>
+<li>跨越多个子系统的错误检测能力</li>
+<li>分布式规模的错误控制和测试机制</li>
+<li>自测试SDC的分布式系统架构和恢复方案</li>
+</ul>
+</li>
+<li>从**软件(Software)**层面提供弹性服务<ul>
+<li>软件层面实现对SDC的弹性，例如冗余机制、概率和算法的容错机制</li>
+<li>实现抗SDC的通用计算和数据搬运库</li>
+<li>针对SDC的实时检测和遏制软件方法(需要评估计算成本和性能开销)</li>
+<li>从过去的SDC中归纳SDC解决算法</li>
+</ul>
+</li>
+<li>从**硅设计(Silicon Design)**层面提供更可靠的硬件工艺<ul>
+<li>面向SDC问题，优化硅设计和制造策略</li>
+<li>用于硅制造过程的进阶模拟、仿真和测试策略</li>
+<li>硅测试的覆盖率评估、硅模块内发生故障的概率评估模型</li>
+<li>用于SDC检测的生产过程中的测试例程开发</li>
+<li>硅模块使用过程中逐渐衰退的模型和评估机制</li>
+</ul>
+</li>
+</ol>
+<hr>
     
     <a class="article-more-a" href="/2023/02/06/Meta%E5%85%B3%E4%BA%8ESDC%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9F%BA%E9%87%91%E5%92%8C%E5%B7%B2%E6%9C%89%E7%9A%84%E7%A0%94%E7%A9%B6%E6%88%90%E6%9E%9C%E8%B0%83%E7%A0%94/#more">more >></a>
     
@@ -473,6 +519,26 @@
     
     <p>以下内容来自HPCA’06的论文《<em><strong>The Soft Error Problem: An Architectural Perspective</strong></em>》。</p>
 <h1 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h1><h2 id="什么是软错误"><a href="#什么是软错误" class="headerlink" title="什么是软错误"></a>什么是软错误</h2><p><strong>高能粒子</strong>(e.g. <em>宇宙射线中的中子和封装材料中的α粒子</em>)通过半导体设备(电路)时，会在其上产生<strong>电子空穴对</strong>(electron-hole pairs)，这会可能会导致<strong>瞬态错误</strong>(Transient Fault)。具体来说，电子空穴对会对晶体管的源(source)和扩散节点充电，如果充电量到达一定的阈值，会使得设备上某个组件(e.g. SRAM、锁存器、门电路)的逻辑状态发生改变，最终使得整个电路的运行结果产生逻辑错误，这种因为瞬态错误继而产生的运行错误被称为**软错误(soft error)**。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PS: 与此相对应，硬错误(hard error)是指电路原件发生破坏，错误无法在短时间内修正的错误。个人理解是：软错误相对于硬错误来说是一种逻辑错误，而不是真实硬件发生了错误。软错误在接下来也许很难复现。</span><br></pre></td></tr></table></figure>
+
+<p>一般来说，每个电子元器件器件的纯软错误率(raw error rate)是一个常数。随着工艺水平的提升，单位面积的电路中将会集成更多的电子元器件，因而整个电路的纯软错误率线性增长。为了降低纯软错误率，一些DRAM厂商通过<strong>减缓单位电容的提升</strong>、<strong>降低供电电压</strong>等措施来降低每比特的软错误率，以应对工艺迭代会造成的软错误率提升。</p>
+<h2 id="软错误：从工业界到学术界"><a href="#软错误：从工业界到学术界" class="headerlink" title="软错误：从工业界到学术界"></a>软错误：从工业界到学术界</h2><p>工业界中亟待解决的因为软错误而产生的问题：</p>
+<ul>
+<li>在芯片设计中，厂商希望能够<strong>了解</strong>软错误会对其设计产生多大的影响</li>
+<li>希望能够从现有的技术中选择一种合适的策略来<strong>降低软错误产生的影响</strong>，以达到通过最小代价换取其可靠性指标的目的。</li>
+</ul>
+<p>而学术界要解决以下的具体问题：</p>
+<ul>
+<li>开发更好的设计框架、分析技术和软工具，以对软错误造成的系统影响产生<strong>更直观</strong>的理解和更量化的测量</li>
+<li>探索和刻画软错误避免、探测和恢复的技术，在<strong>合理的性能、功耗、面积和复杂度要求下</strong>，满足对不同可靠性指标的要求</li>
+</ul>
+<h2 id="单比特软错误的分类"><a href="#单比特软错误的分类" class="headerlink" title="单比特软错误的分类"></a>单比特软错误的分类</h2><h3 id="SDC-amp-DUE"><a href="#SDC-amp-DUE" class="headerlink" title="SDC &amp; DUE"></a>SDC &amp; DUE</h3><img src="/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/soft_error.jpg" class="" title="单比特软错误的分类">
+
+<ul>
+<li>**SDC(Silent Data Corruption，静默数据错误)**：没有被探测到、没有被修复，且对最终结果产生了影响的软错误。</li>
+<li>**DUE(Detected Unrecoverable Error，被探测到且无法修复错误)**：被探测到了，但是无法被修复的错误。</li>
+</ul>
+<p>目前，业界认为软错误率为SDC和DUE之和。DUE错误因为无法修正，所以它并不会影响整体的错误率。对抗DUE错误的最基本的对抗办法是fail-stop(重新运行)，以保证最后结果是正确的，但是它实际上并没有降低错误率。</p>
     
     <a class="article-more-a" href="/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/#more">more >></a>
     
@@ -522,6 +588,375 @@
     
     <p class="article-more-link">
       <a class="article-more-a" href="/2023/02/04/%E8%BD%AF%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-networked-SSD" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2022/12/02/networked-SSD/" target="_blank">(MICRO22)Networked SSD:面向高带宽SSD设备的Flash memory互连网络</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2022/12/02/networked-SSD/" class="archive-article-date">
+        <time datetime="2022-12-02T14:29:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-12-02</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p><strong>Networked</strong> <strong>SSD</strong><strong>: Flash Memory Interconnection Network for High-Bandwidth SSD</strong></p>
+<p><strong>作者：Jiho Kim, Seokwon Kang, Yongjun Park, John Kim</strong></p>
+<p>@ <em>KAIST(Korea)</em></p>
+<p>相比于以往flash存储总线中<strong>专用信号通信</strong>的机制，本工作利用<strong>packetized通信机制</strong>来扩展flash memory的带宽；提出了适用于flash memory的互连网络拓扑，提升了数据转移路径的多样性；在此基础上，设计了最小化IO干扰的GC机制。</p>
+<hr>
+<h1 id="论文为什么要做这件事？"><a href="#论文为什么要做这件事？" class="headerlink" title="论文为什么要做这件事？"></a>论文为什么要做这件事？</h1><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTg0ZDM2ZTY3ZDA2ODcyOGU2NGQ1ODJkOGRkMmM4NjNfNDgwblBZSWo2ck5uWmNXaVhJUnRSY01LZ1poOThFU05fVG9rZW46Ym94Y25JMEJINVViMTl3RllMTUczdHUxWk5jXzE2NzYxMjU4MTA6MTY3NjEyOTQxMF9WNA" alt="img"></p>
+<p><em>图 过去15年Flash memory的写带宽以及flash channel总线带宽发展趋势</em></p>
+    
+    <a class="article-more-a" href="/2022/12/02/networked-SSD/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">KAIST</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MICRO</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">2022</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据管理</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">存储技术</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2022/12/02/networked-SSD/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-amber" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2022/10/20/amber/" target="_blank">(MICRO18) Amber:一个可以准确、详细地模拟全部SSD内部资源的模拟器(SimpleSSD-v2)</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2022/10/20/amber/" class="archive-article-date">
+        <time datetime="2022-10-20T14:26:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-10-20</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p><strong>Amber: Enabling Precise Full-System Simulation with Detailed Modeling of All SSD Resources</strong></p>
+<p><strong>作者：Donghyun Gouk, Miryeong Kwon, Jie Zhang, Sungjoon Koh, Wonil Choi, Nam Sung Kim, Mahmut Kandemir and</strong> <strong>Myoungsoo Jung****鄭溟隨</strong></p>
+<p>@ <em>KAIST(Korea)</em></p>
+<p>SimpleSSD主页：<a target="_blank" rel="noopener" href="https://docs.simplessd.org/en/v2.0.12/">https://docs.simplessd.org/en/v2.0.12/</a></p>
+<p>camelab研究组主页：<a target="_blank" rel="noopener" href="http://camelab.org/pmwiki.php">http://camelab.org/pmwiki.php</a></p>
+<p>Amber是SimpleSSD的扩展版本。相比于以往的SSD模拟器，Amber对<strong>SSD内部软硬件资源</strong>的运行时间和功耗进行了详细的建模，实现了对SSD设备单体更加精确的模拟；通过修改gem5模拟的主机DMA引擎，和对功能型(functional)和计时型(timing)CPU系统总线模型提供支持，实现了<strong>真实数据转移的仿真</strong>，进而支持主机+SSD的<strong>全系统模拟</strong>。</p>
+<h1 id="论文为什么要做这件事？"><a href="#论文为什么要做这件事？" class="headerlink" title="论文为什么要做这件事？"></a>论文为什么要做这件事？</h1><p>SSD模拟器可以为研究提供更加高效、低价的选择。然而，准确的SSD模拟框架有以下要求：</p>
+<ol>
+<li>虽然SSD往往被认为是整个系统的存储或者内存子系统部分，但是相对于传统存储来说，<strong>它本身是一个有自己架构和系统的计算机系统</strong>。 </li>
+<li>SSD不仅包含存储实体后端，也包含<strong>复杂的计算部分</strong>。例如嵌入式CPU核心、DRAM和内存控制器。SSD内部的计算部分是与主机并行运行的，因而模拟结果很容易不准确。 </li>
+<li>SSD<strong>通过多种存储接口和协议与主机系统进行数据交换</strong>，包含SATA，NVMe，OpenChannelSSD (OCSSD)等。在全系统性能模拟时，我们需要考虑这些存储接口和软件栈的差异。</li>
+<li>SSD上运行的固件有不同的设计方案和运行机制，因而<strong>固件的软件栈</strong>对于整个系统的性能有很大的影响。</li>
+</ol>
+<h1 id="这个事情之前别人是怎么做的，存在什么问题？"><a href="#这个事情之前别人是怎么做的，存在什么问题？" class="headerlink" title="这个事情之前别人是怎么做的，存在什么问题？"></a>这个事情之前别人是怎么做的，存在什么问题？</h1><p>论文写作时(2018)，也存在各种SSD模拟器(SimpleSSD v1.0 &#x2F; MQSim &#x2F; FlashSim &#x2F; SSD-ext)，但是它们的模型或多或少的简化了以上的问题场景：</p>
+<ol>
+<li>缺乏SSD<strong>内部的计算资源的模型</strong>，使得这些模拟器无法胜任全系统模拟。特别是无法模拟固件的运行时间。</li>
+<li>之前的SSD模拟器并没有建模<strong>实际的存储接口模型和实际数据转移的仿真，</strong>无法集成进全系统模拟的环境。</li>
+<li>没有SSD模拟器能够既支持**功能型(functional)<strong>，又支持</strong>计时型(timing)**的CPU模型接口。大部分都是只支持功能型的CPU模型，这种假设过于简化了。</li>
+</ol>
+<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NTY3M2ZkM2VjY2ZkZjUzMzE0ZGQyODgwN2U0ZDEyZjZfeFg0bjVRMjR0R0NxdGdNaWZyZWd3YnVwQzlXZUxDOG1fVG9rZW46Ym94Y244NkdYTkNyOTA2cElPWHlJUVRCVmRKXzE2NzYxMjU2MzQ6MTY3NjEyOTIzNF9WNA" alt="img"></p>
+    
+    <a class="article-more-a" href="/2022/10/20/amber/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">KAIST</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MICRO</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">2018</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">模拟器</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2022/10/20/amber/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-event-prefetch" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2022/08/12/event-prefetch/" target="_blank">(ASPLOS18)面向不规则访存问题的事件驱动可编程预取器</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2022/08/12/event-prefetch/" class="archive-article-date">
+        <time datetime="2022-08-12T14:18:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-08-12</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p><strong>A Event-Triggered Programmable Prefetcher for Irregular Workloads</strong></p>
+<p><strong>作者：Sam Ainsworth and Timothy M.Jones</strong> </p>
+<p>@ <em>University of Cambridge(UK)</em></p>
+<p>大数据应用中大量的内存不规则访问产生了memory-bound问题。为了减少一般性的复杂访问特征应用的的cache miss率，本论文提出了一种以事件触发的可编程预取器，其可以将通用处理单元的灵活性将基于事件的编程模型相结合来支持更加复杂的预取特征。此外，本工作还借助编译器，自动地从源代码中解析出事件。</p>
+<hr>
+<h1 id="论文为什么要做这件事？"><a href="#论文为什么要做这件事？" class="headerlink" title="论文为什么要做这件事？"></a>论文为什么要做这件事？</h1><h2 id="大数据分析中的性能瓶颈"><a href="#大数据分析中的性能瓶颈" class="headerlink" title="大数据分析中的性能瓶颈"></a>大数据分析中的性能瓶颈</h2><p>现代大规模数据分析中存在大量不规则、难预测的数据访问，这大大增加了传统存储结构中的缓存未命中次数，造成了CPU暂停的时间增加，造成了严重的memory-bound问题。</p>
+<h3 id="解决方法1：多线程"><a href="#解决方法1：多线程" class="headerlink" title="解决方法1：多线程"></a>解决方法1：多线程</h3><p>线程级并行可以将不同线程间的访存和计算重叠，以掩盖CPU的暂停时间。这种方法的问题是：不规则的多线程数据访问难免出现竞争关系；数据分块方法又很难确定，这些都是线程级并行的硬伤。</p>
+<h3 id="解决方法2：软硬件预取（规则-gt-不规则-gt-专用-gt-可编程）"><a href="#解决方法2：软硬件预取（规则-gt-不规则-gt-专用-gt-可编程）" class="headerlink" title="解决方法2：软硬件预取（规则-&gt;不规则-&gt;专用-&gt;可编程）"></a>解决方法2：软硬件预取（规则-&gt;不规则-&gt;专用-&gt;可编程）</h3><p>软硬件预取器也是提升cache命中率的有效方式。然而，现有的预取器对于复杂内存访问的内存级并行探索并不深入。大体上，现有的预取器可以分为以下几类。前三种都采用硬件手段实现。</p>
+<ul>
+<li><strong>传统预取器：</strong>这类预取器基本上基于传统应用中的时间局部性或者空间局部性进行内存预取。常见的有：stride prefetcher(空间局部性)&#x2F; history-based prefetcher(时间局部性)</li>
+<li><strong>不规则访问预取器：</strong>这类预取器对一些常见的不规则访问进行预取。例如pointer-chasing预取器、indirect array预取器等。</li>
+<li><strong>专用预取器：</strong>针对某一类应用，提取特殊的数据访问特征来定制硬件预取器。这类预取器往往在目标应用上能够取得很好的效果，但是往往需要算法是成熟的，不需要进一步改动了。</li>
+<li><strong>软件预取器：</strong>软件预取器在其他CPU线程上进行访存，为当前线程提供数据。这种方法可以让用户显式地自定义预取特征。</li>
+</ul>
+<p>综上所述，现有的硬件预取器由于缺乏灵活性，对于现代数据应用中复杂的数据访问特征往往不见效，有时候还有相反的效果。软件预取器虽然支持用户对待预取的数据进行显式的自定义，但是因为毕竟在一个核心上，也是有数据等待的开销的。同时，软件预取器无法对提取到的数据进行反应，例如软件预取器就无法对指针追踪类的应用产生效果。</p>
+<h2 id="本文的基本想法"><a href="#本文的基本想法" class="headerlink" title="本文的基本想法"></a>本文的基本想法</h2><p>用通用的计算单元作为可编程的预取主体，用户或编译器来定义预取函数，在特定事件触发时进行对应的预取，从而实现对于一般性的复杂数据访问特征有效的预取器。</p>
+<hr>
+    
+    <a class="article-more-a" href="/2022/08/12/event-prefetch/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">2018</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">ASPLOS</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Cambridge</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">预取器</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">数据访问优化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2022/08/12/event-prefetch/">展开全文 >></a>
     </p>
     
 
@@ -607,11 +1042,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">eBPF</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">eBPF</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -659,7 +1094,7 @@
 
 
   
-    <article id="post-图数据管理笔记2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-pasm" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -667,7 +1102,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/" target="_blank">图数据管理-课程笔记2</a>
+	  <a class="article-title" href="/2022/06/15/pasm/" target="_blank">(JSA)PASM:针对hybrid SSD中DNN训练加速的并行度优化存储空间管理策略</a>
   
     </h1>
   
@@ -675,8 +1110,8 @@
 
   
   
-<a href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/" class="archive-article-date">
-        <time datetime="2021-02-04T12:16:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-04</time>
+<a href="/2022/06/15/pasm/" class="archive-article-date">
+        <time datetime="2022-06-15T14:05:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-06-15</time>
 </a>
 
   
@@ -688,15 +1123,27 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="Network-Properties-and-Random-Graph-Model"><a href="#Network-Properties-and-Random-Graph-Model" class="headerlink" title="Network Properties and Random Graph Model"></a>Network Properties and Random Graph Model</h1><h2 id="I-Key-Network-Properties"><a href="#I-Key-Network-Properties" class="headerlink" title="I. Key Network Properties"></a>I. Key Network Properties</h2><blockquote>
-<p><strong>Problem:</strong> How to measure a network?</p>
-<p><strong>Answer</strong>: Using Network Properties.</p>
-</blockquote>
-<h3 id="1-Degree-Distribution-P-k"><a href="#1-Degree-Distribution-P-k" class="headerlink" title="1. Degree Distribution P(k)"></a>1. Degree Distribution <em>P(k)</em></h3><p><em>P(k)</em> is the probability that a random chosen node has degree <em>k</em>.</p>
-<p><img src="https://s0.wp.com/latex.php?latex=N_k&bg=ffffff&fg=000&s=0&c=20201002" alt="N_k"> is number of nodes with degree <em>k</em>. Thus<img src="https://s0.wp.com/latex.php?latex=P(k)=%5Cfrac%7BN_k%7D%7BN%7D&bg=ffffff&fg=000&s=0&c=20201002" alt="P(k)=\frac{N_k}{N}">.</p>
-<p><img src="https://xinmiaozhang.files.wordpress.com/2021/07/pk.png?w=750" alt="pk"></p>
+    <p>[JSA] PASM：针对hybrid SSD中DNN训练加速的并行度优化存储空间管理策略</p>
+<p><strong>PASM: Parallelism Aware Space Management strategy for hybrid SSD towards in-storage</strong> <strong>DNN</strong> <strong>training acceleration</strong></p>
+<p><strong>作者：肖春华 等人</strong></p>
+<p>@ <em>Chongqing University(China)</em></p>
+<p>近存储端的DNN加速器提升了系统整体的性能，但大量的写操作导致了密集的写入放大现象，这对Flash芯片的寿命和性能产生了极大的挑战；目前广泛使用TLC（甚至QLC）来提升flash芯片存储密度的趋势进一步加剧了这个问题。</p>
+<p>本文基于SLC-TLC混合粒度型SSD，提出了一种垃圾回收与写入并行的存储空间管理策略来解决这一问题。</p>
+<hr>
+<h1 id="论文为什么要做这件事？"><a href="#论文为什么要做这件事？" class="headerlink" title="论文为什么要做这件事？"></a>论文为什么要做这件事？</h1><p>在近存储端采用DNN加速器的方案在性能和功耗上都表现不俗，但目前仍然存在以下两个由Flash芯片本身的性质引起的问题：</p>
+<ol>
+<li><strong>NAND flash与DRAM相比寿命短，且各种复杂的物理特征（如页面只能够被写入一次、擦除和写入的粒度不同等等）影响了整体性能。传统FTL中的flash数据管理策略对于具有大量连续写入的近存储<strong><strong>DNN</strong></strong>训练并不适用。</strong></li>
+</ol>
+<ul>
+<li>例：DNN 训练需要至少数千次完整的flash芯片写入，大量垃圾回收不可避免的。 传统的并行化数据布局会在垃圾回收过程中造成数据迁移，导致写入放大。 而传统的垃圾回收是基于阈值触发的策略，只有在可用空间逐渐耗尽且低于预设阈值时才会执行，在阈值达到时，持续写入带宽将因为数据迁移和擦除操作显着降低，导致系统的性能急剧下降。</li>
+</ul>
+<ol>
+<li><strong>高密度的flash芯片（例如TLC&#x2F;QLC颗粒芯片）逐渐在市场占据主流，相比于SLC芯片其性能和寿命更差，加剧了上述问题。</strong></li>
+</ol>
+<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=Y2Q1NzE4MDcxYmUyMGM4OWUwMDQ0NjU1MzQ5NWVkMzhfU2k3cVhySnE3Q1l1MnVXbE1HR3ZnV3M1UGI1aFNsZ3dfVG9rZW46Ym94Y25uR2hNbXJuS3VHQkY1NGlleVRHRFFjXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA" alt="img"></p>
+<h2 id="表1-不同的存储单元的在读、写、擦除和寿命上的表现"><a href="#表1-不同的存储单元的在读、写、擦除和寿命上的表现" class="headerlink" title="表1 不同的存储单元的在读、写、擦除和寿命上的表现"></a><em>表1 不同的存储单元的在读、写、擦除和寿命上的表现</em><br>
     
-    <a class="article-more-a" href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/#more">more >></a>
+    <a class="article-more-a" href="/2022/06/15/pasm/#more">more >></a>
     
     
 
@@ -713,19 +1160,39 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">图计算</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">基础知识</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">加速器</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">课程笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">DNN</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PKU</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">2022</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据管理</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">存储技术</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CQU</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">JSA</a>
         		</li>
       		
 		</ul>
@@ -735,7 +1202,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B02/">展开全文 >></a>
+      <a class="article-more-a" href="/2022/06/15/pasm/">展开全文 >></a>
     </p>
     
 
@@ -765,7 +1232,7 @@
 
 
   
-    <article id="post-图数据管理笔记1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-smartsage" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -773,7 +1240,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/" target="_blank">图数据管理-课程笔记1</a>
+	  <a class="article-title" href="/2022/05/20/smartsage/" target="_blank">(ISCA22)SmartSAGE:在近存储计算架构下训练大规模图神经网络</a>
   
     </h1>
   
@@ -781,8 +1248,8 @@
 
   
   
-<a href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/" class="archive-article-date">
-        <time datetime="2021-02-04T12:08:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-04</time>
+<a href="/2022/05/20/smartsage/" class="archive-article-date">
+        <time datetime="2022-05-20T13:57:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-20</time>
 </a>
 
   
@@ -794,13 +1261,17 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h2 id="Introduction-to-Graph-Data"><a href="#Introduction-to-Graph-Data" class="headerlink" title="Introduction to Graph Data"></a>Introduction to Graph Data</h2><h3 id="I-Concept-of-Graph"><a href="#I-Concept-of-Graph" class="headerlink" title="I. Concept of Graph"></a>I. Concept of Graph</h3><h4 id="1-Origin-of-Graph-problem"><a href="#1-Origin-of-Graph-problem" class="headerlink" title="1. Origin of Graph problem"></a>1. Origin of Graph problem</h4><blockquote>
-<p>[<em>Seven Bridges of Knigsberg, 1736</em>] The problem is to devise a walk across each of the seven bridges once and only once to touch every part of the town, or this walk does not exist.</p>
-</blockquote>
-<p><img src="https://xinmiaozhang.files.wordpress.com/2021/06/seven-bridge.png?w=1024" alt="seven-bridge"></p>
-<p><strong>Solution:</strong> Seven Bridge Problem is to find the <strong>Euler Circuit</strong> in a graph. It is easier than finding a Hamilton Circuit.</p>
+    <p><strong>SmartSAGE: Training Large-scale Graph Neural Networks using In-Storage Processing Architectures</strong></p>
+<p><strong>作者：Yunjae Lee等人,</strong> lead by <strong>Minsoo Rhu</strong> </p>
+<p>@ <em>KAIST(Korea)</em></p>
+<p>既要提升图神经网络（GNN）训练扩展性，又要保证系统整体的性能。</p>
+<p>主要做法是通过采用SSD保存原始图数据，提升了GNN训练的扩展性；</p>
+<p>通过用近存储计算的方法完成GNN的采样步骤，保证了方案的处理性能。</p>
+<hr>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><h2 id="图神经网络训练"><a href="#图神经网络训练" class="headerlink" title="图神经网络训练"></a>图神经网络训练</h2><p>图神经网络的训练主要有<strong>选择目标节点、目标节点邻居采样、特征查找，最终将邻居节点的特征通过多层感知机实现训练</strong>，以得到目标节点或边的嵌入向量。</p>
+<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjgyYTA0YTMyOGUyMDE4MzBiN2I4ZWEwY2QyMDQzZTNfUTF5UDZJdWN4SXpCUDVRV1pYQ1VmUlI2WGpJTWZlb01fVG9rZW46Ym94Y25yZnNXMHBOczZLeUIydU1xQ09VVjNmXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
     
-    <a class="article-more-a" href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/#more">more >></a>
+    <a class="article-more-a" href="/2022/05/20/smartsage/#more">more >></a>
     
     
 
@@ -817,19 +1288,31 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">图计算</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">基础知识</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">课程笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">KAIST</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">PKU</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">2022</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">ISCA</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">GNN</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">图随机游走</a>
         		</li>
       		
 		</ul>
@@ -839,7 +1322,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2021/02/04/%E5%9B%BE%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%AC%94%E8%AE%B01/">展开全文 >></a>
+      <a class="article-more-a" href="/2022/05/20/smartsage/">展开全文 >></a>
     </p>
     
 
@@ -869,6 +1352,130 @@
 
 
   
+    <article id="post-genstore" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2022/03/18/genstore/" target="_blank">(ASPLOS22)GenStore：面向基因序列分析的高性能近数据处理系统</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2022/03/18/genstore/" class="archive-article-date">
+        <time datetime="2022-03-18T13:51:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-03-18</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p><strong>GenStore: A High-Performance In-Storage Processing System for Genome Sequence Analysis</strong></p>
+<p><strong>作者：Nika Mansouri Ghiasi等人,</strong> lead by <strong>Onur Mutlu</strong> </p>
+<p>@ <em>ETH Zurich(Switzerland)</em></p>
+<p>本文指出了基因序列分析的性能瓶颈为存储设备的I&#x2F;O，为了解决这一问题，通过在近数据端添加两个加速器实现对数据的筛选，实现了性能的大幅提升。</p>
+<hr>
+<h1 id="基因序列分析背景知识"><a href="#基因序列分析背景知识" class="headerlink" title="基因序列分析背景知识"></a>基因序列分析背景知识</h1><h2 id="端到端的基因序列分析"><a href="#端到端的基因序列分析" class="headerlink" title="端到端的基因序列分析"></a>端到端的基因序列分析</h2><h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>药物开发、病毒溯源和进化研究</p>
+<h3 id="主要目的"><a href="#主要目的" class="headerlink" title="主要目的"></a>主要目的</h3><p>识别样本基因组和已知基因组之间的可能匹配点和差异点。</p>
+<h3 id="基本步骤"><a href="#基本步骤" class="headerlink" title="基本步骤"></a>基本步骤</h3><ol>
+<li><strong>采样以及DNA样本测序：</strong>现代测序技术无法测序整个DNA，只能在这个DNA上随机采样一些短的子序列，并对他们进行测序。</li>
+<li><strong>转换：</strong>将测序到的波形图转换成碱基对（A,G,C,T等基本组成单元）的表示，这些表示被称为read(译：待匹配序列)，以便存储和处理；</li>
+</ol>
+<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MTJkM2EyYjUyZWRkYjExNzlhNTNlMzhlZGE3MzU5M2FfeTFqdVNCSGlNMTR5dGpzRWVPR3Q1YjBTclRpb0l1VUxfVG9rZW46Ym94Y243RDNGSVM0U29qNUJoNUlWQ0JuR3JnXzE2NzYxMjM2NjE6MTY3NjEyNzI2MV9WNA" alt="img"></p>
+<p><em>图1 DNA序列转换</em></p>
+    
+    <a class="article-more-a" href="/2022/03/18/genstore/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">加速器</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ETH</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">ASPLOS</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">2022</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2022/03/18/genstore/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+    </nav>
   
 
 
@@ -997,11 +1604,67 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">eBPF</a>
+                <a href="javascript:void(0)" class="js-tag color4">TPU</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">通用计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">加速器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UC(Riverside)</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">SC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DNN</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">近存储计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">FAST</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">FPGA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ETH</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">云计算</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MICRO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">2018</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">模拟器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">eBPF</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1010,6 +1673,54 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">前沿系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">ASPLOS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Cambridge</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">预取器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">数据访问优化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">2022</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据管理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">存储技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CQU</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JSA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">ISCA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">GNN</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">图随机游走</a>
               </li>
              
               <li class="article-tag-list-item">
