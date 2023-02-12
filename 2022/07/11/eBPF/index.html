@@ -10,31 +10,28 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="很多人认为融合eBPF技术会是未来计算型存储器**(Computational Storage,CSD)的一个重要发展方向。本文调研了eBPF技术的原理和应用场景**，并指出“Why eBPF+CSD”。此外，本文还调研了当下在CSD中使用eBPF技术的难点和可能的替代选项。  什么是eBPF技术？前身：BPF(Berkeley Package Filter)BPF背景：于1992年提出，当时un">
+  <meta name="description" content="很多人认为融合eBPF技术会是未来计算型存储器**(Computational Storage,CSD)的一个重要发展方向。本文调研了eBPF技术的原理和应用场景**，并指出“Why eBPF+CSD”。此外，本文还调研了当下在CSD中使用eBPF技术的难点和可能的替代选项。 什么是eBPF技术？前身：BPF(Berkeley Package Filter)BPF背景：于1992年提出，当时uni">
 <meta property="og:type" content="article">
 <meta property="og:title" content="eBPF+CSD调研">
 <meta property="og:url" content="https://recoderchris.github.io/2022/07/11/eBPF/index.html">
 <meta property="og:site_name" content="Xinmiao的博客">
-<meta property="og:description" content="很多人认为融合eBPF技术会是未来计算型存储器**(Computational Storage,CSD)的一个重要发展方向。本文调研了eBPF技术的原理和应用场景**，并指出“Why eBPF+CSD”。此外，本文还调研了当下在CSD中使用eBPF技术的难点和可能的替代选项。  什么是eBPF技术？前身：BPF(Berkeley Package Filter)BPF背景：于1992年提出，当时un">
+<meta property="og:description" content="很多人认为融合eBPF技术会是未来计算型存储器**(Computational Storage,CSD)的一个重要发展方向。本文调研了eBPF技术的原理和应用场景**，并指出“Why eBPF+CSD”。此外，本文还调研了当下在CSD中使用eBPF技术的难点和可能的替代选项。 什么是eBPF技术？前身：BPF(Berkeley Package Filter)BPF背景：于1992年提出，当时uni">
 <meta property="og:locale">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YTRkNTMyMDA5MjQ4ZGIzOWI2ZmMwNTlmYzk5YTY1YzlfY3RWNmpXS2tPUGtUdjNsWERpT1pxMWZJYlNjRG9JMEFfVG9rZW46Ym94Y25OSXVWQUczRU9OZWt4YXc4dkJJbDVJXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NjZjYWIwZWI2YWQyNTIxYWM5ZGE2OTgwZTM2OWY1MGNfaEpnaW1GODZ6TThtWjI1d1lndkw1UTN5c09HaU1zQWhfVG9rZW46Ym94Y25WaFlQYTZsT1pWQ0c0dlBOcGJBUW1mXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MTIwYTIxMWEzZWYzMjQ3NjE4ZTMzZjVlZDE1NTNjZmRfUERVRHY4cUltTHVqQ2o5dE9DSHRIS0FuVFQ3M1JKWW1fVG9rZW46Ym94Y25PamdidUY2NVlnQ21ibzNpb05ZbUxlXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MjMwZTg1MWJhNjRiZjFhYjMxMDNlZDJhNzAzMmMwOThfVkJ2RERYNm1QUGtteWpVNTJpQWlza2p1bWNpckk5MjlfVG9rZW46Ym94Y25YRklRTXhwdlFKMWhSYzEzcDFBNFdkXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MzFhZmJkMTA1ZTBmYzkwNzVlMGI3ZjNmOGRmMTZlMTBfeHV4TVZqMWlnZExHSWNFYUJZMFE3VzFGUEZUNXZiWDlfVG9rZW46Ym94Y25PT1ZVdVhxSVRmcDVtZEFkM2w4NWJmXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NTJhMmYzZTYzMGY2MmFlMDU5YzMxZDg0NmQ4YjhjNGNfd1NjaWU4bmhhQTNxMm5jdlkxTHhOck9selhjVEhLQUVfVG9rZW46Ym94Y25oZTh1Y0lweXNNZDV0eW1qU2RPS0RkXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NGRkMzRiMTNiYzM2YjBkNGY3OGQwZjIxOWU4MzQ5OTZfbWt0bUZsVmhqOHZWaG9VMlc1QXE2Mld4TDVBajBXYk1fVG9rZW46Ym94Y25oZDJ2bEh1TUJPVDNEcVpsdWZJZDhmXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTMzZWEyMzAyY2IxOTYxMGJlOGI3YmUwMTgzMDUzZTNfMVA5TElGWkE4TmVnTmJPZmd6Nng4Rk5MS215NE8xUmxfVG9rZW46Ym94Y25xWjVOTnJGbGNTZmczMEJnSTNQSGRoXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
+<meta property="og:image" content="https://recoderchris.github.io/2022/07/11/eBPF/fig4.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/07/11/eBPF/fig5.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/07/11/eBPF/fig5.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/07/11/eBPF/fig6.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/07/11/eBPF/fig7.png">
 <meta property="article:published_time" content="2022-07-11T14:15:15.000Z">
-<meta property="article:modified_time" content="2023-02-11T14:58:13.333Z">
+<meta property="article:modified_time" content="2023-02-12T03:58:17.975Z">
 <meta property="article:author" content="Zhang Xinmiao">
-<meta property="article:tag" content="论文阅读">
 <meta property="article:tag" content="近存储计算">
+<meta property="article:tag" content="论文阅读">
 <meta property="article:tag" content="eBPF">
 <meta property="article:tag" content="操作系统">
 <meta property="article:tag" content="前沿系统">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YTRkNTMyMDA5MjQ4ZGIzOWI2ZmMwNTlmYzk5YTY1YzlfY3RWNmpXS2tPUGtUdjNsWERpT1pxMWZJYlNjRG9JMEFfVG9rZW46Ym94Y25OSXVWQUczRU9OZWt4YXc4dkJJbDVJXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA">
+<meta name="twitter:image" content="https://recoderchris.github.io/2022/07/11/eBPF/fig4.png">
   
     <link rel="alternative" href="/atom.xml" title="Xinmiao的博客" type="application/atom+xml">
   
@@ -271,9 +268,9 @@
   <div class="article-entry" itemprop="articleBody">
     
     <p>很多人认为融合eBPF技术会是未来计算型存储器**(Computational Storage,CSD)<strong>的一个重要发展方向。本文调研了</strong>eBPF技术的原理和应用场景**，并指出“Why eBPF+CSD”。此外，本文还调研了当下在CSD中使用eBPF技术的难点和可能的替代选项。</p>
-<hr>
 <h1 id="什么是eBPF技术？"><a href="#什么是eBPF技术？" class="headerlink" title="什么是eBPF技术？"></a>什么是eBPF技术？</h1><h2 id="前身：BPF-Berkeley-Package-Filter"><a href="#前身：BPF-Berkeley-Package-Filter" class="headerlink" title="前身：BPF(Berkeley Package Filter)"></a>前身：BPF(Berkeley Package Filter)</h2><p><strong>BPF背景：</strong>于1992年提出，当时unix操作系统提供了捕获数据包的设施以监控当前的网络情况。但是，网络监控程序(如tcpdump)处于<strong>用户态</strong>，数据包必须频繁地被<strong>从内核态被拷贝到用户态</strong>。因此，一些被称为【<strong>数据包过滤器</strong>】的内核代理被提出了，以尽早在内核就丢弃不想要的数据包，<strong>避免从操作系统内核向用户态复制其他对用户态程序无用的数据包，从而极大提高性能</strong>。BPF是其中一种。</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YTRkNTMyMDA5MjQ4ZGIzOWI2ZmMwNTlmYzk5YTY1YzlfY3RWNmpXS2tPUGtUdjNsWERpT1pxMWZJYlNjRG9JMEFfVG9rZW46Ym94Y25OSXVWQUczRU9OZWt4YXc4dkJJbDVJXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+
+
 <p><em>图 经典的BPF</em></p>
 <span id="more"></span>
 
@@ -283,7 +280,8 @@
 <p><strong>优势：</strong>由于内核具有监督、控制整个系统的特权，操作系统一直是实现可观察性、安全性和网络功能的理想场所。但是内核由于其核心作用和对稳定性和安全性的高要求，<strong>修改内核很难</strong>。eBPF则改变了这一点，并且由<strong>操作系统来保证其安全性和执行效率</strong>。</p>
 <p><strong>可编程性：</strong>因为eBPF虚拟机使用的是类似于汇编语言的指令，可编程性差。现在的编译器正在兼容高级语言<strong>生成BPF字节码</strong>。例如，LLVM在3.7版本开始支持BPF字节码作为后端输出。</p>
 <p><strong>eBPF的实现：</strong></p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NjZjYWIwZWI2YWQyNTIxYWM5ZGE2OTgwZTM2OWY1MGNfaEpnaW1GODZ6TThtWjI1d1lndkw1UTN5c09HaU1zQWhfVG9rZW46Ym94Y25WaFlQYTZsT1pWQ0c0dlBOcGJBUW1mXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+
+
 <p><em>图 eBPF开发流程</em></p>
 <h2 id="eBPF技术现有的应用领域"><a href="#eBPF技术现有的应用领域" class="headerlink" title="eBPF技术现有的应用领域"></a>eBPF技术现有的应用领域</h2><ul>
 <li><strong>网络（协议解析、转发逻辑）</strong></li>
@@ -292,7 +290,8 @@
 <li><strong>传统存储（实现数据过滤）</strong></li>
 <li>……</li>
 </ul>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MTIwYTIxMWEzZWYzMjQ3NjE4ZTMzZjVlZDE1NTNjZmRfUERVRHY4cUltTHVqQ2o5dE9DSHRIS0FuVFQ3M1JKWW1fVG9rZW46Ym94Y25PamdidUY2NVlnQ21ibzNpb05ZbUxlXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+
+
 <p><em>图 eBPF面向的应用场景和技术栈</em></p>
 <hr>
 <h1 id="为什么说eBPF-CSD是一个重要的发展方向？"><a href="#为什么说eBPF-CSD是一个重要的发展方向？" class="headerlink" title="为什么说eBPF+CSD是一个重要的发展方向？"></a>为什么说eBPF+CSD是一个重要的发展方向？</h1><h2 id="当前CSD发展所目前面临的难点"><a href="#当前CSD发展所目前面临的难点" class="headerlink" title="当前CSD发展所目前面临的难点"></a>当前CSD发展所目前面临的难点</h2><p>目前，CSD的可编程性仍然很差：</p>
@@ -320,7 +319,8 @@
 </ul>
 <hr>
 <h1 id="一个可能的eBPF-CSD-prototype"><a href="#一个可能的eBPF-CSD-prototype" class="headerlink" title="一个可能的eBPF+CSD prototype"></a>一个可能的eBPF+CSD prototype</h1><p>来自<strong>阿姆斯特丹自由大学</strong>的团队探索了**基于QEMU仿真ZNS，来实现eBPF+**<strong>CSD</strong>的一个prototype。(仍然在开发中，文档健全；官网给出运行的视频样例)(<a target="_blank" rel="noopener" href="https://github.com/Dantali0n/OpenCSD)%E3%80%82%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%8E%BB%E5%B1%95%E6%9C%9B%E4%B8%80%E4%B8%8BeBPF+CSD%E7%9A%84%E8%AE%BE%E8%AE%A1%EF%BC%9A">https://github.com/Dantali0n/OpenCSD)。我们可以通过这个项目去展望一下eBPF+CSD的设计：</a></p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MjMwZTg1MWJhNjRiZjFhYjMxMDNlZDJhNzAzMmMwOThfVkJ2RERYNm1QUGtteWpVNTJpQWlza2p1bWNpckk5MjlfVG9rZW46Ym94Y25YRklRTXhwdlFKMWhSYzEzcDFBNFdkXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+<img src="/2022/07/11/eBPF/fig4.png" class="" title="img">
+
 <p><em>图 技术报告封面</em></p>
 <p><strong>配置</strong></p>
 <ul>
@@ -328,7 +328,8 @@
 <li><strong>SPDK：</strong>一种与用户空间的存储设备接口（在本项目中就是指能够与QEMU仿真的ZNS）的技术。</li>
 <li><strong>uBPF(user-space BPF)：</strong>一种ebpf虚拟机。</li>
 </ul>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MzFhZmJkMTA1ZTBmYzkwNzVlMGI3ZjNmOGRmMTZlMTBfeHV4TVZqMWlnZExHSWNFYUJZMFE3VzFGUEZUNXZiWDlfVG9rZW46Ym94Y25PT1ZVdVhxSVRmcDVtZEFkM2w4NWJmXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+<img src="/2022/07/11/eBPF/fig5.png" class="" title="img">
+
 <p><em>图 ZCSD的工作流程</em></p>
 <p><strong>主机端</strong></p>
 <ol>
@@ -364,7 +365,8 @@
 <li>二者的优缺点分别是什么？</li>
 <li>在计算型存储器的背景下怎么去改进这些两种机制？</li>
 </ul>
-<h2 id="定性分析"><a href="#定性分析" class="headerlink" title="定性分析"></a>定性分析</h2><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NTJhMmYzZTYzMGY2MmFlMDU5YzMxZDg0NmQ4YjhjNGNfd1NjaWU4bmhhQTNxMm5jdlkxTHhOck9selhjVEhLQUVfVG9rZW46Ym94Y25oZTh1Y0lweXNNZDV0eW1qU2RPS0RkXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+<h2 id="定性分析"><a href="#定性分析" class="headerlink" title="定性分析"></a>定性分析</h2><img src="/2022/07/11/eBPF/fig5.png" class="" title="img">
+
 <h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><p>这里的安全性是指抵御人为错误的机制：如果卸载的bytecode里有bug，能发生的最坏结果是什么？</p>
 <ul>
 <li>WebAssembly：卸载的代码会在一个隔离的内存空间中运行，并且默认是不允许访问文件系统。因此bug可能最差会引起CPU时钟周期的浪费，但是并不会在runtime之外造成什么影响。</li>
@@ -396,9 +398,11 @@
 <p>运行时间：实际计算所花费的时间，rBPF和uBPF表现非常好，以至于能够击败host上的binary。</p>
 <p>总时间：rBPF和uBPF在x64架构上经常击败基于host的方式</p>
 <h2 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h2><p>虽然eBPF虚拟机在<strong>定量分析中显示占有更少的内存、计算性能更好</strong>，但是作者从定性分析的角度，认为eBPF存在更多的缺陷，而<strong>webAssembly可能是更成熟、更容易上手的选择</strong>。</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NGRkMzRiMTNiYzM2YjBkNGY3OGQwZjIxOWU4MzQ5OTZfbWt0bUZsVmhqOHZWaG9VMlc1QXE2Mld4TDVBajBXYk1fVG9rZW46Ym94Y25oZDJ2bEh1TUJPVDNEcVpsdWZJZDhmXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+<img src="/2022/07/11/eBPF/fig6.png" class="" title="img">
+
 <p><em>图 定量分析实验其中之一</em></p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTMzZWEyMzAyY2IxOTYxMGJlOGI3YmUwMTgzMDUzZTNfMVA5TElGWkE4TmVnTmJPZmd6Nng4Rk5MS215NE8xUmxfVG9rZW46Ym94Y25xWjVOTnJGbGNTZmczMEJnSTNQSGRoXzE2NzYxMjQ5NDQ6MTY3NjEyODU0NF9WNA" alt="img"></p>
+<img src="/2022/07/11/eBPF/fig7.png" class="" title="img">
+
 <p><em>图 对eBPF和WebAssembly定性分析的总结</em></p>
 <p>下面是一些潜在的可能提升机会：</p>
 <p><strong>webassembly：作为一个相当成熟的技术，仍然有以下改进方向</strong></p>
@@ -483,11 +487,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -731,30 +735,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">容错</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SDC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">论文阅读</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">软错误</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">2021</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">TPDS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">DNN</a>
               </li>
              
@@ -767,11 +747,35 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">论文阅读</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">FAST</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">2021</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">容错</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">SDC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">软错误</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">TPDS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -803,18 +807,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MICRO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">2018</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">模拟器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">eBPF</a>
               </li>
              
@@ -824,6 +816,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">前沿系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MICRO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">2018</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">模拟器</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -855,14 +859,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CQU</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JSA</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">ISCA</a>
               </li>
              
@@ -872,6 +868,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">图随机游走</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CQU</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JSA</a>
               </li>
              
               <li class="article-tag-list-item">

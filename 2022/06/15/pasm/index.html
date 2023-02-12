@@ -17,33 +17,33 @@
 <meta property="og:site_name" content="Xinmiao的博客">
 <meta property="og:description" content="[JSA] PASM：针对hybrid SSD中DNN训练加速的并行度优化存储空间管理策略 PASM: Parallelism Aware Space Management strategy for hybrid SSD towards in-storage DNN training acceleration 作者：肖春华 等人 @ Chongqing University(China) 近存储端">
 <meta property="og:locale">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=Y2Q1NzE4MDcxYmUyMGM4OWUwMDQ0NjU1MzQ5NWVkMzhfU2k3cVhySnE3Q1l1MnVXbE1HR3ZnV3M1UGI1aFNsZ3dfVG9rZW46Ym94Y25uR2hNbXJuS3VHQkY1NGlleVRHRFFjXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YzU1ZGMyNDM0Njg5MTcwNWNiNTczYjYwYWMzNWNhMzRfN2Z4SGUxcmlHcWZkdWE2QXpydGloS0xYTnZjMmhUYkRfVG9rZW46Ym94Y25FVjdyUG1ybDBab0t4MEZrVVdIbFFkXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ODYwYzkxNjljMzBkODcyZmUzZWFhNDM2NDk2YjZmMzNfZmF1ejBDWU5NNXZLeDhKYXU0cHRzd2hycjlWUGlsVzlfVG9rZW46Ym94Y25sVGNNNjVrWFlYTWhEWlJDTTdsbHZnXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=OTQ4MmJlMjgyMDIxZDRmNWI2ZGU3NTAyODNjOTNkYzZfWlZMZENvRjlBMDFzWEx0aU1qUUFKalZjbnFVUkFBMWlfVG9rZW46Ym94Y25iT1ZOc1JqQ2haVTFLWnFCZ2FQRUVmXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YmEyYTBjNGM1Yzc2OTIxZWU1NGE1ODJmNzVlNGVhZWVfNzRMS0JzWW84VGNLZUdwWlZYSkt2dmhoc3ZhYmJnQjZfVG9rZW46Ym94Y25Ndm9UQW1GT2VOSFJxMGpTRmZ0TjljXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MjBhMTNjMTRhZDJjOTNjNTRhYjIwODMxYzhlOTZkMzBfYjhnQmFpcFBoS1B6dUtYWkdpb0g5WXZNMzBVd3dnWDJfVG9rZW46Ym94Y251Y0hNSXpHS0tFQ3dBQUZGTTRSczQ5XzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NDIxYzNmOTM0MmMzZTQwYjQxNzdjN2I4NDYxNjIxYzBfdGpXcTNXWE5ZaFZXUThwVGdTZ1JUZ2pLVnZWUnpFcDBfVG9rZW46Ym94Y25mNEh2OFlZeHJLQWMwMkZWOVFlSFVkXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MGFhZWJiMDU4NzI4NjkyZDg1YTZjMDAxMWM1ODU1YzlfZHZsV3F3V3MwUWxTVmdsd3dpcUxIUDZ0T3ZpSFFzVzJfVG9rZW46Ym94Y25ZakFkNW5PanJWNXZtVW5POEVmWWtkXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YzI5ZGYwMDZiZmNiZmJkYzJkYjQzZDY5NDNhZTg2NmFfOFROV01ORzNaSENVZFdvZkhVZEtXVjMwS0tTdGYzWkhfVG9rZW46Ym94Y25xWTZyMFhKS3BXbWY5Tk1pQ1NZWWViXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NzUyNGQzN2UwYmQxZjY0ZjJlMTkzMDA2ODg2OGNkMmRfSzJNcHo5c3JIcndBMktxQW9Oa1RHZ1hwUmN6Ym1JQUJfVG9rZW46Ym94Y25KaGhzbER2bEdNWmRUR243ZzRTcFhnXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MTcwYmY0MTJmOWFkZmY0NjhmYzM0YjJjNmY0ZWYwMWRfb3VqV3Z6bjZuckloMUdTbWdXc1BKd3VmU0k5Sm5pN2NfVG9rZW46Ym94Y25ZSmZrV0VJR0tSa2xVMmxKMFB4QkcyXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDk0MjhhNzkyZjFiMjU2NGU0NTU2ZWE2MjVjYTY0YmVfZ1I1VGpJWW9ZUUhRTGFsVER6engxU2w5UFZIWER0WUtfVG9rZW46Ym94Y25KYXhIaURjWWRVTmExcUFuMVNIOWllXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YzFlZmQ2ZWM5OThlOThmZjZjMDc5OTU4M2FjZDM5NjdfYkZnYWZpUHpQZ1hOa2o3VVVIZHRRZ2xtemx2c0ZRZ0lfVG9rZW46Ym94Y25BdHZSdWxqR1NiaW84SmcybkFDS01iXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA">
+<meta property="og:image" content="https://recoderchris.github.io/2022/06/15/pasm/pasm/fig1.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/06/15/pasm/fig2.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/06/15/pasm/fig3.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/06/15/pasm/fig4.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/06/15/pasm/fig5.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/06/15/pasm/fig6.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/06/15/pasm/fig7.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/06/15/pasm/fig8.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/06/15/pasm/fig9.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/06/15/pasm/fig10.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/06/15/pasm/fig11.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/06/15/pasm/fig12.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/06/15/pasm/fig13.png">
 <meta property="article:published_time" content="2022-06-15T14:05:38.000Z">
-<meta property="article:modified_time" content="2023-02-11T15:02:52.593Z">
+<meta property="article:modified_time" content="2023-02-12T03:55:52.664Z">
 <meta property="article:author" content="Zhang Xinmiao">
-<meta property="article:tag" content="论文阅读">
 <meta property="article:tag" content="DNN">
 <meta property="article:tag" content="近存储计算">
 <meta property="article:tag" content="加速器">
+<meta property="article:tag" content="论文阅读">
 <meta property="article:tag" content="2022">
 <meta property="article:tag" content="数据管理">
 <meta property="article:tag" content="存储技术">
 <meta property="article:tag" content="CQU">
 <meta property="article:tag" content="JSA">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=Y2Q1NzE4MDcxYmUyMGM4OWUwMDQ0NjU1MzQ5NWVkMzhfU2k3cVhySnE3Q1l1MnVXbE1HR3ZnV3M1UGI1aFNsZ3dfVG9rZW46Ym94Y25uR2hNbXJuS3VHQkY1NGlleVRHRFFjXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA">
+<meta name="twitter:image" content="https://recoderchris.github.io/2022/06/15/pasm/pasm/fig1.png">
   
     <link rel="alternative" href="/atom.xml" title="Xinmiao的博客" type="application/atom+xml">
   
@@ -296,12 +296,14 @@
 <ol>
 <li><strong>高密度的flash芯片（例如TLC&#x2F;QLC颗粒芯片）逐渐在市场占据主流，相比于SLC芯片其性能和寿命更差，加剧了上述问题。</strong></li>
 </ol>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=Y2Q1NzE4MDcxYmUyMGM4OWUwMDQ0NjU1MzQ5NWVkMzhfU2k3cVhySnE3Q1l1MnVXbE1HR3ZnV3M1UGI1aFNsZ3dfVG9rZW46Ym94Y25uR2hNbXJuS3VHQkY1NGlleVRHRFFjXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA" alt="img"></p>
+<img src="pasm/fig1.png" alt="img" style="zoom: 50%;" />
+
 <h2 id="表1-不同的存储单元的在读、写、擦除和寿命上的表现"><a href="#表1-不同的存储单元的在读、写、擦除和寿命上的表现" class="headerlink" title="表1 不同的存储单元的在读、写、擦除和寿命上的表现"></a><em>表1 不同的存储单元的在读、写、擦除和寿命上的表现</em><br><span id="more"></span></h2><h1 id="这个事情之前别人是怎么做的，存在什么问题？"><a href="#这个事情之前别人是怎么做的，存在什么问题？" class="headerlink" title="这个事情之前别人是怎么做的，存在什么问题？"></a>这个事情之前别人是怎么做的，存在什么问题？</h1><ul>
 <li>DNN+ISP：Behemoth利用flash芯片的高带宽和大容量进行语言模型的训练；HyperTune在计算型存储设备上完成了分布式训练等等。<strong>然而，DNN+ISP的工作往往局限于使用近存储计算来优化DNN中存在的memory-bound问题，却并没有充分考虑flash芯片的物理特征给DNN训练效率以及flash寿命带来的影响。</strong></li>
 <li>混合颗粒型SSD(hybrid SSD)是解决高密度flash性能问题的一个有效途径。这种存储利用了flash的dual-mode特性，将flash上的一部分TLC颗粒转换为SLC颗粒，把SLC部分当做flash上的缓存，以利用SLC的高性能和长寿性；运算过程中逐渐地将SLC的数据迁移到TLC部分以保证SLC的容量。</li>
 </ul>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YzU1ZGMyNDM0Njg5MTcwNWNiNTczYjYwYWMzNWNhMzRfN2Z4SGUxcmlHcWZkdWE2QXpydGloS0xYTnZjMmhUYkRfVG9rZW46Ym94Y25FVjdyUG1ybDBab0t4MEZrVVdIbFFkXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA" alt="img"></p>
+<img src="/2022/06/15/pasm/fig2.png" class="" title="img">
+
 <ul>
 <li><em>图1 混合颗粒型SSD的架构(来源：[19’ICCD] SPA-SSD)</em></li>
 </ul>
@@ -315,7 +317,8 @@
 <hr>
 <h1 id="该论文解决了什么难点，难点存在的原因是什么，作者是如何发现这些难点的？"><a href="#该论文解决了什么难点，难点存在的原因是什么，作者是如何发现这些难点的？" class="headerlink" title="该论文解决了什么难点，难点存在的原因是什么，作者是如何发现这些难点的？"></a>该论文解决了什么难点，难点存在的原因是什么，作者是如何发现这些难点的？</h1><p>下面的探究验证了hybrid SSD在性能和寿命上的存在的问题。</p>
 <p><strong>难点1.</strong> DNN进行持续写的场景下，混合型SSD的性能损耗</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ODYwYzkxNjljMzBkODcyZmUzZWFhNDM2NDk2YjZmMzNfZmF1ejBDWU5NNXZLeDhKYXU0cHRzd2hycjlWUGlsVzlfVG9rZW46Ym94Y25sVGNNNjVrWFlYTWhEWlJDTTdsbHZnXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA" alt="img"></p>
+<img src="/2022/06/15/pasm/fig3.png" class="" title="img">
+
 <p><em>图2 混合型SSD和TLC-SSD在多iteration后的表现</em></p>
 <p>上图反映了用10%SLC-90%TLC和用TLC作为存储系统时的IOPS。当迭代次数增加时，混合颗粒型SSD的的性能迅速下降，甚至降低到TLC存储的效果差不多。原因有以下两点：</p>
 <ol>
@@ -330,17 +333,21 @@
 </ul>
 <p><strong>为了解决以上的问题，作者认为，需要在</strong> <strong>DNN</strong> <strong>训练过程中并行执行垃圾收集和数据访问，以确保始终有空闲的 SLC 块用于写入请求。</strong></p>
 <hr>
-<h1 id="针对以上难点，作者各做了哪些优化，优化背后的思想是什么？"><a href="#针对以上难点，作者各做了哪些优化，优化背后的思想是什么？" class="headerlink" title="针对以上难点，作者各做了哪些优化，优化背后的思想是什么？"></a>针对以上难点，作者各做了哪些优化，优化背后的思想是什么？</h1><h2 id="融合PASM的近存储DNN计算"><a href="#融合PASM的近存储DNN计算" class="headerlink" title="融合PASM的近存储DNN计算"></a>融合PASM的近存储DNN计算</h2><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=OTQ4MmJlMjgyMDIxZDRmNWI2ZGU3NTAyODNjOTNkYzZfWlZMZENvRjlBMDFzWEx0aU1qUUFKalZjbnFVUkFBMWlfVG9rZW46Ym94Y25iT1ZOc1JqQ2haVTFLWnFCZ2FQRUVmXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA" alt="img"></p>
+<h1 id="针对以上难点，作者各做了哪些优化，优化背后的思想是什么？"><a href="#针对以上难点，作者各做了哪些优化，优化背后的思想是什么？" class="headerlink" title="针对以上难点，作者各做了哪些优化，优化背后的思想是什么？"></a>针对以上难点，作者各做了哪些优化，优化背后的思想是什么？</h1><h2 id="融合PASM的近存储DNN计算"><a href="#融合PASM的近存储DNN计算" class="headerlink" title="融合PASM的近存储DNN计算"></a>融合PASM的近存储DNN计算</h2><img src="/2022/06/15/pasm/fig4.png" class="" title="img">
+
 <p><em>图3 PASM计算架构</em></p>
 <p><strong>DNN</strong>加速器：<strong>DNN加速器发送数据写入请求时，需要将该</strong>数据的寿命包含请求中。一般而言，数据的寿命很难获得，但是在DNN这种数据访问模式非常规律的应用中，数据的寿命可以简单的分析出来。</p>
 <p>DNN加速器发出数据写入请求后，数据布局模块(CFP-DL)根据数据生命周期指导数据分配，数据生存周期也记录在映射表中，随着训练过程的进行动态更新。</p>
 <p>在训练过程中，垃圾回收模块(LAD-GC)会在后台持续监控闪存阵列中数据的有效性。如果满足预设的擦除条件并且后续 I&#x2F;O 没有中断，数据回收模块将使用擦除命令将要擦除的块的物理地址发送到FCC。 </p>
 <p>当达到预设的迭代次数或模型收敛时，训练结束。</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YmEyYTBjNGM1Yzc2OTIxZWU1NGE1ODJmNzVlNGVhZWVfNzRMS0JzWW84VGNLZUdwWlZYSkt2dmhoc3ZhYmJnQjZfVG9rZW46Ym94Y25Ndm9UQW1GT2VOSFJxMGpTRmZ0TjljXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA" alt="img"></p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MjBhMTNjMTRhZDJjOTNjNTRhYjIwODMxYzhlOTZkMzBfYjhnQmFpcFBoS1B6dUtYWkdpb0g5WXZNMzBVd3dnWDJfVG9rZW46Ym94Y251Y0hNSXpHS0tFQ3dBQUZGTTRSczQ5XzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA" alt="img"></p>
+<img src="/2022/06/15/pasm/fig5.png" class="" title="img">
+
+<img src="/2022/06/15/pasm/fig6.png" class="" title="img">
+
 <p><em>表2</em> DNN训练中各种数据的寿命</p>
 <hr>
-<h2 id="CFP-DL：无冲突的、I-x2F-O请求与擦除操作可并行的数据布局"><a href="#CFP-DL：无冲突的、I-x2F-O请求与擦除操作可并行的数据布局" class="headerlink" title="CFP-DL：无冲突的、I&#x2F;O请求与擦除操作可并行的数据布局"></a>CFP-DL：无冲突的、I&#x2F;O请求与擦除操作可并行的数据布局</h2><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NDIxYzNmOTM0MmMzZTQwYjQxNzdjN2I4NDYxNjIxYzBfdGpXcTNXWE5ZaFZXUThwVGdTZ1JUZ2pLVnZWUnpFcDBfVG9rZW46Ym94Y25mNEh2OFlZeHJLQWMwMkZWOVFlSFVkXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA" alt="img"></p>
+<h2 id="CFP-DL：无冲突的、I-x2F-O请求与擦除操作可并行的数据布局"><a href="#CFP-DL：无冲突的、I-x2F-O请求与擦除操作可并行的数据布局" class="headerlink" title="CFP-DL：无冲突的、I&#x2F;O请求与擦除操作可并行的数据布局"></a>CFP-DL：无冲突的、I&#x2F;O请求与擦除操作可并行的数据布局</h2><img src="/2022/06/15/pasm/fig7.png" class="" title="img">
+
 <p><em>图4 数据布局</em></p>
 <p><strong>防止数据迁移</strong></p>
 <ul>
@@ -357,7 +364,8 @@
 <p>此外，作者还通过模型参数来估算每种block的数量以及关于磨损度平衡的优化，细节不再展开。</p>
 <p><strong>效果：将不同生命周期的数据分布到不同种类的物理块中，尽可能避免数据迁移；</strong></p>
 <p><strong>通过利用闪存中固有的并行性来实现并行读&#x2F;编程和擦除操作，从而消除了连续</strong> <strong>I&#x2F;O</strong> <strong>请求和垃圾回收之间的冲突，能够在训练期间提供稳定的 I&#x2F;O 性能。</strong></p>
-<h2 id="LAD-GC：数据寿命感知的垃圾回收机制"><a href="#LAD-GC：数据寿命感知的垃圾回收机制" class="headerlink" title="LAD-GC：数据寿命感知的垃圾回收机制"></a>LAD-GC：数据寿命感知的垃圾回收机制</h2><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MGFhZWJiMDU4NzI4NjkyZDg1YTZjMDAxMWM1ODU1YzlfZHZsV3F3V3MwUWxTVmdsd3dpcUxIUDZ0T3ZpSFFzVzJfVG9rZW46Ym94Y25ZakFkNW5PanJWNXZtVW5POEVmWWtkXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA" alt="img"></p>
+<h2 id="LAD-GC：数据寿命感知的垃圾回收机制"><a href="#LAD-GC：数据寿命感知的垃圾回收机制" class="headerlink" title="LAD-GC：数据寿命感知的垃圾回收机制"></a>LAD-GC：数据寿命感知的垃圾回收机制</h2><img src="/2022/06/15/pasm/fig8.png" class="" title="img">
+
 <p><em>图5 垃圾回收机制</em></p>
 <p><strong>垃圾回收机制的执行具有严格的时序和顺序，可以防止擦除操作引起的</strong> <strong>I&#x2F;O</strong> <strong>阻塞，擦除的时机由数据的生命周期和数据量决定。</strong></p>
 <p>第一步：<strong>初始权重和数据集</strong>被分别保存在中期块和长期块中。上图假定每个chip中只有两个die。我们先选择die0为工作状态来存储输出，die1为空闲状态。</p>
@@ -371,7 +379,8 @@
 <p>DNN加速器仿真：ScaleSim</p>
 <p>将ScaleSim的输出接到HybridSim的输入上去。</p>
 <p>参数设置：</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YzI5ZGYwMDZiZmNiZmJkYzJkYjQzZDY5NDNhZTg2NmFfOFROV01ORzNaSENVZFdvZkhVZEtXVjMwS0tTdGYzWkhfVG9rZW46Ym94Y25xWTZyMFhKS3BXbWY5Tk1pQ1NZWWViXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA" alt="img"></p>
+<img src="/2022/06/15/pasm/fig9.png" class="" title="img">
+
 <p>数据集：Imagenet-2012</p>
 <p>模型：resnet-50</p>
 <h2 id="验证CFP-DL和LAD-GC的有效性"><a href="#验证CFP-DL和LAD-GC的有效性" class="headerlink" title="验证CFP-DL和LAD-GC的有效性"></a>验证CFP-DL和LAD-GC的有效性</h2><p>Baseline: SPA-SSD是一种hybrid SSD实现方案，利用SLC部分作为缓存。</p>
@@ -379,24 +388,28 @@
 <ul>
 <li><strong>并行数据布局的效果</strong></li>
 </ul>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NzUyNGQzN2UwYmQxZjY0ZjJlMTkzMDA2ODg2OGNkMmRfSzJNcHo5c3JIcndBMktxQW9Oa1RHZ1hwUmN6Ym1JQUJfVG9rZW46Ym94Y25KaGhzbER2bEdNWmRUR243ZzRTcFhnXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA" alt="img"></p>
+<img src="/2022/06/15/pasm/fig10.png" class="" title="img">
+
 <p>iteration增加时，相比于SPA-SSD来说，PASM的写入平均响应时间更为稳定，读出的平均响应时间好像略有增加。这主要是因为并行度降低了。</p>
 <p>PASM与SPA-SSD-h相近，说明数据布局可以很大程度地减少垃圾回收引起的冲突，稳定地提供I&#x2F;O性能。</p>
 <ul>
 <li><strong>垃圾回收机制的效果</strong></li>
 </ul>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MTcwYmY0MTJmOWFkZmY0NjhmYzM0YjJjNmY0ZWYwMWRfb3VqV3Z6bjZuckloMUdTbWdXc1BKd3VmU0k5Sm5pN2NfVG9rZW46Ym94Y25ZSmZrV0VJR0tSa2xVMmxKMFB4QkcyXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA" alt="img"></p>
+<img src="/2022/06/15/pasm/fig11.png" class="" title="img">
+
 <p>iteration非常高的时候，SPA-SSD的擦除操作陡然上升。</p>
 <p>整体来看，PASM中大部分擦除都是与访问并行的，充分利用了并行性。</p>
 <h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><ul>
 <li><strong>IOPS</strong></li>
 </ul>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDk0MjhhNzkyZjFiMjU2NGU0NTU2ZWE2MjVjYTY0YmVfZ1I1VGpJWW9ZUUhRTGFsVER6engxU2w5UFZIWER0WUtfVG9rZW46Ym94Y25KYXhIaURjWWRVTmExcUFuMVNIOWllXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA" alt="img"></p>
+<img src="/2022/06/15/pasm/fig12.png" class="" title="img">
+
 <p>SPA-SSD的性能在iteration到达100以上时，与传统的SSD没什么差别了。但是PASM则一直表现稳定。</p>
 <ul>
 <li><strong>SLC擦除次数</strong></li>
 </ul>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YzFlZmQ2ZWM5OThlOThmZjZjMDc5OTU4M2FjZDM5NjdfYkZnYWZpUHpQZ1hOa2o3VVVIZHRRZ2xtemx2c0ZRZ0lfVG9rZW46Ym94Y25BdHZSdWxqR1NiaW84SmcybkFDS01iXzE2NzYxMjQ0ODA6MTY3NjEyODA4MF9WNA" alt="img"></p>
+<img src="/2022/06/15/pasm/fig13.png" class="" title="img">
+
 <p>当iteration很高的时候，SPA-SSD和TLC-only SSD的擦除次数是PASM的6.6倍，这说明PASM可以延长寿命6倍左右。</p>
 <hr>
 <h1 id="自己的思考"><a href="#自己的思考" class="headerlink" title="自己的思考"></a>自己的思考</h1><p>本文的主要两个创新点对于具有大量数据写入的应用有较好的借鉴意义。</p>
@@ -469,10 +482,6 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">DNN</a>
         		</li>
       		 
@@ -482,6 +491,10 @@
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">加速器</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -733,30 +746,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">容错</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SDC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">论文阅读</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">软错误</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">2021</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">TPDS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">DNN</a>
               </li>
              
@@ -769,11 +758,35 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">论文阅读</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">FAST</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">2021</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">容错</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">SDC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">软错误</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">TPDS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -805,18 +818,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MICRO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">2018</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">模拟器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">eBPF</a>
               </li>
              
@@ -826,6 +827,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">前沿系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MICRO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">2018</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">模拟器</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -857,14 +870,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CQU</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JSA</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">ISCA</a>
               </li>
              
@@ -874,6 +879,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">图随机游走</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CQU</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JSA</a>
               </li>
              
               <li class="article-tag-list-item">

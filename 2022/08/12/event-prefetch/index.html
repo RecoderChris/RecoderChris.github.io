@@ -17,12 +17,12 @@
 <meta property="og:site_name" content="Xinmiao的博客">
 <meta property="og:description" content="A Event-Triggered Programmable Prefetcher for Irregular Workloads 作者：Sam Ainsworth and Timothy M.Jones  @ University of Cambridge(UK) 大数据应用中大量的内存不规则访问产生了memory-bound问题。为了减少一般性的复杂访问特征应用的的cache miss率，本论">
 <meta property="og:locale">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmQxZDc3YjQ0ZjE0ZjAyN2RmZDZjNDliODZkZTU4OTRfSHJFV1g2bDVrRDZvM3l5c1BTOFhGZUZ2YjBpOUlYMFNfVG9rZW46Ym94Y25YbUNQMm5GNFdNVmlZclJvTjRrZjBjXzE2NzYxMjUxNzU6MTY3NjEyODc3NV9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NDk1OTIzYTdlYjMwOTBlNjZkMmFhOWYyZWU4NDUwNThfVHE4VmxqZWcyUE4xcnBPcmxMY3hhWWo4aE1LVGgwYXNfVG9rZW46Ym94Y25qNzhHOENUZHM5dkVBUXJ5aVloTjdkXzE2NzYxMjUxNzU6MTY3NjEyODc3NV9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTdjNjc1NTYwZDcxMTdjZDQ4NjZkNzkzMDBiOGZlNGZfcWl5MWNpaDlwZ3FSbkRvMGhRaW9hUUljaHZVYk5qV2RfVG9rZW46Ym94Y24xYXBBWThsMnlNSjY2T1kxOTMyQVdlXzE2NzYxMjUxNzU6MTY3NjEyODc3NV9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=OTMzMTg4Yzc5YWY3ZjhhNzhjZGUxMjFhYzcxYTgyOGFfdXJhV2FOMzc5a3JmYks0Wmk0bm5rSDJ2Z2twcDR6YjhfVG9rZW46Ym94Y25KcTVUWlRoVzhrSzUwVE51d1FOTDVnXzE2NzYxMjUxNzU6MTY3NjEyODc3NV9WNA">
+<meta property="og:image" content="https://recoderchris.github.io/2022/08/12/event-prefetch/fig1.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/08/12/event-prefetch/fig2.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/08/12/event-prefetch/fig3.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/08/12/event-prefetch/fig4.png">
 <meta property="article:published_time" content="2022-08-12T14:18:58.000Z">
-<meta property="article:modified_time" content="2023-02-11T15:01:42.954Z">
+<meta property="article:modified_time" content="2023-02-12T03:59:49.745Z">
 <meta property="article:author" content="Zhang Xinmiao">
 <meta property="article:tag" content="论文阅读">
 <meta property="article:tag" content="2018">
@@ -31,7 +31,7 @@
 <meta property="article:tag" content="预取器">
 <meta property="article:tag" content="数据访问优化">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmQxZDc3YjQ0ZjE0ZjAyN2RmZDZjNDliODZkZTU4OTRfSHJFV1g2bDVrRDZvM3l5c1BTOFhGZUZ2YjBpOUlYMFNfVG9rZW46Ym94Y25YbUNQMm5GNFdNVmlZclJvTjRrZjBjXzE2NzYxMjUxNzU6MTY3NjEyODc3NV9WNA">
+<meta name="twitter:image" content="https://recoderchris.github.io/2022/08/12/event-prefetch/fig1.png">
   
     <link rel="alternative" href="/atom.xml" title="Xinmiao的博客" type="application/atom+xml">
   
@@ -314,10 +314,12 @@
 <p>总结：虽然现有的预取器都能或多或少的对某些特定应用、某个访存特征做加速，但是仍然不是完整的解决方案。</p>
 <hr>
 <h1 id="该论文解决了什么难点，难点存在的原因是什么，作者是如何发现这些难点的？"><a href="#该论文解决了什么难点，难点存在的原因是什么，作者是如何发现这些难点的？" class="headerlink" title="该论文解决了什么难点，难点存在的原因是什么，作者是如何发现这些难点的？"></a>该论文解决了什么难点，难点存在的原因是什么，作者是如何发现这些难点的？</h1><p>下面以数据库操作中的hash-join为例，来指出大规模数据操作的难点和各种预取器存在的问题。</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmQxZDc3YjQ0ZjE0ZjAyN2RmZDZjNDliODZkZTU4OTRfSHJFV1g2bDVrRDZvM3l5c1BTOFhGZUZ2YjBpOUlYMFNfVG9rZW46Ym94Y25YbUNQMm5GNFdNVmlZclJvTjRrZjBjXzE2NzYxMjUxNzU6MTY3NjEyODc3NV9WNA" alt="img"></p>
+<img src="/2022/08/12/event-prefetch/fig1.png" class="" title="img">
+
 <p>上面是一个在数据库操作中常用的hash-join函数内核。我们先忽略红色的优化策略，整个算法的流程是这样的：对每个顺序访问的键值key求哈希值，根据此哈希值做数组访问，找到htab。这里涉及了一个数组的非线性随机访问，此处容易产生cache miss。下一步对于htab上链的一整个链表做访问和计算，这里也是一个指针追踪，容易产生多次的cache miss。</p>
 <p>下面我们将逐步分析用预取器优化这个内存访问会有什么样的难点，图中浅绿色代表indirect access找到htab的过程，深绿色代表pointer-chasing的过程。斜线代表由cache miss产生的CPU stall。</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NDk1OTIzYTdlYjMwOTBlNjZkMmFhOWYyZWU4NDUwNThfVHE4VmxqZWcyUE4xcnBPcmxMY3hhWWo4aE1LVGgwYXNfVG9rZW46Ym94Y25qNzhHOENUZHM5dkVBUXJ5aVloTjdkXzE2NzYxMjUxNzU6MTY3NjEyODc3NV9WNA" alt="img"></p>
+<img src="/2022/08/12/event-prefetch/fig2.png" class="" title="img">
+
 <p>（注意：这个图画错了，d和e应该反过来的。）</p>
 <ul>
 <li>原始情况下会有大量的CPU stall</li>
@@ -328,7 +330,8 @@
 </ul>
 <hr>
 <h1 id="针对以上难点，作者各做了哪些优化，优化背后的思想是什么？"><a href="#针对以上难点，作者各做了哪些优化，优化背后的思想是什么？" class="headerlink" title="针对以上难点，作者各做了哪些优化，优化背后的思想是什么？"></a>针对以上难点，作者各做了哪些优化，优化背后的思想是什么？</h1><h2 id="系统概况"><a href="#系统概况" class="headerlink" title="系统概况"></a>系统概况</h2><p>文章提出了一个可编程的预取器，这个预取器被特定地址的数据结构的读事件触发，并且自定义预取操作，在额外的低功耗通用计算核心上进行预取。</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTdjNjc1NTYwZDcxMTdjZDQ4NjZkNzkzMDBiOGZlNGZfcWl5MWNpaDlwZ3FSbkRvMGhRaW9hUUljaHZVYk5qV2RfVG9rZW46Ym94Y24xYXBBWThsMnlNSjY2T1kxOTMyQVdlXzE2NzYxMjUxNzU6MTY3NjEyODc3NV9WNA" alt="img"></p>
+<img src="/2022/08/12/event-prefetch/fig3.png" class="" title="img">
+
 <p>主要运行流程：主核心中的读取请求和预取单元中的预取请求中的地址，在通过L1dcache的时候先进入预取器的地址过滤器。地址过滤器会对感兴趣的地址进行过滤，这个感兴趣的地址一般是在程序开始之前由编译器的一条单独指令初始化，往往是目标数据结构的地址空间。之后，将感兴趣的地址放入观察队列中。观察队列满了的时候就将最老的观察抛弃，因为预取本身不影响程序的正确性。之后调度器负责将感兴趣地址送给可编程的预取单元，进行相应的预取操作。当有空闲的可编程预取单元的时候，调度器才会将这个请求映射到可编程预取单元上。可编程预取单元是这个预取器的主体，但是他并不需要等待访存的结果，而是只发送访存的请求。可编程预取单元在L1cache中有空闲的MSHR时将请求发送给预取请求队列，之后预取请求队列再通过TLB地址转换和数据预取。注意到，可编程预取单元还连接了全局寄存器和EWMA计算单元，全局寄存器是负责存放一些重要数组的首地址，EWMA是负责为预取单元提供预取步长的。预取单元使用单独的指令缓存。</p>
 <h3 id="地址过滤器"><a href="#地址过滤器" class="headerlink" title="地址过滤器"></a>地址过滤器</h3><ul>
 <li><strong>初始化：通过编译器分析产生的感兴趣地址使用指令进行配置，为过滤器明确几段指定感兴趣的逻辑地址，以及每段感兴趣的逻辑地址对应的函数指针。</strong></li>
@@ -348,7 +351,8 @@
 <h3 id="内存请求标签"><a href="#内存请求标签" class="headerlink" title="内存请求标签"></a>内存请求标签</h3><p>主要针对指针型访问。数组型访问可以通过感兴趣的内存地址来找到，而指针型的感兴趣标记可以通过MSHR中的特定标记来实现。</p>
 <h2 id="编程模型"><a href="#编程模型" class="headerlink" title="编程模型"></a>编程模型</h2><p>目前主要讨论手写预取函数，之后会要讨论编译器生成手写函数。</p>
 <p>因为PPU之间是完全独立的，每个都可以相应预取请求，所以预取器不需要stall来等待结果。</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=OTMzMTg4Yzc5YWY3ZjhhNzhjZGUxMjFhYzcxYTgyOGFfdXJhV2FOMzc5a3JmYks0Wmk0bm5rSDJ2Z2twcDR6YjhfVG9rZW46Ym94Y25KcTVUWlRoVzhrSzUwVE51d1FOTDVnXzE2NzYxMjUxNzU6MTY3NjEyODc3NV9WNA" alt="img"></p>
+<img src="/2022/08/12/event-prefetch/fig4.png" class="" title="img">
+
 <p>PPU编程模型是基于事件的，有一些限制。比如PPU的编程中不能有数据访问，栈或者存储。不能有函数调用，不能有系统调用。只是简单的算数运算。</p>
 
     
@@ -670,30 +674,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">容错</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SDC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">论文阅读</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">软错误</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">2021</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">TPDS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">DNN</a>
               </li>
              
@@ -706,11 +686,35 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">论文阅读</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">FAST</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">2021</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">容错</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">SDC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">软错误</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">TPDS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -742,18 +746,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MICRO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">2018</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">模拟器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">eBPF</a>
               </li>
              
@@ -763,6 +755,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">前沿系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MICRO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">2018</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">模拟器</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -794,14 +798,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CQU</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JSA</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">ISCA</a>
               </li>
              
@@ -811,6 +807,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">图随机游走</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CQU</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JSA</a>
               </li>
              
               <li class="article-tag-list-item">

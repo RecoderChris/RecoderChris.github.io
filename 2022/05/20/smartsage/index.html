@@ -17,40 +17,40 @@
 <meta property="og:site_name" content="Xinmiao的博客">
 <meta property="og:description" content="SmartSAGE: Training Large-scale Graph Neural Networks using In-Storage Processing Architectures 作者：Yunjae Lee等人, lead by Minsoo Rhu  @ KAIST(Korea) 既要提升图神经网络（GNN）训练扩展性，又要保证系统整体的性能。 主要做法是通过采用SSD保存原始图数据">
 <meta property="og:locale">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjgyYTA0YTMyOGUyMDE4MzBiN2I4ZWEwY2QyMDQzZTNfUTF5UDZJdWN4SXpCUDVRV1pYQ1VmUlI2WGpJTWZlb01fVG9rZW46Ym94Y25yZnNXMHBOczZLeUIydU1xQ09VVjNmXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MWJjYzYzYjI3OGU2ZmYyZTM0MDVhYmM0ZGU4ZjI3NGJfWm9uMVNrdGhWVFpDcDZ3YUZXWVRoUHcwRW5DT1JudmRfVG9rZW46Ym94Y253Y2gzM3p5amIyOEdTVld4bEpXYmtjXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=M2JhNjQ3ZWY5MTMyOWY0Y2NiYWMyNzYwOTkxMjI0NzVfc2RXTE1OMktlYkNJNml5WmlGNDlRYzRRRjRSSkpxb1BfVG9rZW46Ym94Y25yaVJieTg3UlZWS25oV2dORURFZUFlXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmYxMTQyZjIzZjBlOTAwNjc2NWNjZDRmNjVjMTVmNDVfOEg0Zmh0c1RibjVLOW9oRldPZHFjdXFZMWhtcWJocDhfVG9rZW46Ym94Y25jMmhrNlZwZjI3MzNPcVJuQ1A1TndkXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=M2ZiMDZlMTg5ZmZmMDQ4YWM3NGViM2VmM2E5YWUxMGJfVG95UVEwNUtJMUtGdENaM3o5VzE4a2diS0ZRd0RCSkxfVG9rZW46Ym94Y25xOHNabFFTMU9pRmhnUXhSSThwcjRiXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NGZmOGExZjg0NjAwNzVkZTAxMjM0NTQ1Y2Q1OWZlZGFfeXpsSFN6RVZ1N1pKRjI3eEt1MHlSZmdOYlNRTzA3VnZfVG9rZW46Ym94Y25YemZCb3doZ3kwZEZUQ1JDVXNURG5mXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=N2IyNDdjNWVjMTVjN2QxYzkzYmMwMGE5NGFmOThkZWJfZTBSa202QWxjcHZsRUx1Z2paQzRUdkUyS3ZoSWFack9fVG9rZW46Ym94Y25JOUhUZThyMVNubkdtSDFoR1NrTzRnXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=OTc4MmMxZDE0MTdiZDBiNzlhMzQyOTFmOTRjODE2MDRfSTlxcWNZeGszcHBVc1dLNVZwcHZrQ2ZxUUNxZmNmNTNfVG9rZW46Ym94Y25ITEFTb0hsSWxzelZtQlVPRElDV2pNXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmM2MzZiZGY4ZDRkODNmOTYwOTIxNjZkOTI2NGNjOThfOTUxb0NybjlCTTJGVkM3bUFyd2hxbFVLbVNibjA0bGpfVG9rZW46Ym94Y252ZEo1NzhxeEdPTlpMY3M5UTRHSEdoXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTliNWMyY2U0ZjRjMWFjNGRjMTFjY2E1YmIzZWRjZWJfM0Q1a05tTXo5NTlkamdNUXBodXFveHpQTjUxTDVTVWVfVG9rZW46Ym94Y25RQ1JsMVhndG5XbFdUY0xIbWQzRlVmXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NDA0YWU0NTI4Zjg1N2RlMDgwNGE3NmRhMzU5NzdlN2RfUUtuYWd2OENQNE04MDVqWkpkQ1o5MjlaUGZFejlSTTVfVG9rZW46Ym94Y24xbzZXRUlQalhiSlBxb3JwSU51UUtjXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YmEyNzZiZTc0YmQ0N2M0Mzc3NmY2ODUwMDVlNDMxZTRfclFaWXBqNVEzUmJvZlFoRjdsUjhLZTZ5cEZ5bGkzZmxfVG9rZW46Ym94Y25IYXdaVDhrcDlNb3k5THdZQ0pxUlZiXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MzVhZmE1MGZlOTRmZjA5OTI4OWUyNzYyMzQxZDdlOTNfTzFUT0VmZlNCVE9NR29LU1BEcWdQbmZDamZWdDNvUmZfVG9rZW46Ym94Y250cnN0UHpxZVJja0lFbkkycGFUMkZlXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTQxNTNjYTRkNzAxMTBmNTc1NWI5NTZkY2I2NjBlZTZfTlNpRURKdHhwTjNhNld3OXI3WFhDTUxnMlNLUHdSQ2FfVG9rZW46Ym94Y242Nlg5QkkycG5jR054ckRkeDB0MDFaXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=OTU5OGZhMmU4YzJhNWQwMjBkMzE0YmZjOWIyOTQxMjdfS2Y3c2k3ZWRJNHJwMHdSaVB2a1JSMnpNRXVSeEFocVZfVG9rZW46Ym94Y250UHN4RE9zOUo2Y2ZSWVhBdWU3aVJjXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTJiZjNjMTA5N2Y0ODYxZGJhY2QxMGY1MjdmZjcwZGZfRGl6UXVHaWRnd21haGE3UFVMQkpzNnFlcm5NRGZmZHhfVG9rZW46Ym94Y25aUERqVlVCYUY5QjdLZVFENXgwUFRoXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=OTZlNjQ3ZjE1MmE1MDlmMmQxMDk1NmU1YjhjYjU0NjJfMDloV2ZrUERxV3Joc0d3Zzk4WHBmZ3NSYnlBYVh5RUxfVG9rZW46Ym94Y25MRktzNjBFUGJTN3o3WUdMV0dNeVRnXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ODAwOGQ4ZmQ5MTVmZmM0OTE2YzZkMWU0N2E3M2VlZmVfMUZYbVpEVk5WRkk3TkJqNzlCVGxXcGJLSllPVXJoMHNfVG9rZW46Ym94Y25GOE9ONGhOemZKaWhsRTc0d0huTG5nXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=Zjc2NDBiYjBlYmIxMzJjZWEwZTg5N2JlMDhhNjY2YmNfSTFuS3cwaTJhNlBDdklmeGVMOGxid0lQMElwMWM4QkZfVG9rZW46Ym94Y25WMGYzNUd2V2t3a2NBNU1KV2oyQURoXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MWUyMGY1MjYxZGIxYjM4Njg3MzJkMWUwYjU2ZWQ0NjhfT2hmaFcyWFlqcDVOY1lCc01pb2FWVVo2VERlb3ZlUFNfVG9rZW46Ym94Y25CSzdubXdLekdmekExb3dVYk44bU5lXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=N2E5NTJlY2MxMDUyYmYxZGM3ZjM3OWY0Y2M2YzhjYTRfSWlDcHR6bzIwS2RDSndtb1hHaUFYSmVTUmZzR3NEZDJfVG9rZW46Ym94Y25kWWQ0aTR5VmFXd0VlMnZoeW90aUFoXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
-<meta property="og:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NzM4NjNmZmM4NGM1Y2I1N2FhZmE2MGY1YWEyOGExYjZfV3JnaEFWdkRTUTQ4aVpwY0RuTHEzTXY0RU5VSFoxNnFfVG9rZW46Ym94Y25sWnNGTHBhUld0NldnQ2tTb2tLQkliXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/smartsage/fig1.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/smartsage/fig2.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig3.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig4.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig5.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/smartsage/fig6.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/smartsage/fig7.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/smartsage/fig8.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/smartsage/fig9.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fih10.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig11.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig12.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig13.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig14.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig15.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig16.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig17.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig18.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig19.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig20.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig21.png">
+<meta property="og:image" content="https://recoderchris.github.io/2022/05/20/smartsage/fig22.png">
 <meta property="article:published_time" content="2022-05-20T13:57:21.000Z">
-<meta property="article:modified_time" content="2023-02-11T15:03:11.517Z">
+<meta property="article:modified_time" content="2023-02-12T03:51:44.386Z">
 <meta property="article:author" content="Zhang Xinmiao">
-<meta property="article:tag" content="论文阅读">
 <meta property="article:tag" content="近存储计算">
+<meta property="article:tag" content="论文阅读">
 <meta property="article:tag" content="KAIST">
 <meta property="article:tag" content="2022">
 <meta property="article:tag" content="ISCA">
 <meta property="article:tag" content="GNN">
 <meta property="article:tag" content="图随机游走">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjgyYTA0YTMyOGUyMDE4MzBiN2I4ZWEwY2QyMDQzZTNfUTF5UDZJdWN4SXpCUDVRV1pYQ1VmUlI2WGpJTWZlb01fVG9rZW46Ym94Y25yZnNXMHBOczZLeUIydU1xQ09VVjNmXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA">
+<meta name="twitter:image" content="https://recoderchris.github.io/2022/05/20/smartsage/smartsage/fig1.png">
   
     <link rel="alternative" href="/atom.xml" title="Xinmiao的博客" type="application/atom+xml">
   
@@ -294,33 +294,42 @@
 <p>通过用近存储计算的方法完成GNN的采样步骤，保证了方案的处理性能。</p>
 <hr>
 <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><h2 id="图神经网络训练"><a href="#图神经网络训练" class="headerlink" title="图神经网络训练"></a>图神经网络训练</h2><p>图神经网络的训练主要有<strong>选择目标节点、目标节点邻居采样、特征查找，最终将邻居节点的特征通过多层感知机实现训练</strong>，以得到目标节点或边的嵌入向量。</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjgyYTA0YTMyOGUyMDE4MzBiN2I4ZWEwY2QyMDQzZTNfUTF5UDZJdWN4SXpCUDVRV1pYQ1VmUlI2WGpJTWZlb01fVG9rZW46Ym94Y25yZnNXMHBOczZLeUIydU1xQ09VVjNmXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<img src="smartsage/fig1.png" alt="img" style="zoom: 50%;" />
+
 <span id="more"></span>
-<h2 id="架构导致的瓶颈问题"><a href="#架构导致的瓶颈问题" class="headerlink" title="架构导致的瓶颈问题"></a>架构导致的瓶颈问题</h2><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MWJjYzYzYjI3OGU2ZmYyZTM0MDVhYmM0ZGU4ZjI3NGJfWm9uMVNrdGhWVFpDcDZ3YUZXWVRoUHcwRW5DT1JudmRfVG9rZW46Ym94Y253Y2gzM3p5amIyOEdTVld4bEpXYmtjXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<h2 id="架构导致的瓶颈问题"><a href="#架构导致的瓶颈问题" class="headerlink" title="架构导致的瓶颈问题"></a>架构导致的瓶颈问题</h2><img src="smartsage/fig2.png" alt="img" style="zoom:67%;" />
+
 <p>实际训练流程往往是按照以上这张图的步骤来进行的，主要分为两个大的环节：数据准备和GNN训练。而这两个环节有完全不同的计算特征：在数据准备阶段中的邻居采样是在整个大图上进行的，且访问不规律；而后面GNN训练阶段的特征聚合以及GNN训练是在前面采样出来的一个很小的子图上完成的，其计算特征固定，可用GPU进行加速。 </p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=M2JhNjQ3ZWY5MTMyOWY0Y2NiYWMyNzYwOTkxMjI0NzVfc2RXTE1OMktlYkNJNml5WmlGNDlRYzRRRjRSSkpxb1BfVG9rZW46Ym94Y25yaVJieTg3UlZWS25oV2dORURFZUFlXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<img src="/2022/05/20/smartsage/fig3.png" class="" title="img">
+
 <p>传统的训练流程和架构的映射如图a所示。考虑到访问的不规则，图神经网络框架（e.g. PyG，DGL）往往把采样和邻居特征查询这两个步骤放在内存中完成的，然后再将查出来的子图的特征通过PCIe传送到GPU的memory上进行计算。</p>
 <p>这样做的瓶颈在于：采样这一步的扩展性差。主要问题是采样是针对整个大图的，对于大型的图内存很有可能放不下，设计人员不得不限制图的大小，那么这等于限制了图神经网络表达能力，进而限制网络的实际应用效果。 </p>
-<h2 id="要解决的基本问题"><a href="#要解决的基本问题" class="headerlink" title="要解决的基本问题"></a>要解决的基本问题</h2><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmYxMTQyZjIzZjBlOTAwNjc2NWNjZDRmNjVjMTVmNDVfOEg0Zmh0c1RibjVLOW9oRldPZHFjdXFZMWhtcWJocDhfVG9rZW46Ym94Y25jMmhrNlZwZjI3MzNPcVJuQ1A1TndkXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<h2 id="要解决的基本问题"><a href="#要解决的基本问题" class="headerlink" title="要解决的基本问题"></a>要解决的基本问题</h2><img src="/2022/05/20/smartsage/fig4.png" class="" title="img">
+
 <p>一个自然的想法是上图所示的架构：采用SSD作为存储数据的主体，DRAM作为缓存来存正在计算的数据或者缓存一些局部性高的数据，采样仍然在CPU上完成。然而一个很明显的问题在于：<strong>SSD的吞吐量显然没有DRAM高，对性能会产生影响。由此产生的一些疑问是：这样做是否会极大程度的影响整体性能？有什么方法可以进一步优化此架构下的性能表现？</strong></p>
 <p>下面的motivation实验，文章主要展现了用DRAM和SSD存放图数据进行图神经网络训练时，系统的一些特征。 </p>
 <hr>
 <h1 id="论文为什么要做这个事情？"><a href="#论文为什么要做这个事情？" class="headerlink" title="论文为什么要做这个事情？"></a>论文为什么要做这个事情？</h1><h2 id="端到端性能分析"><a href="#端到端性能分析" class="headerlink" title="端到端性能分析"></a>端到端性能分析</h2><p>作者先分析了DRAM和用SSD来存放数据时，进行GNN训练时一个端到端的时间模型。如下图所示：</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=M2ZiMDZlMTg5ZmZmMDQ4YWM3NGViM2VmM2E5YWUxMGJfVG95UVEwNUtJMUtGdENaM3o5VzE4a2diS0ZRd0RCSkxfVG9rZW46Ym94Y25xOHNabFFTMU9pRmhnUXhSSThwcjRiXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<img src="/2022/05/20/smartsage/fig5.png" class="" title="img">
+
 <p>图a展示了in-memory的运行模型，b则是采用ssd作存储设备的运行模型。实际运行中，训练和采样是并行的。可以看到，由于SSD的带宽低于DRAM，CPU上的数据准备步骤会引发高延时，以至于让GPU陷入大量的空闲等待，产生对计算资源的浪费。 </p>
 <p>下面文章剖析了为什么会出现这种现象：</p>
-<h2 id="当用DRAM存图数据时"><a href="#当用DRAM存图数据时" class="headerlink" title="当用DRAM存图数据时"></a>当用DRAM存图数据时</h2><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NGZmOGExZjg0NjAwNzVkZTAxMjM0NTQ1Y2Q1OWZlZGFfeXpsSFN6RVZ1N1pKRjI3eEt1MHlSZmdOYlNRTzA3VnZfVG9rZW46Ym94Y25YemZCb3doZ3kwZEZUQ1JDVXNURG5mXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<h2 id="当用DRAM存图数据时"><a href="#当用DRAM存图数据时" class="headerlink" title="当用DRAM存图数据时"></a>当用DRAM存图数据时</h2><img src="smartsage/fig6.png" alt="img" style="zoom:67%;" />
+
 <p>为了更好的理解采样过程的特点，对传统方案，文章测试了系统的cache miss率和带宽利用率两个参数，探究计算延时是由什么导致的。</p>
 <p>文章发现在in-memory时cache命中率非常低，且内存带宽的利用率也非常低。从算法角度很好解释。而进一步，这说明：<strong>采样操作的性能主要被纯的memory latency限制，而不是被throughput限制</strong>。这一点将指导基于SSD的方案设计。</p>
 <h2 id="SSD存图数据"><a href="#SSD存图数据" class="headerlink" title="SSD存图数据"></a>SSD存图数据</h2><p>文章首先给出了全文的一个baseline：即将图数据保存在SSD上，并在主机上进行采样操作；访问数据时采用mmap对图数据集文件在用户空间上做地址映射，这样能够利用操作系统的page cache进行缓存，以提升局部性。</p>
 <p>文章下面对这个方案的性能进行了仔细分析。下图展示了in-memory和baseline两个方案训练延时的breakdown以及端到端计算延时的倍数增长：</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=N2IyNDdjNWVjMTVjN2QxYzkzYmMwMGE5NGFmOThkZWJfZTBSa202QWxjcHZsRUx1Z2paQzRUdkUyS3ZoSWFack9fVG9rZW46Ym94Y25JOUhUZThyMVNubkdtSDFoR1NrTzRnXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<img src="smartsage/fig7.png" alt="img" style="zoom:67%;" />
+
 <p>可以看出，将存储主体从DRAM改为SSD之后，整个延时的开销主体变为了采样这一步，并且延时有了平均9.8倍的增加。原因是sample的局部性非常差，操作系统中页面缓存的命中率很低，用mmap非但不能从局部性获得好处，反而会引起频繁的缺页中断和操作系统的用户-内核态切换。因此，图采样成为了训练过程中的瓶颈问题，最终将引发GPU计算资源的空闲。如下图所示：</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=OTc4MmMxZDE0MTdiZDBiNzlhMzQyOTFmOTRjODE2MDRfSTlxcWNZeGszcHBVc1dLNVZwcHZrQ2ZxUUNxZmNmNTNfVG9rZW46Ym94Y25ITEFTb0hsSWxzelZtQlVPRElDV2pNXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<img src="smartsage/fig8.png" alt="img" style="zoom:67%;" />
+
 <p>文章采用近存储计算的方法来解决这个问题，旨在弥补DRAM和SSD方案之间巨大的性能差异。</p>
 <hr>
 <h1 id="该论文解决了什么难点，难点存在的原因是什么，作者是如何发现这些难点的？"><a href="#该论文解决了什么难点，难点存在的原因是什么，作者是如何发现这些难点的？" class="headerlink" title="该论文解决了什么难点，难点存在的原因是什么，作者是如何发现这些难点的？"></a>该论文解决了什么难点，难点存在的原因是什么，作者是如何发现这些难点的？</h1><p>文章要解决的主要难点是：<strong>既要用SSD来打破内存容量的限制，又要用近存储计算的手段来缩近SSD与DRAM之间巨大的性能差距</strong>。</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmM2MzZiZGY4ZDRkODNmOTYwOTIxNjZkOTI2NGNjOThfOTUxb0NybjlCTTJGVkM3bUFyd2hxbFVLbVNibjA0bGpfVG9rZW46Ym94Y252ZEo1NzhxeEdPTlpMY3M5UTRHSEdoXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<img src="smartsage/fig9.png" alt="img" style="zoom: 33%;" />
+
 <p>软硬件协同：</p>
 <p>第一：硬件上，用<strong>近存储计算</strong>的手段将随机采样的计算的过程卸载进SSD里面。将采样这一算法步骤部署在存储器的固件中，其目标是提升子图生成过程中的有效吞吐量，减少无关数据的转移；</p>
 <p>第二：软件上，摒弃了之前以<strong>优化局部性</strong>为导向的方案，设计了以<strong>优化延时</strong>为导向的运行时系统和主机驱动栈。不再采用操作系统的页缓存，使用Linux的直接I&#x2F;O命令并设计了用户空间的数据缓存。这使得运行时系统可以直接将数据读取到缓存上，减少了查询软件栈的开销；同时合并了多条NVMe指令，减少了多条I&#x2F;O指令调用的开销。</p>
@@ -328,14 +337,18 @@
 <h1 id="针对以上难点，作者各做了哪些优化，优化背后的思想是什么？"><a href="#针对以上难点，作者各做了哪些优化，优化背后的思想是什么？" class="headerlink" title="针对以上难点，作者各做了哪些优化，优化背后的思想是什么？"></a>针对以上难点，作者各做了哪些优化，优化背后的思想是什么？</h1><h2 id="硬件上：ISP"><a href="#硬件上：ISP" class="headerlink" title="硬件上：ISP"></a>硬件上：ISP</h2><p>作者通过修改SSD控制器中的固件代码，实现了对采样(sampling)过程的近存储计算。</p>
 <h3 id="Why-not-FPGA-based-but-firmware-based"><a href="#Why-not-FPGA-based-but-firmware-based" class="headerlink" title="Why not FPGA-based but firmware-based?"></a>Why not FPGA-based but firmware-based?</h3><p>第一、采样这个过程的计算的密度很低。主要复杂度在于随机数据的查询；没必要用FPGA。</p>
 <p>第二、用FPGA需要额外的数据转移：即从SSD通过PCIe switch到FPGA，再从FPGA到主机端CPU的过程，本身数据转移的延迟高，用FPGA是否能获得性能提升有待推敲。文章<strong>在实验阶段也验证了这一点。</strong> </p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTliNWMyY2U0ZjRjMWFjNGRjMTFjY2E1YmIzZWRjZWJfM0Q1a05tTXo5NTlkamdNUXBodXFveHpQTjUxTDVTVWVfVG9rZW46Ym94Y25RQ1JsMVhndG5XbFdUY0xIbWQzRlVmXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<img src="/2022/05/20/smartsage/fih10.png" class="" title="img">
+
 <p>而计算密度低的采样过程刚好与羸弱的嵌入式处理器性能匹配。</p>
-<h3 id="近存储计算设计"><a href="#近存储计算设计" class="headerlink" title="近存储计算设计"></a>近存储计算设计</h3><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NDA0YWU0NTI4Zjg1N2RlMDgwNGE3NmRhMzU5NzdlN2RfUUtuYWd2OENQNE04MDVqWkpkQ1o5MjlaUGZFejlSTTVfVG9rZW46Ym94Y24xbzZXRUlQalhiSlBxb3JwSU51UUtjXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<h3 id="近存储计算设计"><a href="#近存储计算设计" class="headerlink" title="近存储计算设计"></a>近存储计算设计</h3><img src="/2022/05/20/smartsage/fig11.png" class="" title="img">
+
 <p>图a是baseline的方案。当我们要在这两个Batch，4个目标节点上完成采样的时候，我们首先要将这4个目标节点的邻居节点的地址找到，然后依次发送以block为级别的I&#x2F;O请求，把数据全部从SSD传送到CPU一侧，然后在主机上完成采样。 </p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=YmEyNzZiZTc0YmQ0N2M0Mzc3NmY2ODUwMDVlNDMxZTRfclFaWXBqNVEzUmJvZlFoRjdsUjhLZTZ5cEZ5bGkzZmxfVG9rZW46Ym94Y25IYXdaVDhrcDlNb3k5THdZQ0pxUlZiXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<img src="/2022/05/20/smartsage/fig12.png" class="" title="img">
+
 <p>图b是文章建立了近存储计算模块之后的，我们可以直接在存储端完成采样，并把采样后的子图发送给主机一侧。</p>
 <p>这样做提升了系统的有效吞吐量，并且由于发送给DRAM的只有采样出的很小的子图，这也可以合理利用宝贵的带宽。 </p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MzVhZmE1MGZlOTRmZjA5OTI4OWUyNzYyMzQxZDdlOTNfTzFUT0VmZlNCVE9NR29LU1BEcWdQbmZDamZWdDNvUmZfVG9rZW46Ym94Y250cnN0UHpxZVJja0lFbkkycGFUMkZlXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<img src="/2022/05/20/smartsage/fig13.png" class="" title="img">
+
 <p>主要两个模块：近存储控制模块和子图生成器；主要流程：</p>
 <ol>
 <li>主机端发送 【子图生成】 的I&#x2F;O命令，SSD接收（1）；</li>
@@ -348,7 +361,8 @@
 <p>第一，“以访存局部性为导向”实际上就是baseline系统中基于memory-map的SSD数据访问，采用操作系统页面缓存来优化局部性的这种方案。这种方案在图采样应用上，对于减少I&#x2F;O访问时间几乎没有什么用，因为随机采样有很差的局部性，反而由于页缓存的存在，在读取数据的时候需要一些复杂的缺页中断处理等操作。</p>
 <p>第二，baseline的方案需要大量的I&#x2F;O请求，这是因为每个I&#x2F;O请求对应的是以chunk为单位的数据，而很多数据都是无用的，这又增加了另一个层面的计算延迟，即每个以chunk为单位的请求穿过主机驱动栈的时候，都需要经历从用户空间到核空间的双向转换。</p>
 <p>下面的优化主要针对运行时系统和主机驱动栈，以延时优化为导向进行设计。主要两个方面：越过软件栈完成直接I&#x2F;O；同batch的I&#x2F;O请求的合并。</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTQxNTNjYTRkNzAxMTBmNTc1NWI5NTZkY2I2NjBlZTZfTlNpRURKdHhwTjNhNld3OXI3WFhDTUxnMlNLUHdSQ2FfVG9rZW46Ym94Y242Nlg5QkkycG5jR054ckRkeDB0MDFaXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<img src="/2022/05/20/smartsage/fig14.png" class="" title="img">
+
 <h3 id="直接I-x2F-O"><a href="#直接I-x2F-O" class="headerlink" title="直接I&#x2F;O"></a>直接I&#x2F;O</h3><p>用linux的直接I&#x2F;O特征，使得文件写和读操作可以直接从用户空间的应用访问到存储设备，不需要经过操作系统的页面缓存，也不需要从用户空间到核空间的双向转换。</p>
 <h3 id="I-x2F-O命令合并"><a href="#I-x2F-O命令合并" class="headerlink" title="I&#x2F;O命令合并"></a>I&#x2F;O命令合并</h3><p>对于同一批采样，调用SSD做计算的命令合并在一条I&#x2F;O指令中。系统预先将计算需要的参数保存在本地上；调用唤醒近存储计算模块的I&#x2F;O指令时，通过DMA将参数全部发送过去，近存储端再进行计算。整个batch只需要一条命令，这样大大减少了调用I&#x2F;O的命令的条数，缩减了主机驱动栈的开销。</p>
 <hr>
@@ -361,26 +375,34 @@
 <li>in-memory方案：用intel optane PMEM，提供768GB的空间。</li>
 </ol>
 <p><strong>Mini-batch大小：</strong>1024</p>
-<h3 id="单线程性能对比"><a href="#单线程性能对比" class="headerlink" title="单线程性能对比"></a>单线程性能对比</h3><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=OTU5OGZhMmU4YzJhNWQwMjBkMzE0YmZjOWIyOTQxMjdfS2Y3c2k3ZWRJNHJwMHdSaVB2a1JSMnpNRXVSeEFocVZfVG9rZW46Ym94Y250UHN4RE9zOUo2Y2ZSWVhBdWU3aVJjXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<h3 id="单线程性能对比"><a href="#单线程性能对比" class="headerlink" title="单线程性能对比"></a>单线程性能对比</h3><img src="/2022/05/20/smartsage/fig15.png" class="" title="img">
+
 <p><strong>单线程性能对比：</strong></p>
 <p><strong>software-only:1.5x</strong></p>
 <p><strong>hw-sw: 6.6x to software-only</strong></p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTJiZjNjMTA5N2Y0ODYxZGJhY2QxMGY1MjdmZjcwZGZfRGl6UXVHaWRnd21haGE3UFVMQkpzNnFlcm5NRGZmZHhfVG9rZW46Ym94Y25aUERqVlVCYUY5QjdLZVFENXgwUFRoXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<img src="/2022/05/20/smartsage/fig16.png" class="" title="img">
+
 <p>命令合并的效果如上图所示，横坐标是命令合并的大小，纵坐标是性能表现（越高越好）。</p>
-<h3 id="多线程性能对比"><a href="#多线程性能对比" class="headerlink" title="多线程性能对比"></a>多线程性能对比</h3><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=OTZlNjQ3ZjE1MmE1MDlmMmQxMDk1NmU1YjhjYjU0NjJfMDloV2ZrUERxV3Joc0d3Zzk4WHBmZ3NSYnlBYVh5RUxfVG9rZW46Ym94Y25MRktzNjBFUGJTN3o3WUdMV0dNeVRnXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<h3 id="多线程性能对比"><a href="#多线程性能对比" class="headerlink" title="多线程性能对比"></a>多线程性能对比</h3><img src="/2022/05/20/smartsage/fig17.png" class="" title="img">
+
 <p>**software-only:**3x</p>
 <p><strong>Hw-sw:</strong> 1.3-1.4x to software-only</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=ODAwOGQ4ZmQ5MTVmZmM0OTE2YzZkMWU0N2E3M2VlZmVfMUZYbVpEVk5WRkk3TkJqNzlCVGxXcGJLSllPVXJoMHNfVG9rZW46Ym94Y25GOE9ONGhOemZKaWhsRTc0d0huTG5nXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<img src="/2022/05/20/smartsage/fig18.png" class="" title="img">
+
 <p>上图显示，当线程数逐渐增多时，加速比降低。这是因为存储端的算力限制导致的，多个线程同时做计算会挑战存储端的计算能力。下面的一段论述描述了如果采用NGD的Newport上的嵌入式处理器（四个ARMv7 M7运行固件管理程序，双核ARM v8 Cortex A53专门用来近存储计算），效果将会更好。</p>
-<p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=Zjc2NDBiYjBlYmIxMzJjZWEwZTg5N2JlMDhhNjY2YmNfSTFuS3cwaTJhNlBDdklmeGVMOGxid0lQMElwMWM4QkZfVG9rZW46Ym94Y25WMGYzNUd2V2t3a2NBNU1KV2oyQURoXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
-<h3 id="Latency-Breakdown对比"><a href="#Latency-Breakdown对比" class="headerlink" title="Latency Breakdown对比"></a>Latency Breakdown对比</h3><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=MWUyMGY1MjYxZGIxYjM4Njg3MzJkMWUwYjU2ZWQ0NjhfT2hmaFcyWFlqcDVOY1lCc01pb2FWVVo2VERlb3ZlUFNfVG9rZW46Ym94Y25CSzdubXdLekdmekExb3dVYk44bU5lXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<img src="/2022/05/20/smartsage/fig19.png" class="" title="img">
+
+<h3 id="Latency-Breakdown对比"><a href="#Latency-Breakdown对比" class="headerlink" title="Latency Breakdown对比"></a>Latency Breakdown对比</h3><img src="/2022/05/20/smartsage/fig20.png" class="" title="img">
+
 <p>这里添加了一个smartsage(oracle)，文章在这里估算了如果采用Newport系统进行近存储计算的表现。</p>
 <p>首先，sampling这个瓶颈问题被很大程度上缓解了；</p>
 <p>其次，这里也估算了用DRAM做存储的方案，相比于DRAM的性能只差60%，但DRAM方案不现实；</p>
 <p>oracle方案相比于傲腾（PMEM）只是1.2倍的延时开销，但是价格大大降低了。</p>
-<h3 id="Why-not-FPGA"><a href="#Why-not-FPGA" class="headerlink" title="Why not FPGA?"></a>Why not FPGA?</h3><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=N2E5NTJlY2MxMDUyYmYxZGM3ZjM3OWY0Y2M2YzhjYTRfSWlDcHR6bzIwS2RDSndtb1hHaUFYSmVTUmZzR3NEZDJfVG9rZW46Ym94Y25kWWQ0aTR5VmFXd0VlMnZoeW90aUFoXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<h3 id="Why-not-FPGA"><a href="#Why-not-FPGA" class="headerlink" title="Why not FPGA?"></a>Why not FPGA?</h3><img src="/2022/05/20/smartsage/fig21.png" class="" title="img">
+
 <p>相比起来，FPGA将大量的时间用在了SSD到FPGA之间的数据传递上，整体的时间开销可能比sw版本还要大。</p>
-<h3 id="参数敏感性"><a href="#参数敏感性" class="headerlink" title="参数敏感性"></a>参数敏感性</h3><p><img src="https://sa893iqgol.feishu.cn/space/api/box/stream/download/asynccode/?code=NzM4NjNmZmM4NGM1Y2I1N2FhZmE2MGY1YWEyOGExYjZfV3JnaEFWdkRTUTQ4aVpwY0RuTHEzTXY0RU5VSFoxNnFfVG9rZW46Ym94Y25sWnNGTHBhUld0NldnQ2tTb2tLQkliXzE2NzYxMjQxMzA6MTY3NjEyNzczMF9WNA" alt="img"></p>
+<h3 id="参数敏感性"><a href="#参数敏感性" class="headerlink" title="参数敏感性"></a>参数敏感性</h3><img src="/2022/05/20/smartsage/fig22.png" class="" title="img">
+
 <p>采样率升高的时候，系统加速效果会逐渐减弱。（算力限制、子图变大导致从SSD到主机的数据传输量变大）</p>
 <hr>
 <h1 id="自己的思考"><a href="#自己的思考" class="headerlink" title="自己的思考"></a>自己的思考</h1><ol>
@@ -456,11 +478,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -712,30 +734,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">容错</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SDC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">论文阅读</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">软错误</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">2021</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">TPDS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">DNN</a>
               </li>
              
@@ -748,11 +746,35 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">论文阅读</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">KAIST</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">FAST</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">2021</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">容错</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">SDC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">软错误</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">TPDS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -784,18 +806,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MICRO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">2018</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">模拟器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">eBPF</a>
               </li>
              
@@ -805,6 +815,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">前沿系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MICRO</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">2018</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">模拟器</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -836,14 +858,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CQU</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JSA</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">ISCA</a>
               </li>
              
@@ -853,6 +867,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">图随机游走</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CQU</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JSA</a>
               </li>
              
               <li class="article-tag-list-item">
