@@ -18,7 +18,7 @@
 <meta property="og:description" content="GraphSSD: Graph Semantics Aware SSD 作者：Kiran Kumar Matam, Gunjae Koo, Haipeng Zha, Hung-Wei Tseng and Murali Annavaram  @ University of Southern California 现有的Out-of-core图处理系统试图通过分块的方式减缓的I&#x2F;O访存瓶颈，">
 <meta property="og:locale">
 <meta property="article:published_time" content="2024-05-07T02:43:39.000Z">
-<meta property="article:modified_time" content="2024-05-07T04:27:32.525Z">
+<meta property="article:modified_time" content="2024-05-07T04:30:26.303Z">
 <meta property="article:author" content="Zhang Xinmiao">
 <meta property="article:tag" content="近存储计算">
 <meta property="article:tag" content="ISCA">
@@ -272,7 +272,6 @@
 <p>存储层面上来看，SSD的价格下降明显(大约100$每TB)。并且伴随着NVMe接口的普及，SSD在带宽上有了明显的提升。除此之外，SSD内部还提供一些计算功能来管理闪存。这种SSD的出现使得构建感知图语义的存储系统成为了可能。</p>
 <p>所谓的“感知图语义的存储系统”，具体来说就是将图结构直接看成一种本地数据，而实际上它在存储一端。相比于以往都是将图看成成页的数据，这种方式可以再编程友好的前提下融合更多底层的访存优化。</p>
 <span id="more"></span>
-
 <h1 id="背景和挑战"><a href="#背景和挑战" class="headerlink" title="背景和挑战"></a>背景和挑战</h1><h2 id="现代可编程的SSD平台"><a href="#现代可编程的SSD平台" class="headerlink" title="现代可编程的SSD平台"></a>现代可编程的SSD平台</h2>
 
 <p>SSD内部通过多个闪存信道(Flash Channels)来提供高数据带宽。物理页面是一条闪存命令能够读写的最小单元。</p>
