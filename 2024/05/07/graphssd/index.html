@@ -13,10 +13,26 @@
   <meta name="description" content="GraphSSD: Graph Semantics Aware SSD 作者：Kiran Kumar Matam, Gunjae Koo, Haipeng Zha, Hung-Wei Tseng and Murali Annavaram  @ University of Southern California 现有的Out-of-core图处理系统试图通过分块的方式减缓的I&#x2F;O访存瓶颈，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="(ISCA2019)GraphSSD:图语义感知的SSD">
-<meta property="og:url" content="https://recoderchris.github.io/2024/05/07/ISCA2019-GraphSSD-%E5%9B%BE%E8%AF%AD%E4%B9%89%E6%84%9F%E7%9F%A5%E7%9A%84SSD/index.html">
+<meta property="og:url" content="https://recoderchris.github.io/2024/05/07/graphssd/index.html">
 <meta property="og:site_name" content="Xinmiao的博客">
 <meta property="og:description" content="GraphSSD: Graph Semantics Aware SSD 作者：Kiran Kumar Matam, Gunjae Koo, Haipeng Zha, Hung-Wei Tseng and Murali Annavaram  @ University of Southern California 现有的Out-of-core图处理系统试图通过分块的方式减缓的I&#x2F;O访存瓶颈，">
 <meta property="og:locale">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/ssd.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/arch.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/api.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/gtl.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/page.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/example.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/flow.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/exm2.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/exm3.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/data.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/result1.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/result2.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/result3.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/result4.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/result5.png">
+<meta property="og:image" content="https://recoderchris.github.io/2024/05/07/graphssd/result6.png">
 <meta property="article:published_time" content="2024-05-07T02:43:39.000Z">
 <meta property="article:modified_time" content="2024-05-07T04:30:26.303Z">
 <meta property="article:author" content="Zhang Xinmiao">
@@ -24,6 +40,7 @@
 <meta property="article:tag" content="ISCA">
 <meta property="article:tag" content="图计算">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://recoderchris.github.io/2024/05/07/graphssd/ssd.png">
   
     <link rel="alternative" href="/atom.xml" title="Xinmiao的博客" type="application/atom+xml">
   
@@ -206,7 +223,7 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-ISCA2019-GraphSSD-图语义感知的SSD" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-graphssd" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -225,7 +242,7 @@
               <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
         </span>
 
-<a href="/2024/05/07/ISCA2019-GraphSSD-%E5%9B%BE%E8%AF%AD%E4%B9%89%E6%84%9F%E7%9F%A5%E7%9A%84SSD/" class="archive-article-date">
+<a href="/2024/05/07/graphssd/" class="archive-article-date">
         <time datetime="2024-05-07T02:43:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-05-07</time>
 </a>
 
@@ -272,7 +289,7 @@
 <p>存储层面上来看，SSD的价格下降明显(大约100$每TB)。并且伴随着NVMe接口的普及，SSD在带宽上有了明显的提升。除此之外，SSD内部还提供一些计算功能来管理闪存。这种SSD的出现使得构建感知图语义的存储系统成为了可能。</p>
 <p>所谓的“感知图语义的存储系统”，具体来说就是将图结构直接看成一种本地数据，而实际上它在存储一端。相比于以往都是将图看成成页的数据，这种方式可以再编程友好的前提下融合更多底层的访存优化。</p>
 <span id="more"></span>
-<h1 id="背景和挑战"><a href="#背景和挑战" class="headerlink" title="背景和挑战"></a>背景和挑战</h1><h2 id="现代可编程的SSD平台"><a href="#现代可编程的SSD平台" class="headerlink" title="现代可编程的SSD平台"></a>现代可编程的SSD平台</h2>
+<h1 id="背景和挑战"><a href="#背景和挑战" class="headerlink" title="背景和挑战"></a>背景和挑战</h1><h2 id="现代可编程的SSD平台"><a href="#现代可编程的SSD平台" class="headerlink" title="现代可编程的SSD平台"></a>现代可编程的SSD平台</h2><img src="/2024/05/07/graphssd/ssd.png" class="" title="现代SSD的内部架构">
 
 <p>SSD内部通过多个闪存信道(Flash Channels)来提供高数据带宽。物理页面是一条闪存命令能够读写的最小单元。</p>
 <p>SSD的写操作比较特殊：闪存页面在被写入操作之前要被完全擦除，但因为擦除闪存单元往往需要更高的能耗，也会污染邻近的页面，所以擦除过程以块单位上进行。故擦除过程很明显的比读写操作要慢，这叫做写放大现象。SSD都不会在每次写入操作时都执行擦除-写入的过程，而是会将更新的页内容写到空的物理页。每当页数据被更新的时候，FTL会将闪存页的逻辑块(LBA)地址映射到新的物理页地址(PPA)上，并老的页设定为失效。SSD控制器将这个映射机制放置在FTL中(闪存翻译层)的映射表里。</p>
@@ -280,21 +297,21 @@
 <h2 id="图更新"><a href="#图更新" class="headerlink" title="图更新"></a>图更新</h2><p>虽然许多图处理系统都假设图是静态的，但是在实际应用场景中，节点或边信息有可能会被更新。基于此，GraphSSD支持基于Delta Graph机制的图更新。</p>
 <p>Delta Graph机制将图更新作为一系列的快照。一开始，所有的节点使用一个连续的向量来保存他的邻居信息。当图更新产生的时候，多个更新会合并形成一个snapshot。在常规的运行间隙，一个snapshot会被写入到存储中去，而新的snapshot会建立，以容纳新的更新。graphSSD在常规的间隙也会合并snapshot，来为每个节点创建单一的连续邻接矩阵。</p>
 <p>当使用基于CSR的图表示来合并更新时，有可能需要遍历整个图以归并更新，将其写到新的位置。而出于一致性考虑，只有在全部的归并操作完成之后，才能从新位置读取节点的邻接矩阵。因此，支持归并会对节点的遍历过程带来很大的性能损失。</p>
-<h1 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h1>
+<h1 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h1><img src="/2024/05/07/graphssd/arch.png" class="" title="overview">
 <p>组成部分：</p>
 <ul>
 <li>SSD端：图翻译层(GTL)，图命令解码器</li>
 <li>HOST端：图缓存和图更新日志管理</li>
 </ul>
-<h2 id="图命令解码器"><a href="#图命令解码器" class="headerlink" title="图命令解码器"></a>图命令解码器</h2>
+<h2 id="图命令解码器"><a href="#图命令解码器" class="headerlink" title="图命令解码器"></a>图命令解码器</h2><img src="/2024/05/07/graphssd/api.png" class="" title="overview">
 <p>GraphSSD向上层提供一系列图访问的API。每一个API函数会进而激活SSD控制器来完成访存工作。这些函数会通过host端向SSD端发送的NVMe命令来实现。</p>
 <p>所有的NVMe命令首先被GraphSSD图命令解码器解码，图命令解码器将GraphSSD和常规的NVMe命令执行不同的处理路线。因此GraphSSD和其他传统的存储可以共存。</p>
 <p>一般来说，所有GraphSSD函数处理的第一步都是在闪存中访问节点及邻边。为了与原始的物理页面访问机制(FTL)进行区别，GraphSSD建立了GTL层(graph translation layer)。</p>
 <h2 id="GTL层和图存储格式"><a href="#GTL层和图存储格式" class="headerlink" title="GTL层和图存储格式"></a>GTL层和图存储格式</h2><p>GTL(graph translation layer)将传统的LBA-to-PPN机制更改了，其直接将节点id映射到保存其邻接节点信息的物理NAND页序号。</p>
 <h3 id="GTL结构"><a href="#GTL结构" class="headerlink" title="GTL结构"></a>GTL结构</h3><p>GTL中的每一项都将节点id映射到物理页数，并且还保存有一系列的状态信息。(dirty &#x2F; extension &#x2F; valid)。因为很多点其邻接边非常少，可以将多个节点的信息全部定位到同一个物理页中。这样能够减少GTL的项数。GTL上只保存给定物理页中最小的节点作表项。在GTL中保存的节点信息是按照节点序号的大小从小到大进行编号的。如果是有向图，GraphSSD建立两个GTL，分别表示入边信息和出边信息。</p>
+<img src="/2024/05/07/graphssd/gtl.png" class="" title="overview">
 
-
-<h3 id="物理页面存储"><a href="#物理页面存储" class="headerlink" title="物理页面存储"></a>物理页面存储</h3>
+<h3 id="物理页面存储"><a href="#物理页面存储" class="headerlink" title="物理页面存储"></a>物理页面存储</h3><img src="/2024/05/07/graphssd/page.png" class="" title="overview">
 <p>在一个物理页中，</p>
 <ol>
 <li>最后一部分是本页中包含的节点个数；</li>
@@ -305,12 +322,12 @@
 <ol>
 <li>节点Vi的所有信息都能保存在页中，平凡不讨论；</li>
 <li>节点Vi的信息太大，一个页保存不下。多页保存同一个Vi。建立物理页映射，多个项和物理页对应一个节点。在满的一页上面写一个节点的信息；</li>
-<li>节点Vi的信息恰好在拐角处，不允许这样的情况发生，采取规避措施</li>
+<li>节点Vi的信息恰好在拐角处，不允许这样的情况发生，采取规避措施<img src="/2024/05/07/graphssd/example.png" class="" title="overview"></li>
 </ol>
 <h3 id="用GTL进行访存的例子"><a href="#用GTL进行访存的例子" class="headerlink" title="用GTL进行访存的例子"></a>用GTL进行访存的例子</h3><p>GTL使用二分查找的方式对节点进行查找。对于节点Vi，我们要找到下标使得j&lt;&#x3D;i&lt;&#x3D;k。当定位到Vj时，在上面的二元组进行二分查找，是否能够找到Vi。如果找得到则获取其邻接矩阵；如果Vi的邻结点很多那么将找到很多的页，来构建其邻接矩阵。</p>
 <p>如何在上图中找到V3的邻接矩阵？<br>在GTT的节点id上进行二分查找，因为V3&#x3D;V3 &lt; V6,所以V3应该在P2中，之后P2会被取到，P2中的最后一个位置中写着3，也就是本页中会有三个节点。之后GTL会搜索后半部分来查找V3的偏移位置，也就是1。通过其下一项V4的位置3，我们可以知道V3的邻结点有两个，即为V1,V2。</p>
 <h2 id="支持图更新的设计"><a href="#支持图更新的设计" class="headerlink" title="支持图更新的设计"></a>支持图更新的设计</h2><p>GTT支持的操作AddEdge(在两个点之间加一条边)和AddVertex(添加一个节点及其邻接边和权值)</p>
-
+<img src="/2024/05/07/graphssd/flow.png" class="" title="flow">
 
 <ol>
 <li><p>AddEdge(Vid1,Vid2)：将Vid2添加在Vid1的邻接矩阵中，并且也要添加值到value中。因为Vid1有可能存在一个物理页或两个中，所以有两种情况，如下。</p>
@@ -319,13 +336,13 @@
 </li>
 </ol>
 <p>对于一个加入的页，我们应该将本GTT中的所有内容都向后移动一些，在最差的情况下，有可能移动所有的GTT项。为了防止这种现象发生，我们采用了GTT项中的扩展位，设置一个指针指向两页的位置。如下图。</p>
-
+<img src="/2024/05/07/graphssd/exm2.png" class="" title="overview">
 
 <ol start="3">
 <li>当Vid1在多页时，添加在最后一页的最后，和上述操作基本相似。</li>
 </ol>
 <p>AddEdge的例子：</p>
-
+<img src="/2024/05/07/graphssd/exm3.png" class="" title="overview">
 
 
 <h3 id="一致性考虑"><a href="#一致性考虑" class="headerlink" title="一致性考虑"></a>一致性考虑</h3><p>将更新写在DRAM中就会有断电失去状态的风险。重要的是在重启之后要保持和重启前相同的一致性。因此每个更新都需要在重启后自动进行。我们在开始更新过程之前先创建redo-log，保存了正在更新的GTL项、deltaPointer和deltaUpdate数据。更新过程会先写新的页，之后清空GTL dirty位，将GTLentry的指针指向新的一页，最终将原来的老的物理页面设置为无效。</p>
@@ -363,30 +380,30 @@
 <li>主机系统：Intel i7-4790CPU，16GB DDR3 DRAM。为了扩展NVMe命令，主机端安装NVMe ver.3.19 linux驱动器</li>
 </ul>
 <h2 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h2><p>测试图数据：com-friendster(CF) &#x2F; YahooWebScope(YWS)</p>
-
+<img src="/2024/05/07/graphssd/data.png" class="" title="overview">
 
 <h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>本文章的实验首先从基础的GraphSSD提供的图访问API进行评估，主要是GetAdjacentVerteces和GetEdgeWeight这两个函数。之后GraphSSD在应用级别的表现。对于基础API，每条命令执行1M次，并且使用随机的点或者边作为此查询过程的起点。</p>
-<h3 id="基础API"><a href="#基础API" class="headerlink" title="基础API"></a>基础API</h3>
+<h3 id="基础API"><a href="#基础API" class="headerlink" title="基础API"></a>基础API</h3><img src="/2024/05/07/graphssd/result1.png" class="" title="overview">
 <p>GraphSSD是baseline系统的1.85倍。性能提升原因的两个点：</p>
 <ol>
 <li>baseline使用block接口来访问rowPtr和colIdx；GraphSSD使用GTL直接找到节点的邻接信息。Baseline 必须访问两个不同的页面来找到rowPtr和colIdx，但是GraphSSD用图语义可知的系统通过GTL来减少NAND页的访问。即使有百万请求，host端的缓存系统能够帮助减少NAND页的访问。没有成倍的原因是rowPtr向量比较紧凑，可以被缓存系统缓存在HOST端上来减少rowPtr有关的NAND页接触。</li>
 <li>序列化瓶颈：首先访问rowPtr，再访问colIdx，因此两个访问是有先后顺序的。着花样有可能减少SSD请求率，会导致SSD与HOST之间通信的低带宽。但是实际上因为多个请求并行发送，所以rowPtr和colIdx的请求是混杂在一起的，这种多线程的方式保证了很高的带宽利用。如下图所示。</li>
 </ol>
-
+<img src="/2024/05/07/graphssd/result2.png" class="" title="re">
 <h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>使用Random-walk应用来呈现细节的结果，根据全部应用的实验结果进行详细的分析。<br>A.Random-walk</p>
-
+<img src="/2024/05/07/graphssd/result3.png" class="" title="r3">
 <p>a图：Y轴为相对于baseline的加速比。X轴为迭代伦次。整体提升性能大概为1.6倍。性能的提升来自于两点：NAND page访问的数量和SSD带宽的利用。</p>
 <p>b图：因为在randomwalk中，下一个节点是随机访问的，baseline系统缓存rowPtr的作用不大。而使用一个紧凑的GTL的表示，GraphSSD能够减少NAND物理页面的访问数量。</p>
 <p>c图：在baseline里面，访问rowPtr到访问colIdx的顺序会导致对SSD带宽的利用不充分。GraphSSD可以更好的缓存GTL，并行地去访问邻接点，所以提高了带宽。</p>
 <p>B.所有应用</p>
-
+<img src="/2024/05/07/graphssd/result4.png" class="" title="r3">
 <p>对于BFS，将能够到达的位置占全图最长路径的长度作为横坐标。对于BFS &#x2F; CC &#x2F; MIS &#x2F; PR来说，性能分别提升1.40 &#x2F; 1.42 &#x2F; 1.56 &#x2F; 1.29倍。原因是更少的NAND页访问和更高效的带宽利用。</p>
 <p>C. 与GraphChi对比</p>
-
+<img src="/2024/05/07/graphssd/result5.png" class="" title="r3">
 <p>因为GraphChi是为Vertex-centric为主的模型设计的，例如BFS &#x2F; CC等这些不适合用这个模型的方案不能够使用。GraphChi会在每次迭代的时候会把所有的点都加入到内存中，但是其中只有一小部分的活跃点会被使用。和GraphChi来说跟它比较BFS不公平。与GraphSSD相比较的结果就是证明了其多样性。<br>在一次更新过程中，将所有的节点都放入到内存中，对于BFS来说不适用。随着距离变长，GraphChi的性能逐渐变差，在每次迭代过程中，所有的块都会被读取。<br>另一方面，PR这种更加适合vertex-centric的编程模型，许多点会被重复遍历，与GraphSSD相比，性能性能有了2.62倍的提升。<br>shard在每次都要被放入内存中计算，即时在shard中的计算非常少。</p>
 <p>D. GraphSSD的开销<br>GTT的大小对于两个数据集来说分别是8MB和34MB，相对于整个DRAM来说非常小。原因是因为多个节点放在同一个页中，这就只需要一个项来实现映射。只有很少的节点需要多个GTT项(0% in CF and 0.01% in YWS)。如果每个节点一页，大概需要1GB到11.2GB。<br>空间开销：当将节点的邻接点放进NAND页中，为了简化设计，如果邻接点放不进空闲空间中，我们使用新的一个NAND页。此设计的空间开销大概4.8%或者4.9%。如果使用更加负责的设计，例如追踪一个节点在不同页之间的邻结点划分，能够轻松的省下。</p>
 <p>E. 图更新</p>
-
+<img src="/2024/05/07/graphssd/result6.png" class="" title="r3">
 <p>a图：横坐标是一共有多少个delta图。可以看出查询操作GetAdjacentVertices的性能稳定地下降，因为在更新过程中访问图很有可能涉及到UpdatePointer的追踪操作。</p>
 <p>b图：横坐标是在一个页中有多少空的位置，纵坐标是merge过程的时间。空位置越少，merge时间越长。</p>
 <p>c图：因为merge过程中，如果要查询节点，如果她已经被更新过直接查找page即可，但是没更新的需要找pointers。横坐标表示了merge的比例，纵坐标是性能体现。</p>
@@ -438,7 +455,7 @@
         </li>
         <li>
           <strong>本文链接：</strong>
-          <a href="https://recoderchris.github.io/2024/05/07/ISCA2019-GraphSSD-图语义感知的SSD/" title="(ISCA2019)GraphSSD:图语义感知的SSD" target="_blank">https://recoderchris.github.io/2024/05/07/ISCA2019-GraphSSD-图语义感知的SSD/</a>
+          <a href="https://recoderchris.github.io/2024/05/07/graphssd/" title="(ISCA2019)GraphSSD:图语义感知的SSD" target="_blank">https://recoderchris.github.io/2024/05/07/graphssd/</a>
         </li>
         
         <li>
@@ -524,7 +541,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://recoderchris.github.io/2024/05/07/ISCA2019-GraphSSD-%E5%9B%BE%E8%AF%AD%E4%B9%89%E6%84%9F%E7%9F%A5%E7%9A%84SSD/" alt="微信分享二维码"> -->
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://recoderchris.github.io/2024/05/07/graphssd/" alt="微信分享二维码"> -->
     </div>
 </div>
 
