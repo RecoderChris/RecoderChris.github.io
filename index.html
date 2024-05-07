@@ -263,6 +263,94 @@
   <div class="article-info article-info-index">
     
     
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2024/05/07/graphssd/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-ISCA2019-GraphSSD-图语义感知的SSD" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2024/05/07/ISCA2019-GraphSSD-%E5%9B%BE%E8%AF%AD%E4%B9%89%E6%84%9F%E7%9F%A5%E7%9A%84SSD/" target="_blank">(ISCA2019)GraphSSD:图语义感知的SSD</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2024/05/07/ISCA2019-GraphSSD-%E5%9B%BE%E8%AF%AD%E4%B9%89%E6%84%9F%E7%9F%A5%E7%9A%84SSD/" class="archive-article-date">
+        <time datetime="2024-05-07T02:43:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-05-07</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p><strong>GraphSSD: Graph Semantics Aware SSD</strong></p>
+<p><strong>作者：</strong>Kiran Kumar Matam, Gunjae Koo, Haipeng Zha, Hung-Wei Tseng and <strong>Murali Annavaram</strong> </p>
+<p>@ <em>University of Southern California</em></p>
+<p>现有的Out-of-core图处理系统试图通过分块的方式减缓的I&#x2F;O访存瓶颈，然而这种方法产生了很多冗余的数据访问开销。本文提出的GraphSSD是一个在SSD上进行图存储、图访问和图分析的一体化方案。其主要创新点有：</p>
+<ul>
+<li>GraphSSD在用新颖的vertex-to-page框架替换掉传统的物理页映射机制，将冗余数据访问降到了最小</li>
+<li>最小化了不必要的页面替换开销来支持图更新</li>
+<li>提供了有效的编程接口，支持应用开发人员像访问内存内的数据一样访问图。</li>
+</ul>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>在图分析领域中，由于许多图的大小已经远远超过了现有的单机主存的大小，需要来考虑以存储为中心的图处理方案。在这类问题中，访问图数据的I&#x2F;O时间相比于CPU计算和内存的访问时间成为了新的系统性能瓶颈。</p>
+<p>存储层面上来看，SSD的价格下降明显(大约100$每TB)。并且伴随着NVMe接口的普及，SSD在带宽上有了明显的提升。除此之外，SSD内部还提供一些计算功能来管理闪存。这种SSD的出现使得构建感知图语义的存储系统成为了可能。</p>
+<p>所谓的“感知图语义的存储系统”，具体来说就是将图结构直接看成一种本地数据，而实际上它在存储一端。相比于以往都是将图看成成页的数据，这种方式可以再编程友好的前提下融合更多底层的访存优化。</p>
+    
+    <a class="article-more-a" href="/2024/05/07/ISCA2019-GraphSSD-%E5%9B%BE%E8%AF%AD%E4%B9%89%E6%84%9F%E7%9F%A5%E7%9A%84SSD/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -286,7 +374,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2024/05/07/graphssd/">展开全文 >></a>
+      <a class="article-more-a" href="/2024/05/07/ISCA2019-GraphSSD-%E5%9B%BE%E8%AF%AD%E4%B9%89%E6%84%9F%E7%9F%A5%E7%9A%84SSD/">展开全文 >></a>
     </p>
     
 
@@ -1312,126 +1400,6 @@
     
     <p class="article-more-link">
       <a class="article-more-a" href="/2022/06/15/pasm/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-smartsage" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2022/05/20/smartsage/" target="_blank">(ISCA22)SmartSAGE:在近存储计算架构下训练大规模图神经网络</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2022/05/20/smartsage/" class="archive-article-date">
-        <time datetime="2022-05-20T13:57:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-20</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p><strong>SmartSAGE: Training Large-scale Graph Neural Networks using In-Storage Processing Architectures</strong></p>
-<p><strong>作者：Yunjae Lee等人,</strong> lead by <strong>Minsoo Rhu</strong> </p>
-<p>@ <em>KAIST(Korea)</em></p>
-<p>既要提升图神经网络（GNN）训练扩展性，又要保证系统整体的性能。</p>
-<p>主要做法是通过采用SSD保存原始图数据，提升了GNN训练的扩展性；</p>
-<p>通过用近存储计算的方法完成GNN的采样步骤，保证了方案的处理性能。</p>
-<hr>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><h2 id="图神经网络训练"><a href="#图神经网络训练" class="headerlink" title="图神经网络训练"></a>图神经网络训练</h2><p>图神经网络的训练主要有<strong>选择目标节点、目标节点邻居采样、特征查找，最终将邻居节点的特征通过多层感知机实现训练</strong>，以得到目标节点或边的嵌入向量。</p>
-<img src="smartsage/fig1.png" alt="img" style="zoom: 50%;" />
-    
-    <a class="article-more-a" href="/2022/05/20/smartsage/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">论文阅读</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">近存储计算</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">KAIST</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">2022</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">ISCA</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">GNN</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">图随机游走</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2022/05/20/smartsage/">展开全文 >></a>
     </p>
     
 
